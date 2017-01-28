@@ -13,7 +13,6 @@ CLIENT_PORT = 8888 #TODO: need to change it
 #kind of a mutex lock, will be used for DataBase access
 lock = Lock()
 
-close_sockets_flag = False
 
 def handle_client(option,Client_socket,lock):
     if (option == "1"):  # If the client sent a seats request-message to the server ("1" - protocol message for request for the seats' status)
@@ -103,7 +102,7 @@ class ThreadedServer(object):
 
     def listenToClient(self, client, address):
         size = 1024
-        while close_sockets_flag:
+        while True:
             try:
                 data = client.recv(size)
                 if data:
@@ -131,7 +130,6 @@ def Handle_RPI():
     except socket.error as msg:
         print 'Bind failed. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
         s_to_RPI.close()
-        close_sockets_flag = True
         return
 
     while True:
