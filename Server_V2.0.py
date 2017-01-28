@@ -38,8 +38,8 @@ def update_DataBase(data,lock):
         try:
 
             #first of all, if an error has been occured in the process, get the data before changing it so if something happened we can restore the OLD_DATA
-            data = db.execute("SELECT * FROM seats")
-            for row in data:
+            seat_results = db.execute("SELECT * FROM seats")
+            for row in seat_results:
                 old_data += str(row[0]) #append the seat's number, after converting from int to string
                 old_data += str(row[1]) #append the seat's status, after converting from int to string
 
