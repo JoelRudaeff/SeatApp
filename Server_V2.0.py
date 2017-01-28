@@ -2,7 +2,7 @@ import socket
 import sys
 import sqlite3
 import threading
-from threading import Thread
+from threading import Thread,Lock
 
 RPI_HOST = ''	# Symbolic name, meaning all available interfaces. TODO: need to change it
 RPI_PORT = 8888	# TODO: Need to change it
@@ -10,13 +10,18 @@ RPI_PORT = 8888	# TODO: Need to change it
 CLIENT_HOST = '' #TODO: need to change it
 CLIENT_PORT = 8888 #TODO: need to change it
 
+#kind of a mutex lock, will be used for DataBase access
+lock = Lock()
+
+close_sockets_flag = False
+
 def handle_client(option,Client_socket,lock):
     if (option == "1"):  # If the client sent a seats request-message to the server ("1" - protocol message for request for the seats' status)
         Client_socket.send(get_seats_from_DataBase(lock))
 
 
 #function that will update the seats data inside the data-base. will be used during communication with the RPI
-def update_DataBase(data,lock):
+def update_DataBase(data):
     old_data = ""
     """
     d = []
@@ -61,7 +66,7 @@ def update_DataBase(data,lock):
 
 
 
-def get_seats_from_DataBase(lock): #return the data about the seats, from the database, as a string
+def get_seats_from_DataBase(): #return the data about the seats, from the database, as a string
     seats = ""
 
     with lock.acquire():#tries to gain access to the data base. WITH - whenever it's done, release the lock - it's like the state "USING" in c#
@@ -82,13 +87,12 @@ def get_seats_from_DataBase(lock): #return the data about the seats, from the da
 	
 	
 class ThreadedServer(object):
-    def __init__(self, host, port,lock):
+    def __init__(self, host, port):
         self.host = host
         self.port = port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sock.bind((self.host, self.port))
-        self.lock = lock
 
     def listen(self):
         self.sock.listen(5)
@@ -99,7 +103,7 @@ class ThreadedServer(object):
 
     def listenToClient(self, client, address):
         size = 1024
-        while True:
+        while close_sockets_flag:
             try:
                 data = client.recv(size)
                 if data:
@@ -107,7 +111,7 @@ class ThreadedServer(object):
                         client.close()
                         break
                     else:
-                        handle_client(data,client,self.lock)
+                        handle_client(data,client)
                 else:
                     raise Exception('Client disconnected')
             except:
@@ -115,38 +119,36 @@ class ThreadedServer(object):
                 break
         return
 
-def Handle_RPI(socket,lock):
+def Handle_RPI():
     size = 1024
+    s_to_RPI = socket.socket(socket.AF_INET,socket.SOCK_STREAM)  # The socket between the server and between the Raspberry pi
+
+    # Bind socket to local host and port
+    try:
+        s_to_RPI.bind((RPI_HOST, RPI_PORT))
+        print 'Sockets bind complete'
+        print 'Sockets now listening'
+    except socket.error as msg:
+        print 'Bind failed. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
+        s_to_RPI.close()
+        close_sockets_flag = True
+        return
+
     while True:
         try:
             seat_data = socket.recv(size)
             if (seat_data):
-                update_DataBase(seat_data,lock)
+                update_DataBase(seat_data)
         except:
             pass
 
 def main():
     try:
-        data = ""
-        s_to_RPI = socket.socket(socket.AF_INET,socket.SOCK_STREAM)  # The socket between the server and between the Raspberry pi
 
-        # Bind socket to local host and port
-        try:
-            s_to_RPI.bind((RPI_HOST, RPI_PORT))
-
-        except socket.error as msg:
-            print 'Bind failed. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
-            s_to_RPI.close()
-            sys.exit()
-
-        print 'Sockets bind complete'
-
-        db_lock = threading.Lock
-        thread = Thread(target=Handle_RPI, args=(s_to_RPI, db_lock))
-
-        print 'Sockets now listening'
+        thread = Thread(target=Handle_RPI, args=())
         thread.run()
-        ThreadedServer('', CLIENT_PORT, db_lock).listen()
+        ThreadedServer('', CLIENT_PORT).listen()
+        thread.join()
 
     except:
         sys.exit()
