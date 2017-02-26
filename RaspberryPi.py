@@ -6,6 +6,7 @@ PORT = 5839 #TODO: port to send data to server - DEFINE A DEFAULT PORT FOR THE S
 HOST = "127.0.0.1" #TODO: ip of server - DEFINE IP FOR THE SERVER
 PROTOCOL_UPDATE_KEY = "9" #TODO: number of message that the server will understand that the RPI sends updated data - DEFINE A KEY FOR UPDATE THE DATA
 PROTOCOL_CLOSE_KEY = "10" #TODO: message that will be sent to the server if the RPI is closing the code - DEFINE A KEY FOR CLOSING THE COMMUNICATION
+SERIAL_PORT = 9600 # port for communication between the RPI and the Arduino
 
 """ list given with the data: 1 - if a person was detected, 0 - if a person wasn't detected in sensor no.[i]
 every cell in the list belongs to a sensor and its result, for example: [0] - result of first sensor, [1] - result of second sensor and so on"""
@@ -22,7 +23,7 @@ def send_sensors_data_to_server(sensors_data,stored_sensors_data,socket_to_serve
 """function that will do all the work, get data from the arduino (serial) and update data to server"""
 def handle_missions(socket_to_server):
     #serial - our "physical socket" to the sensors and the arduino - gets the data of the sensors from the output of the arduino code we made
-    ser = serial.Serial('/dev/ttyACM0', 9600)
+    ser = serial.Serial('/dev/ttyACM0', SERIAL_PORT)
     stored_sensors_data = [-1,-1,-1,-1] #for the first run of the functions, then, it changes to the results themselves
     while True:
         list_of_sensors = list(ser.readline()) # turn the given string into a list of chars

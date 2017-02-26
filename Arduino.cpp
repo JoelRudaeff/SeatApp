@@ -12,6 +12,7 @@ ECHO_PIN - Arduino pin tied to echo pin on the ultrasonic sensor
 #define MAX_DISTANCE 200 // Maximum distance we want to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm
 #define SONAR_NUM 4      // Number of sensors
 #define START_PIN 4     // From which pin does the sequence of sensors start ( input, output )
+#define SERIAL_PORT 9600 //serial communication between RPI and arduino on usb
 
 //Array of sensors (objects)
 NewPing sonar[SONAR_NUM]; // Each sensor's trigger pin, echo pin, and max distance to ping
@@ -29,21 +30,21 @@ void setup()
 	int i;// for accessing the array of sensors
 	int j;// for pin numbers
 
-	for (i = 0, j = START_PIN; i < START_PIN * 3; i += 1, j += 2)
+	for (i = 0, j = START_PIN; i < SONAR_NUM ; i++, j += 2)
 	{
 		try
 		{
 			sonar[i] = new NewPing(j, j + 1, MAX_DISTANCE) //currently ports 4,5 : 6,7 : 8,9 : 10,11 
 		}
-		catch // if for some reason the pins weren't availbe or something like that
+		catch // if for some reason the pins aren't availbe or something like that
 		{
-			i -= 1; //next sensors will be init instead of the current 
+			cout << "Sensor no. " << j << " isn't up" << endl;
 		}
 	}
 		
 		
 		
-	Serial.begin(9600); // The serial is actually the usb, which we want to send the data to. The usb will send it forward to the Raspberry Pi. Open serial monitor at 115200 baud to see ping results
+	Serial.begin(SERIAL_PORT); // The serial is actually the usb, which we want to send the data to. The usb will send it forward to the Raspberry Pi. Open serial monitor at 115200 baud to see ping results
 }
 
 void loop() 
@@ -67,12 +68,12 @@ void loop()
 	if (old_data_to_send.str() != data_to_send) //if the new data isn't the same as the old data
 	{
 		//by the protocol
-		serial.println('S' + data_to_send.length() + data_to_send + responsible_lines.length() + responsible_lines); //send data to the rpi
+		serial.println('S' + ";" + data_to_send.length() + ";" + data_to_send + ";" + responsible_lines.length() + ";" + responsible_lines); //send data to the rpi
 		old_data_to_send.str(data_to_send);
 	}
 		
 	
-	delay(500); // Wait 0.5s between pings
+	delay(250); // Wait 0.25s between pings
 }
 
 
