@@ -124,8 +124,6 @@ class ThreadedServer:
 
 def handle_rpi():
     size = 1024  # maximum of message size - TODO: define a size
-
-
     rpi_listener = socket.socket(socket.AF_INET,socket.SOCK_STREAM)  # The socket between the server and between the Raspberry pi
     rpi_socket_rdy = False
     s_to_rpi = None
@@ -142,19 +140,19 @@ def handle_rpi():
             time.sleep(1)
 
     while True:
-        s_to_rpi = rpi_listener.accept()
-
-        while True:
-            try:
-                seat_data = s_to_rpi.recv(size)
-                if seat_data:
-                    if seat_data is not "EXIT":  # TODO: define protocol
-                        update_database(seat_data)
-                    else:
-                        #finish
-                        break
-            except:  # TODO: define what to do when error has been occurred
-                pass
+		#accept new RPI connection
+		s_to_rpi = rpi_listener.accept()
+        try:
+            seat_data = s_to_rpi.recv(size)
+            if seat_data:
+                if seat_data is not "EXIT":  # TODO: define protocol
+                    update_database(seat_data)
+                else:
+                    #finish
+					s_to_rpi.close()
+                    break
+        except:  # TODO: define what to do when error has been occurred
+            pass
 
 
 def main():
