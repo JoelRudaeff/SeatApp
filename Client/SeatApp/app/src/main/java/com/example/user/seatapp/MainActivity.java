@@ -67,8 +67,9 @@ public class MainActivity extends ActionBarActivity
 
         schedule_button.setOnClickListener(new View.OnClickListener()
         {
-            public void onClick(View v) {
-                setContentView(R.layout.schedule_screen);
+            public void onClick(View v)
+            {
+                setContentView(R.layout.train_schedule_screen);
             }
         });
     }
