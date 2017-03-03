@@ -16,22 +16,45 @@ public class MainActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        CheckBox train_CheckBox = (CheckBox) findViewById(R.id.train_checkBox);
-        CheckBox bus_CheckBox = (CheckBox) findViewById(R.id.bus_checkBox);
-
         final EditText Train_Current_place = (EditText) findViewById(R.id.Train_Current_place);
         final EditText Train_Destination_place = (EditText) findViewById(R.id.Train_Destination_place);
+        final EditText Bus_Current_place = (EditText) findViewById(R.id.Bus_Current_place);
+        final EditText Bus_Destination_place = (EditText) findViewById(R.id.Bus_Destination_place);
+        Button schedule_button = (Button) findViewById(R.id.schedule);
 
-        train_CheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        CheckBox Train_CheckBox = (CheckBox) findViewById(R.id.train_checkBox);
+        CheckBox Bus_CheckBox = (CheckBox) findViewById(R.id.bus_checkBox);
+
+        Train_CheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
         {
 
         @Override
             public void onCheckedChanged(CompoundButton buttonView,boolean isChecked)
             {
-                if (isChecked)
+                if (isChecked) //when the user chooses the train button, show the train's current place and destination place, and hide the other inputs
                 {
                     Train_Current_place.setVisibility(buttonView.VISIBLE);
                     Train_Destination_place.setVisibility(buttonView.VISIBLE);
+                }
+
+                else
+                {
+                    Train_Current_place.setVisibility(buttonView.INVISIBLE);
+                    Train_Destination_place.setVisibility(buttonView.INVISIBLE);
+                }
+            }
+        });
+
+        Bus_CheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,boolean isChecked)
+            {
+                if (isChecked) //when the user chooses the bus button, show the bus's current place and destination place, and hide the other inputs
+                {
+                    Bus_Current_place.setVisibility(buttonView.VISIBLE);
+                    Bus_Destination_place.setVisibility(buttonView.VISIBLE);
                 }
 
                 else
@@ -42,28 +65,8 @@ public class MainActivity extends ActionBarActivity
             }
         });
 
-        bus_CheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        schedule_button.setOnClickListener(new View.OnClickListener()
         {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView,boolean isChecked)
-            {
-                if (isChecked)
-                {
-                    Current_place.setVisibility(buttonView.VISIBLE);
-                    Destination_place.setVisibility(buttonView.VISIBLE);
-                }
-
-                else
-                {
-                    Current_place.setVisibility(buttonView.INVISIBLE);
-                    Destination_place.setVisibility(buttonView.INVISIBLE);
-                }
-            }
-        });
-
-        Button schedule_button = (Button) findViewById(R.id.schedule);
-        schedule_button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setContentView(R.layout.schedule_screen);
             }

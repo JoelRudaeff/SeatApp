@@ -70,10 +70,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Bus_Current_place"
+        android:hint="Current place"
+        android:visibility="invisible"
         android:layout_alignTop="@+id/bus_checkBox"
+        android:layout_alignRight="@+id/Train_Destination_place"
+        android:layout_alignEnd="@+id/Train_Destination_place"
+        android:layout_alignLeft="@+id/Train_Destination_place"
+        android:layout_alignStart="@+id/Train_Destination_place" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Bus_Destination_place"
+        android:hint="Destination place"
+        android:visibility="invisible"
+        android:layout_below="@+id/Bus_Current_place"
+        android:layout_alignLeft="@+id/Bus_Current_place"
+        android:layout_alignStart="@+id/Bus_Current_place"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignLeft="@+id/Train_Current_place"
-        android:layout_alignStart="@+id/Train_Current_place" />
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
