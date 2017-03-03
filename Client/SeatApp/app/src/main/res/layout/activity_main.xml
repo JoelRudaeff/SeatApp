@@ -17,31 +17,34 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="לוח זמני כלי תחבורה"
-        android:id="@+id/schedule"
+        android:text="Train schedule"
+        android:visibility="invisible"
+        android:id="@+id/Train_schedule_button"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:onClick="startTrainSchedule" />
 
-    <CheckBox
+    <RadioButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Train"
-        android:id="@+id/train_checkBox"
+        android:id="@+id/train_radio_button"
         android:checked="false"
         android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="26dp" />
 
-    <CheckBox
+    <RadioButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Bus"
-        android:id="@+id/bus_checkBox"
-        android:layout_below="@+id/train_checkBox"
+        android:id="@+id/bus_radio_button"
+        android:layout_below="@+id/train_radio_button"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="43dp" />
+        android:layout_marginTop="43dp"
+        android:checked="false" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -50,7 +53,7 @@
         android:id="@+id/Train_Current_place"
         android:hint="Current place"
         android:visibility="invisible"
-        android:layout_alignBottom="@+id/train_checkBox"
+        android:layout_alignBottom="@+id/train_radio_button"
         android:layout_alignLeft="@+id/textView"
         android:layout_alignStart="@+id/textView" />
 
@@ -60,7 +63,7 @@
         android:id="@+id/Train_Destination_place"
         android:hint="Destination place"
         android:visibility="invisible"
-        android:layout_below="@+id/train_checkBox"
+        android:layout_below="@+id/train_radio_button"
         android:layout_alignRight="@+id/Train_Current_place"
         android:layout_alignEnd="@+id/Train_Current_place"
         android:layout_alignLeft="@+id/Train_Current_place"
@@ -72,7 +75,7 @@
         android:id="@+id/Bus_Current_place"
         android:hint="Current place"
         android:visibility="invisible"
-        android:layout_alignTop="@+id/bus_checkBox"
+        android:layout_alignTop="@+id/bus_radio_button"
         android:layout_alignRight="@+id/Train_Destination_place"
         android:layout_alignEnd="@+id/Train_Destination_place"
         android:layout_alignLeft="@+id/Train_Destination_place"
@@ -89,5 +92,16 @@
         android:layout_alignStart="@+id/Bus_Current_place"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bus schedule"
+        android:visibility="invisible"
+        android:id="@+id/Bus_schedule_button"
+        android:onClick="startBusSchedule"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/Train_schedule_button"
+        android:layout_alignStart="@+id/Train_schedule_button" />
 
 </RelativeLayout>
