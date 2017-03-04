@@ -10,7 +10,7 @@ SERIAL_PORT = 9600 # port for communication between the RPI and the Arduino
 
 
 #will try to connect to the server 
-def try_connecting_to_server(socket_to_server):
+def try_connecting_to_server():
 	# start the socket to the server
     socket_to_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # setup the socket for future use
     connected = False
