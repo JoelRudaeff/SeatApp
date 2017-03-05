@@ -15,4 +15,47 @@
         android:id="@+id/Train_schedule_title"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Current"
+        android:id="@+id/Train_Current"
+        android:layout_marginTop="46dp"
+        android:layout_below="@+id/Train_schedule_title"
+        android:layout_alignRight="@+id/Train_schedule_title"
+        android:layout_alignEnd="@+id/Train_schedule_title" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Destination"
+        android:id="@+id/Train_Destination"
+        android:layout_below="@+id/Train_Current"
+        android:layout_alignLeft="@+id/Train_Current"
+        android:layout_alignStart="@+id/Train_Current"
+        android:layout_marginTop="42dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="From:"
+        android:id="@+id/from"
+        android:layout_above="@+id/Train_Destination"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="To:"
+        android:id="@+id/to"
+        android:layout_alignTop="@+id/Train_Destination"
+        android:layout_alignRight="@+id/from"
+        android:layout_alignEnd="@+id/from" />
+
 </RelativeLayout>

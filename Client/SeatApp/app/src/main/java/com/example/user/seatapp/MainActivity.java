@@ -11,14 +11,13 @@ import android.widget.RadioButton;
 
 public class MainActivity extends ActionBarActivity
 {
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        
         final EditText Train_Current_place = (EditText) findViewById(R.id.Train_Current_place);
         final EditText Train_Destination_place = (EditText) findViewById(R.id.Train_Destination_place);
         final EditText Bus_Current_place = (EditText) findViewById(R.id.Bus_Current_place);
@@ -47,7 +46,9 @@ public class MainActivity extends ActionBarActivity
                 else
                 {
                     Train_Current_place.setVisibility(buttonView.INVISIBLE);
+                    Train_Current_place.setText(""); //Erases the current place which the user entered before
                     Train_Destination_place.setVisibility(buttonView.INVISIBLE);
+                    Train_Destination_place.setText(""); //Erases the destination place which the user entered before
                     Train_schedule_button.setVisibility(buttonView.INVISIBLE);
                 }
             }
@@ -69,15 +70,41 @@ public class MainActivity extends ActionBarActivity
                 else
                 {
                     Bus_Current_place.setVisibility(buttonView.INVISIBLE);
+                    Bus_Current_place.setText(""); //Erases the current place which the user entered before
                     Bus_Destination_place.setVisibility(buttonView.INVISIBLE);
+                    Bus_Destination_place.setText(""); //Erases the destination place which the user entered before
                     Bus_schedule_button.setVisibility(buttonView.INVISIBLE);
                 }
+
+
             }
         });
 
     }
 
-    public void startBusSchedule(View view) { startActivity(new Intent(this, BusScheduleActivity.class)); } // when the button is clicked, open this activity
-    public void startTrainSchedule(View view) { startActivity(new Intent(this, TrainScheduleActivity.class)); } // when the button is clicked, open this activity
+    public void startBusSchedule(View view) // when the button is clicked, open this activity
+    {
+        final EditText Bus_Current_place = (EditText) findViewById(R.id.Bus_Current_place);
+        final EditText Bus_Destination_place = (EditText) findViewById(R.id.Bus_Destination_place);
+
+        Intent intent = new Intent(this, BusScheduleActivity.class);
+        intent.putExtra("Current", Bus_Current_place.getText().toString());
+        intent.putExtra("Destination", Bus_Destination_place.getText().toString());
+
+        startActivity(intent);
+    }
+
+    public void startTrainSchedule(View view) // when the button is clicked, open this activity
+    {
+        final EditText Train_Current_place = (EditText) findViewById(R.id.Train_Current_place);
+        final EditText Train_Destination_place = (EditText) findViewById(R.id.Train_Destination_place);
+
+        Intent intent = new Intent(this, TrainScheduleActivity.class);
+        intent.putExtra("Current", Train_Current_place.getText().toString());
+        intent.putExtra("Destination", Train_Destination_place.getText().toString());
+
+        startActivity(intent);
+    }
+
 
 }
