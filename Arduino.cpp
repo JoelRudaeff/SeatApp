@@ -52,24 +52,31 @@ void loop()
 	int i; 
 	int distance;
 	string data_to_send;
-	
-	for( i = 0; i < SONAR_NUM; i++)
+	try
 	{
-		distance = sonar[i].ping_cm(); //returns 0 if nothing found in range
 
-		if ( distance > 0 && distance < 200)
-			distance = "1"; // person was found inrange	
-		else
-			distnace = "0"; // person wasn't found
-		
-		data_to_send.append(distance);
+		for (i = 0; i < SONAR_NUM; i++)
+		{
+			distance = sonar[i].ping_cm(); //returns 0 if nothing found in range
+
+			if (distance > 0 && distance < 200)
+				distance = "1"; // person was found inrange	
+			else
+				distnace = "0"; // person wasn't found
+
+			data_to_send.append(distance);
+		}
+
+		if (old_data_to_send.str() != data_to_send) //if the new data isn't the same as the old data
+		{
+			//by the protocol
+			serial.println('S' + ";" + data_to_send.length() + ";" + data_to_send + ";" + responsible_lines.length() + ";" + responsible_lines); //send data to the rpi
+			old_data_to_send.str(data_to_send);
+		}
 	}
-	
-	if (old_data_to_send.str() != data_to_send) //if the new data isn't the same as the old data
+	catch (exception e)
 	{
-		//by the protocol
-		serial.println('S' + ";" + data_to_send.length() + ";" + data_to_send + ";" + responsible_lines.length() + ";" + responsible_lines); //send data to the rpi
-		old_data_to_send.str(data_to_send);
+		cout << e.what();
 	}
 		
 	

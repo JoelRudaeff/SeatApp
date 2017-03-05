@@ -145,10 +145,10 @@ def handle_rpi():
         try:
             seat_data = s_to_rpi.recv(size)
             if seat_data:
-                if seat_data is not "EXIT":  # TODO: define protocol
+                if seat_data is not "c" and seat_data is "u":  # TODO: define protocol - not close but update
                     update_database(seat_data)
-                else:
-                    #finish
+					s_to_rpi.sendall("r")
+                else: #close
 					s_to_rpi.close()
                     break
         except:  # TODO: define what to do when error has been occurred
