@@ -17,17 +17,17 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Train schedule"
+        android:text="לוח זמני רכבות"
         android:visibility="invisible"
         android:id="@+id/Train_schedule_button"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="startTrainSchedule" />
+        android:onClick="startTrainSchedule"
+        android:layout_below="@+id/Taxi_Destination_place"
+        android:layout_centerHorizontal="true" />
 
     <RadioButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Train"
+        android:text="רכבת"
         android:id="@+id/train_radio_button"
         android:checked="false"
         android:layout_below="@+id/textView"
@@ -38,7 +38,7 @@
     <RadioButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Bus"
+        android:text="אוטובוס"
         android:id="@+id/bus_radio_button"
         android:layout_below="@+id/train_radio_button"
         android:layout_alignParentLeft="true"
@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:id="@+id/Train_Current_place"
-        android:hint="Current place"
+        android:hint="מיקום נוכחי"
         android:visibility="invisible"
         android:layout_alignBottom="@+id/train_radio_button"
         android:layout_alignLeft="@+id/textView"
@@ -61,7 +61,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Train_Destination_place"
-        android:hint="Destination place"
+        android:hint="מיקום יעד"
         android:visibility="invisible"
         android:layout_below="@+id/train_radio_button"
         android:layout_alignRight="@+id/Train_Current_place"
@@ -73,7 +73,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Bus_Current_place"
-        android:hint="Current place"
+        android:hint="מיקום נוכחי"
         android:visibility="invisible"
         android:layout_alignTop="@+id/bus_radio_button"
         android:layout_alignRight="@+id/Train_Destination_place"
@@ -85,7 +85,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Bus_Destination_place"
-        android:hint="Destination place"
+        android:hint="מיקום יעד"
         android:visibility="invisible"
         android:layout_below="@+id/Bus_Current_place"
         android:layout_alignLeft="@+id/Bus_Current_place"
@@ -96,12 +96,62 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Bus schedule"
+        android:text="לוח זמני אוטובוסים"
         android:visibility="invisible"
         android:id="@+id/Bus_schedule_button"
         android:onClick="startBusSchedule"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/Taxi_Destination_place"
         android:layout_alignLeft="@+id/Train_schedule_button"
-        android:layout_alignStart="@+id/Train_schedule_button" />
+        android:layout_alignStart="@+id/Train_schedule_button"
+        android:layout_alignRight="@+id/Train_schedule_button"
+        android:layout_alignEnd="@+id/Train_schedule_button" />
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="מונית"
+        android:id="@+id/Taxi_radio_button"
+        android:layout_below="@+id/Bus_Destination_place"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:checked="false" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="מיקום נוכחי"
+        android:visibility="invisible"
+        android:id="@+id/Taxi_Current_place"
+        android:layout_below="@+id/Bus_Destination_place"
+        android:layout_alignRight="@+id/Bus_Current_place"
+        android:layout_alignEnd="@+id/Bus_Current_place"
+        android:layout_alignLeft="@+id/Bus_Destination_place"
+        android:layout_alignStart="@+id/Bus_Destination_place" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="מיקום יעד"
+        android:visibility="invisible"
+        android:id="@+id/Taxi_Destination_place"
+        android:layout_below="@+id/Taxi_Current_place"
+        android:layout_alignRight="@+id/Bus_Destination_place"
+        android:layout_alignEnd="@+id/Bus_Destination_place"
+        android:layout_alignLeft="@+id/Taxi_Current_place"
+        android:layout_alignStart="@+id/Taxi_Current_place" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="לוח זמני מוניות"
+        android:visibility="invisible"
+        android:id="@+id/Taxi_schedule_button"
+        android:layout_below="@+id/Taxi_Destination_place"
+        android:layout_alignLeft="@+id/Train_schedule_button"
+        android:layout_alignStart="@+id/Train_schedule_button"
+        android:layout_alignBottom="@+id/Bus_schedule_button"
+        android:layout_alignRight="@+id/Train_schedule_button"
+        android:layout_alignEnd="@+id/Train_schedule_button"
+        android:onClick="startTaxiSchedule" />
 
 </RelativeLayout>

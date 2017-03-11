@@ -17,7 +17,7 @@ public class BusScheduleActivity extends ActionBarActivity
         {
             Bundle extras = getIntent().getExtras();
 
-            if(extras.getString("Current") != " ")
+            if(extras.getString("Current") != " ") // if the user entered a current place, continue...
             {
                 String s = extras.getString("Current");
 
@@ -25,7 +25,7 @@ public class BusScheduleActivity extends ActionBarActivity
                 temp.setText(s);
             }
 
-            if(extras.getString("Destination") != " ")
+            if(extras.getString("Destination") != " ") // if the user entered a destination place, continue...
             {
                 String s = extras.getString("Destination");
 

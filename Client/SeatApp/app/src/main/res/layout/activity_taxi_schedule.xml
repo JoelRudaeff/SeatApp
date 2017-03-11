@@ -5,14 +5,14 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.example.user.seatapp.TrainScheduleActivity">
+    tools:context="com.example.user.seatapp.TaxiScheduleActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="רכבות"
-        android:id="@+id/Train_schedule_title"
+        android:text="מוניות"
+        android:id="@+id/Taxi_title"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
@@ -21,22 +21,20 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Current"
-        android:id="@+id/Train_Current"
-        android:layout_marginTop="46dp"
-        android:layout_below="@+id/Train_schedule_title"
-        android:layout_alignRight="@+id/Train_schedule_title"
-        android:layout_alignEnd="@+id/Train_schedule_title" />
+        android:id="@+id/Taxi_Current"
+        android:layout_below="@+id/Taxi_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="36dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Destination"
-        android:id="@+id/Train_Destination"
-        android:layout_below="@+id/Train_Current"
-        android:layout_alignLeft="@+id/Train_Current"
-        android:layout_alignStart="@+id/Train_Current"
-        android:layout_marginTop="42dp" />
+        android:id="@+id/Taxi_Destination"
+        android:layout_marginTop="36dp"
+        android:layout_below="@+id/Taxi_Current"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -44,7 +42,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="מוצא:"
         android:id="@+id/from"
-        android:layout_above="@+id/Train_Destination"
+        android:layout_alignTop="@+id/Taxi_Current"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -54,8 +52,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="יעד:"
         android:id="@+id/to"
-        android:layout_alignTop="@+id/Train_Destination"
-        android:layout_alignRight="@+id/from"
-        android:layout_alignEnd="@+id/from" />
-
+        android:layout_alignTop="@+id/Taxi_Destination"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>
