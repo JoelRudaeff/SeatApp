@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="מוניות"
+        android:text="Taxis"
         android:id="@+id/Taxi_title"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
@@ -40,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="מוצא:"
+        android:text="Current:"
         android:id="@+id/from"
         android:layout_alignTop="@+id/Taxi_Current"
         android:layout_alignParentLeft="true"
@@ -50,9 +50,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="יעד:"
+        android:text="Destination:"
         android:id="@+id/to"
-        android:layout_alignTop="@+id/Taxi_Destination"
+        android:layout_alignBaseline="@+id/Taxi_Destination"
+        android:layout_alignBottom="@+id/Taxi_Destination"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/Taxi_Current"
+        android:layout_toStartOf="@+id/Taxi_Current" />
 </RelativeLayout>

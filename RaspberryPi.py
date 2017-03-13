@@ -13,7 +13,7 @@ SEAT_LIST = []
 #
 def read_configuration_file():
     content = ""
-    with open("RPI_Configuration") as f:
+    with open("RPI_Configuration.txt") as f:
         content = f.readlines()
 
     lines = [x.strip() for x in content]
@@ -66,7 +66,6 @@ def send_sensors_data_to_server(sensors_data, stored_sensors_data, socket_to_ser
         socket_to_server.sendall(PROTOCOL_UPDATE_KEY + sensors_data_in_string)
         socket_to_server.recv(server_reply)
         parse_server_response(server_reply)
-        socket_to_server.sendall(PROTOCOL_CLOSE_KEY)
         stored_sensors_data = sensors_data  # LIST - is a mutable type - passes as a reference and can be changed, SO if the new sensors data is different than the older data, redirect the to the new list of data
     socket_to_server.sendall(PROTOCOL_CLOSE_KEY)
     socket_to_server.close()
@@ -82,7 +81,7 @@ def handle_missions():
     while True:
         list_of_sensors = list(ser.readline())  # turn the given string into a list of chars
         send_sensors_data_to_server(list_of_sensors.pop(0), stored_sensors_data,try_connecting_to_server())  # first cell in the list is always '', so remove it.
-        time.sleep(1)  # sleep for ONE seconds ( 1s )
+        time.sleep(1)  # sleep for ONE second ( 1s )
 
 
 def main():

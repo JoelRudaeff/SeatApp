@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="רכבות"
+        android:text="Trains"
         android:id="@+id/Train_schedule_title"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="מוצא:"
+        android:text="Current:"
         android:id="@+id/from"
         android:layout_above="@+id/Train_Destination"
         android:layout_alignParentLeft="true"
@@ -52,10 +52,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="יעד:"
+        android:text="Destination:"
         android:id="@+id/to"
-        android:layout_alignTop="@+id/Train_Destination"
-        android:layout_alignRight="@+id/from"
-        android:layout_alignEnd="@+id/from" />
+        android:layout_alignBaseline="@+id/Train_Destination"
+        android:layout_alignBottom="@+id/Train_Destination"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/Train_Destination"
+        android:layout_toStartOf="@+id/Train_Destination" />
 
 </RelativeLayout>
