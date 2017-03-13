@@ -23,27 +23,27 @@
         android:id="@+id/username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
+        android:layout_below="@+id/home_page_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="38dp"
         android:ems="10"
         android:hint="Username"
         android:inputType="textPersonName"
-        android:gravity="center"
-        android:layout_below="@+id/home_page_title"
-        android:layout_centerHorizontal="true" />
+        android:textAlignment="center" />
 
     <EditText
         android:id="@+id/password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/username"
+        android:layout_alignStart="@+id/username"
+        android:layout_below="@+id/username"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
         android:selectAllOnFocus="false"
-        android:gravity="center"
-        android:layout_below="@+id/username"
-        android:layout_alignLeft="@+id/username"
-        android:layout_alignStart="@+id/username"
-        android:layout_marginTop="14dp" />
+        android:singleLine="false"
+        android:textAlignment="center" />
 
     <Button
         android:id="@+id/Sign_in"
@@ -65,6 +65,6 @@
         android:layout_below="@+id/Sign_in"
         android:layout_marginTop="38dp"
         android:onClick="startSignUpActivity"
-        android:text="Sign up" />
+        android:text="Sing up" />
 
 </RelativeLayout>

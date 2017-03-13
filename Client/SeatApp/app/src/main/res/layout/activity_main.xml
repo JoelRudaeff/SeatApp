@@ -7,151 +7,164 @@
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Choose the vechile:"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="SeatApp"
-        android:id="@+id/textView"
-        android:layout_centerHorizontal="true" />
+        android:textColor="@android:color/holo_green_light"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
     <Button
+        android:id="@+id/Train_schedule_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Trains schedule"
-        android:visibility="invisible"
-        android:id="@+id/Train_schedule_button"
-        android:onClick="startTrainSchedule"
         android:layout_below="@+id/Taxi_Destination_place"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="51dp"
+        android:onClick="startTrainSchedule"
+        android:text="Train schedule"
+        android:textColor="@android:color/holo_blue_light"
+        android:visibility="invisible" />
 
     <RadioButton
+        android:id="@+id/train_radio_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Trains"
-        android:id="@+id/train_radio_button"
+        android:layout_marginTop="35dp"
         android:checked="false"
+        android:text="Trains"
         android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="26dp" />
+        android:layout_alignParentStart="true" />
 
     <RadioButton
+        android:id="@+id/bus_radio_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:checked="false"
         android:text="Buses"
-        android:id="@+id/bus_radio_button"
-        android:layout_below="@+id/train_radio_button"
+        android:layout_below="@+id/Train_Destination_place"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="43dp"
-        android:checked="false" />
+        android:layout_alignParentStart="true" />
 
     <EditText
+        android:id="@+id/Train_Current_place"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:id="@+id/Train_Current_place"
-        android:hint="Current Location"
+        android:hint="Current place"
+        android:inputType="textPersonName"
         android:visibility="invisible"
-        android:layout_alignBottom="@+id/train_radio_button"
-        android:layout_alignLeft="@+id/textView"
-        android:layout_alignStart="@+id/textView" />
+        android:layout_alignTop="@+id/train_radio_button"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <EditText
+        android:id="@+id/Train_Destination_place"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/Train_Destination_place"
-        android:hint="Destination Location"
+        android:hint="Destination place"
+        android:inputType="textPersonName"
         android:visibility="invisible"
-        android:layout_below="@+id/train_radio_button"
-        android:layout_alignRight="@+id/Train_Current_place"
-        android:layout_alignEnd="@+id/Train_Current_place"
+        android:layout_below="@+id/Train_Current_place"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignLeft="@+id/Train_Current_place"
         android:layout_alignStart="@+id/Train_Current_place" />
 
     <EditText
+        android:id="@+id/Bus_Current_place"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/Bus_Current_place"
-        android:hint="Current Location"
+        android:hint="Current place"
+        android:inputType="textPersonName"
         android:visibility="invisible"
-        android:layout_alignTop="@+id/bus_radio_button"
-        android:layout_alignRight="@+id/Train_Destination_place"
-        android:layout_alignEnd="@+id/Train_Destination_place"
+        android:layout_below="@+id/Train_Destination_place"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignLeft="@+id/Train_Destination_place"
         android:layout_alignStart="@+id/Train_Destination_place" />
 
     <EditText
+        android:id="@+id/Bus_Destination_place"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/Bus_Destination_place"
-        android:hint="Destination Location"
+        android:hint="Destination place"
+        android:inputType="textPersonName"
         android:visibility="invisible"
         android:layout_below="@+id/Bus_Current_place"
-        android:layout_alignLeft="@+id/Bus_Current_place"
-        android:layout_alignStart="@+id/Bus_Current_place"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/Bus_Current_place"
+        android:layout_alignStart="@+id/Bus_Current_place" />
 
     <Button
+        android:id="@+id/Bus_schedule_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Buses schedule"
-        android:visibility="invisible"
-        android:id="@+id/Bus_schedule_button"
-        android:onClick="startBusSchedule"
-        android:layout_below="@+id/Taxi_Destination_place"
-        android:layout_alignLeft="@+id/Train_schedule_button"
-        android:layout_alignStart="@+id/Train_schedule_button"
+        android:layout_alignBaseline="@+id/Taxi_schedule_button"
+        android:layout_alignBottom="@+id/Taxi_schedule_button"
+        android:layout_alignEnd="@+id/Train_schedule_button"
+        android:layout_alignLeft="@+id/Taxi_schedule_button"
         android:layout_alignRight="@+id/Train_schedule_button"
-        android:layout_alignEnd="@+id/Train_schedule_button" />
+        android:layout_alignStart="@+id/Taxi_schedule_button"
+        android:onClick="startBusSchedule"
+        android:text="Bus schedule"
+        android:textColor="@android:color/holo_blue_light"
+        android:visibility="invisible" />
 
     <RadioButton
+        android:id="@+id/Taxi_radio_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:checked="false"
         android:text="Taxis"
-        android:id="@+id/Taxi_radio_button"
         android:layout_below="@+id/Bus_Destination_place"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:checked="false" />
+        android:layout_alignParentStart="true" />
 
     <EditText
+        android:id="@+id/Taxi_Current_place"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Current Location"
-        android:visibility="invisible"
-        android:id="@+id/Taxi_Current_place"
+        android:layout_alignEnd="@+id/Bus_Destination_place"
+        android:layout_alignRight="@+id/Bus_Destination_place"
         android:layout_below="@+id/Bus_Destination_place"
-        android:layout_alignRight="@+id/Bus_Current_place"
-        android:layout_alignEnd="@+id/Bus_Current_place"
+        android:hint="Current place"
+        android:inputType="textPersonName"
+        android:visibility="invisible"
         android:layout_alignLeft="@+id/Bus_Destination_place"
         android:layout_alignStart="@+id/Bus_Destination_place" />
 
     <EditText
+        android:id="@+id/Taxi_Destination_place"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Destination Location"
-        android:visibility="invisible"
-        android:id="@+id/Taxi_Destination_place"
-        android:layout_below="@+id/Taxi_Current_place"
-        android:layout_alignRight="@+id/Bus_Destination_place"
         android:layout_alignEnd="@+id/Bus_Destination_place"
         android:layout_alignLeft="@+id/Taxi_Current_place"
-        android:layout_alignStart="@+id/Taxi_Current_place" />
+        android:layout_alignRight="@+id/Bus_Destination_place"
+        android:layout_alignStart="@+id/Taxi_Current_place"
+        android:layout_below="@+id/Taxi_Current_place"
+        android:hint="Destination place"
+        android:inputType="textPersonName"
+        android:visibility="invisible" />
 
     <Button
+        android:id="@+id/Taxi_schedule_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Taxis schedule"
-        android:visibility="invisible"
-        android:id="@+id/Taxi_schedule_button"
-        android:layout_below="@+id/Taxi_Destination_place"
-        android:layout_alignLeft="@+id/Train_schedule_button"
-        android:layout_alignStart="@+id/Train_schedule_button"
-        android:layout_alignBottom="@+id/Bus_schedule_button"
-        android:layout_alignRight="@+id/Train_schedule_button"
+        android:layout_alignBottom="@+id/Train_schedule_button"
         android:layout_alignEnd="@+id/Train_schedule_button"
-        android:onClick="startTaxiSchedule" />
+        android:layout_alignLeft="@+id/Train_schedule_button"
+        android:layout_alignRight="@+id/Train_schedule_button"
+        android:layout_alignStart="@+id/Train_schedule_button"
+        android:layout_alignTop="@+id/Train_schedule_button"
+        android:onClick="startTaxiSchedule"
+        android:text="Taxi schedule"
+        android:textColor="@android:color/holo_blue_light"
+        android:visibility="invisible" />
 
 </RelativeLayout>

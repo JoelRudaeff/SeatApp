@@ -8,13 +8,13 @@
     tools:context="com.example.user.seatapp.TrainScheduleActivity">
 
     <TextView
+        android:id="@+id/Train_schedule_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Trains"
-        android:id="@+id/Train_schedule_title"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:text="Trains"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -22,10 +22,12 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Current"
         android:id="@+id/Train_Current"
-        android:layout_marginTop="46dp"
+        android:layout_marginTop="52dp"
         android:layout_below="@+id/Train_schedule_title"
-        android:layout_alignRight="@+id/Train_schedule_title"
-        android:layout_alignEnd="@+id/Train_schedule_title" />
+        android:layout_alignLeft="@+id/Train_schedule_title"
+        android:layout_alignStart="@+id/Train_schedule_title"
+        android:layout_marginLeft="43dp"
+        android:layout_marginStart="43dp" />
 
     <TextView
         android:id="@+id/Train_Destination"
@@ -39,26 +41,23 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
+        android:id="@+id/from"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Current:"
-        android:id="@+id/from"
         android:layout_above="@+id/Train_Destination"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:text="Current:"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_alignRight="@+id/to"
+        android:layout_alignEnd="@+id/to" />
 
     <TextView
+        android:id="@+id/to"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_alignTop="@+id/Train_Destination"
         android:text="Destination:"
-        android:id="@+id/to"
-        android:layout_alignBaseline="@+id/Train_Destination"
-        android:layout_alignBottom="@+id/Train_Destination"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/Train_Destination"
-        android:layout_toStartOf="@+id/Train_Destination" />
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>

@@ -8,13 +8,13 @@
     tools:context="com.example.user.seatapp.BusScheduleActivity">
 
     <TextView
+        android:id="@+id/Bus_schedule_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Buses"
-        android:id="@+id/Bus_schedule_title"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:text="Buses"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -22,9 +22,10 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Current"
         android:id="@+id/Bus_Current"
-        android:layout_marginTop="46dp"
+        android:layout_marginTop="45dp"
         android:layout_below="@+id/Bus_schedule_title"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignLeft="@+id/Bus_Destination"
+        android:layout_alignStart="@+id/Bus_Destination" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -32,30 +33,31 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Destination"
         android:id="@+id/Bus_Destination"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="44dp"
+        android:layout_marginStart="44dp"
         android:layout_below="@+id/Bus_Current"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignLeft="@+id/Bus_schedule_title"
+        android:layout_alignStart="@+id/Bus_schedule_title" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Current:"
         android:id="@+id/from"
-        android:layout_alignTop="@+id/Bus_Current"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Destination:"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/Bus_Current"
+        android:text="Current:"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
         android:id="@+id/to"
-        android:layout_alignTop="@+id/Bus_Destination"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/from"
         android:layout_alignStart="@+id/from"
-        android:layout_toLeftOf="@+id/Bus_Current"
-        android:layout_toStartOf="@+id/Bus_Current" />
+        android:layout_alignTop="@+id/Bus_Destination"
+        android:text="Destination:"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>
