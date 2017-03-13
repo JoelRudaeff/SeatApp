@@ -8,96 +8,64 @@
     tools:context="com.example.user.seatapp.HomePageActivity">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="HOME PAGE"
         android:id="@+id/home_page_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:hint="שם משתמש"
-        android:ems="10"
-        android:id="@+id/username"
-        android:layout_below="@+id/home_page_title"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="42dp"
-        android:layout_alignRight="@+id/home_page_title"
-        android:layout_alignEnd="@+id/home_page_title" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="סיסמה"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/password"
-        android:layout_below="@+id/username"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/home_page_title"
-        android:layout_alignEnd="@+id/home_page_title" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="התחברות"
-        android:id="@+id/Sign_in"
-        android:onClick="startMainActivitySignIn"
-        android:layout_below="@+id/password"
-        android:layout_centerHorizontal="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/SignUpUsername"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:hint="שם משתמש לבחירתך"
-        android:layout_alignRight="@+id/home_page_title"
-        android:layout_alignEnd="@+id/home_page_title" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/SignUpPassword"
-        android:layout_below="@+id/SignUpUsername"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/home_page_title"
-        android:layout_alignEnd="@+id/home_page_title"
-        android:hint="הסיסמה לבחירתך" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/SignUpEnsurePasword"
-        android:layout_below="@+id/SignUpPassword"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:hint="אישור סיסמה"
-        android:layout_alignRight="@+id/home_page_title"
-        android:layout_alignEnd="@+id/home_page_title" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="הרשמה"
-        android:id="@+id/Sign_Up"
-        android:layout_below="@+id/SignUpEnsurePasword"
         android:layout_centerHorizontal="true"
-        android:onClick="startMainActivitySignUp" />
+        android:fontFamily="cursive"
+        android:text="SeatApp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@android:color/holo_green_light"
+        android:textSize="50sp" />
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/home_page_title"
+        android:layout_marginTop="38dp"
+        android:ems="10"
+        android:hint="Username"
+        android:inputType="textPersonName"
+        android:textAlignment="textStart" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/username"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:selectAllOnFocus="false"
+        android:singleLine="false"
+        android:textAlignment="textStart" />
+
+    <Button
+        android:id="@+id/Sign_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="startMainActivitySignIn"
+        android:text="Sign in"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/Sign_Up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/Sign_in"
+        android:layout_alignLeft="@+id/Sign_in"
+        android:layout_alignRight="@+id/Sign_in"
+        android:layout_alignStart="@+id/Sign_in"
+        android:layout_below="@+id/Sign_in"
+        android:layout_marginTop="38dp"
+        android:onClick="startSignUpActivity"
+        android:text="Sing up" />
 
 </RelativeLayout>

@@ -18,13 +18,8 @@ public class HomePageActivity extends ActionBarActivity
 
         final EditText UserName = (EditText) findViewById(R.id.username);
         final EditText Password = (EditText) findViewById(R.id.password);
-        final EditText NewUserName = (EditText) findViewById(R.id.SignUpUsername);
-        final EditText NewPassword = (EditText) findViewById(R.id.SignUpPassword);
-        final EditText EnsurePassword = (EditText) findViewById(R.id.SignUpEnsurePasword);
 
         final Button SignIn = (Button) findViewById(R.id.Sign_in);
-
-
     }
 
     public void startMainActivitySignIn(View view)
@@ -39,17 +34,9 @@ public class HomePageActivity extends ActionBarActivity
         startActivity(intent);
     }
 
-    public void startMainActivitySignUp(View view)
+    public void startSignUpActivity(View view)
     {
-        final EditText NewUserName = (EditText) findViewById(R.id.SignUpUsername);
-        final EditText NewPassword = (EditText) findViewById(R.id.SignUpPassword);
-        final EditText EnsurePassword = (EditText) findViewById(R.id.SignUpEnsurePasword);
-
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("New Username", NewUserName.getText().toString());
-        intent.putExtra("New Password", NewPassword.getText().toString());
-        intent.putExtra("Ensure Password", EnsurePassword.getText().toString());
-
+        Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
     }
 }

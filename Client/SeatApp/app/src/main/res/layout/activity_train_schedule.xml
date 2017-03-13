@@ -28,15 +28,15 @@
         android:layout_alignEnd="@+id/Train_schedule_title" />
 
     <TextView
+        android:id="@+id/Train_Destination"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Destination"
-        android:id="@+id/Train_Destination"
-        android:layout_below="@+id/Train_Current"
         android:layout_alignLeft="@+id/Train_Current"
         android:layout_alignStart="@+id/Train_Current"
-        android:layout_marginTop="42dp" />
+        android:layout_below="@+id/Train_Current"
+        android:layout_marginTop="42dp"
+        android:text="Destination"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:layout_width="wrap_content"

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.user.seatapp.SignUpActivity">
+
+    <EditText
+        android:id="@+id/SignUpUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="47dp"
+        android:ems="10"
+        android:hint="Choose your username"
+        android:inputType="textPersonName"
+        android:textAlignment="textStart"
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:layout_editor_absoluteY="47dp"
+        android:layout_below="@+id/title"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:id="@+id/SignUpPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:ems="10"
+        android:hint="Choose your password"
+        android:inputType="textPassword"
+        android:textAlignment="textStart"
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:layout_editor_absoluteY="179dp"
+        android:layout_below="@+id/SignUpUsername"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:id="@+id/SignUpPasswordAgain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/SignUpPassword"
+        android:layout_alignStart="@+id/SignUpPassword"
+        android:layout_below="@+id/SignUpPassword"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:hint="Ensure your password"
+        android:inputType="textPassword"
+        android:textAlignment="textStart"
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:layout_editor_absoluteY="234dp" />
+
+    <EditText
+        android:id="@+id/SignUpEmail"
+        android:layout_width="215dp"
+        android:layout_height="43dp"
+        android:layout_alignEnd="@+id/SignUpPasswordAgain"
+        android:layout_alignRight="@+id/SignUpPasswordAgain"
+        android:layout_below="@+id/SignUpPasswordAgain"
+        android:layout_marginTop="29dp"
+        android:ems="10"
+        android:hint="Enter your E-mail address"
+        android:inputType="textEmailAddress"
+        android:textAlignment="textStart"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="105dp" />
+
+    <Button
+        android:id="@+id/SignUpButton"
+        android:layout_width="162dp"
+        android:layout_height="104dp"
+        android:layout_below="@+id/SignUpEmail"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="29dp"
+        android:onClick="startHomePage"
+        android:text="Register"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="28sp"
+        tools:layout_editor_absoluteX="111dp"
+        tools:layout_editor_absoluteY="321dp" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="11dp"
+        android:text="Please fill in the next details:"
+        android:textColor="@android:color/holo_green_light"
+        android:textSize="30sp"
+        android:textStyle="bold|italic" />
+
+</RelativeLayout>
