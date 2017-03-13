@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.user.seatapp.TrainsActivity">
+
+
+    <TextView
+        android:id="@+id/CurrentTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="32dp"
+        android:text="Current place"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+
+    <TextView
+        android:id="@+id/DestainationTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/CurrentTitle"
+        android:layout_marginTop="19dp"
+        android:layout_toLeftOf="@+id/CurrentSpinner"
+        android:layout_toStartOf="@+id/CurrentSpinner"
+        android:text="Destination place"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <Spinner
+        android:id="@+id/CurrentSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/DestainationTitle"
+        android:layout_marginLeft="25dp"
+        android:layout_marginStart="25dp"
+        android:layout_toEndOf="@+id/CurrentTitle"
+        android:layout_toRightOf="@+id/CurrentTitle" />
+
+    <Spinner
+        android:id="@+id/DestinationSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/DestainationTitle"
+        android:layout_alignLeft="@+id/CurrentSpinner"
+        android:layout_alignStart="@+id/CurrentSpinner" />
+
+    <TextView
+        android:id="@+id/stam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="128dp"
+        android:layout_toLeftOf="@+id/DestinationSpinner"
+        android:layout_toStartOf="@+id/DestinationSpinner"
+        android:text="TextView" />
+</RelativeLayout>

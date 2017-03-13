@@ -65,6 +65,6 @@
         android:layout_below="@+id/Sign_in"
         android:layout_marginTop="38dp"
         android:onClick="startSignUpActivity"
-        android:text="Sing up" />
+        android:text="Sign up" />
 
 </RelativeLayout>

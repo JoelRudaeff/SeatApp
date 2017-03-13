@@ -44,7 +44,7 @@
         android:layout_below="@+id/SignUpPassword"
         android:layout_marginTop="24dp"
         android:ems="10"
-        android:hint="Re-ente your password"
+        android:hint="Re-enter your password"
         android:inputType="textPassword"
         android:textAlignment="center"
         app:layout_constraintLeft_toLeftOf="parent"
