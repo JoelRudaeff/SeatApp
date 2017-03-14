@@ -24,15 +24,13 @@
         android:id="@+id/DestainationTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/CurrentTitle"
-        android:layout_marginTop="19dp"
-        android:layout_toLeftOf="@+id/CurrentSpinner"
-        android:layout_toStartOf="@+id/CurrentSpinner"
+        android:layout_marginTop="21dp"
         android:text="Destination place"
         android:textColor="@android:color/black"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:layout_below="@+id/CurrentTitle"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Spinner
         android:id="@+id/CurrentSpinner"
@@ -53,12 +51,21 @@
         android:layout_alignStart="@+id/CurrentSpinner" />
 
     <TextView
-        android:id="@+id/stam"
+        android:id="@+id/cur"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="128dp"
-        android:layout_toLeftOf="@+id/DestinationSpinner"
-        android:layout_toStartOf="@+id/DestinationSpinner"
-        android:text="TextView" />
+        android:layout_below="@+id/DestinationSpinner"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="198dp"
+        android:text="cur" />
+
+    <TextView
+        android:id="@+id/dest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/cur"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="54dp"
+        android:text="dest" />
+
 </RelativeLayout>
