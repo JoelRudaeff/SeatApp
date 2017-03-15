@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.user.seatapp.BusesActivity">
+
+    <TextView
+        android:id="@+id/CurrentTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="37dp"
+        android:text="Current place"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/DestinationTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="DestinationPlace"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:layout_below="@+id/CurrentSpinner"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Spinner
+        android:id="@+id/CurrentSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/CurrentTitle"
+        android:layout_toEndOf="@+id/DestinationTitle"
+        android:layout_toRightOf="@+id/DestinationTitle" />
+
+    <Spinner
+        android:id="@+id/DestinationSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/DestinationTitle"
+        android:layout_toEndOf="@+id/DestinationTitle"
+        android:layout_toRightOf="@+id/DestinationTitle" />
+
+    <TextView
+        android:id="@+id/CompanyTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/DestinationTitle"
+        android:layout_alignStart="@+id/DestinationTitle"
+        android:layout_below="@+id/DestinationSpinner"
+        android:layout_marginTop="22dp"
+        android:text="Company"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <Spinner
+        android:id="@+id/CompanySpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/DestinationSpinner"
+        android:layout_alignStart="@+id/DestinationSpinner"
+        android:layout_alignTop="@+id/CompanyTitle" />
+
+    <TextView
+        android:id="@+id/cur"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/CompanySpinner"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="165dp"
+        android:text="cur" />
+
+    <TextView
+        android:id="@+id/dest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cur"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="59dp"
+        android:text="dest" />
+
+    <TextView
+        android:id="@+id/company"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/dest"
+        android:layout_alignLeft="@+id/CompanyTitle"
+        android:layout_alignStart="@+id/CompanyTitle"
+        android:layout_marginBottom="40dp"
+        android:text="comp" />
+</RelativeLayout>

@@ -16,6 +16,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="32dp"
         android:text="Current place"
+        android:textAlignment="textStart"
         android:textColor="@android:color/black"
         android:textSize="18sp" />
 
@@ -24,13 +25,14 @@
         android:id="@+id/DestainationTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/CurrentTitle"
         android:layout_marginTop="21dp"
         android:text="Destination place"
+        android:textAlignment="textStart"
         android:textColor="@android:color/black"
-        android:textSize="18sp"
-        android:layout_below="@+id/CurrentTitle"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:textSize="18sp" />
 
     <Spinner
         android:id="@+id/CurrentSpinner"
@@ -67,5 +69,38 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="54dp"
         android:text="dest" />
+
+    <TextView
+        android:id="@+id/CompanyTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
+        android:text="Company"
+        android:textAlignment="textStart"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:layout_below="@+id/DestainationTitle"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Spinner
+        android:id="@+id/CompanySpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/CompanyTitle"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/CurrentTitle"
+        android:layout_alignLeft="@+id/DestinationSpinner"
+        android:layout_alignStart="@+id/DestinationSpinner" />
+
+    <TextView
+        android:id="@+id/company"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/CurrentSpinner"
+        android:layout_toStartOf="@+id/CurrentSpinner"
+        android:text="company" />
 
 </RelativeLayout>

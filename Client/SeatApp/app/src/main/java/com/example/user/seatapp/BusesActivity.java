@@ -1,6 +1,8 @@
 package com.example.user.seatapp;
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -8,13 +10,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class TrainsActivity extends ActionBarActivity
+public class BusesActivity extends ActionBarActivity
 {
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_trains);
+        setContentView(R.layout.activity_buses);
 
         Spinner current_spinner = (Spinner) findViewById(R.id.CurrentSpinner);
         Spinner destination_spinner = (Spinner) findViewById(R.id.DestinationSpinner);
@@ -22,7 +25,7 @@ public class TrainsActivity extends ActionBarActivity
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> places_adapter = ArrayAdapter.createFromResource(this, R.array.places_array, android.R.layout.simple_spinner_item);
-        ArrayAdapter<CharSequence> companies_adapter = ArrayAdapter.createFromResource(this, R.array.train_companies_array, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> companies_adapter = ArrayAdapter.createFromResource(this, R.array.bus_companies_array, android.R.layout.simple_spinner_item);
 
         // Specify the layout to use when the list of choices appears - the spinner type
         places_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -75,6 +78,5 @@ public class TrainsActivity extends ActionBarActivity
             }
 
         });
-
     }
 }

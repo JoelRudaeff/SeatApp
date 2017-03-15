@@ -2,10 +2,24 @@
     <string name="app_name">SeatApp</string>
 
     <string-array name="places_array">
-            <item> </item>
-            <item>Akko</item>
-            <item>Haifa</item>
-            <item>Nahariya</item>
-            <item>Tel-Aviv</item>
+        <item> </item>
+        <item>Akko</item>
+        <item>Haifa</item>
+        <item>Nahariya</item>
+        <item>Tel-Aviv</item>
     </string-array>
+
+    <string-array name="train_companies_array">
+        <item> </item>
+        <item>Israel RailWays</item>
+        <item>STAM</item>
+    </string-array>
+
+    <string-array name="bus_companies_array">
+        <item> </item>
+        <item>Eged</item>
+        <item>Nativ Express</item>
+        <item>Metropollin</item>
+    </string-array>
+
 </resources>
