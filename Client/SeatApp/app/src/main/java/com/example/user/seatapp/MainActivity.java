@@ -37,7 +37,7 @@ public class MainActivity extends ActionBarActivity
 
     public void startTaxis(View view) // when the button is clicked, open this activity
     {
-        Intent intent = new Intent(this, TaxiScheduleActivity.class);
+        Intent intent = new Intent(this, TaxisActivity.class);
         startActivity(intent);
     }
 

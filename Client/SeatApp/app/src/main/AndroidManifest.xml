@@ -35,14 +35,6 @@
                 android:value=".HomePageActivity" />
         </activity>
         <activity
-            android:name=".TaxiScheduleActivity"
-            android:label="Taxi Schedule"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
-        <activity
             android:name=".TrainsActivity"
             android:label="Trains"
             android:parentActivityName=".MainActivity">
@@ -57,6 +49,16 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
-        </activity>    </application>
+        </activity>
+        <activity
+            android:name=".TaxisActivity">
+            android:name=".BusesActivity"
+            android:label="SeatApp"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+    </application>
 
 </manifest>
