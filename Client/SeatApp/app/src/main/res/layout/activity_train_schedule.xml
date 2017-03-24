@@ -12,49 +12,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="cur"
+        android:textSize="24sp"
         tools:layout_editor_absoluteX="71dp"
         tools:layout_editor_absoluteY="90dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="119dp"
-        android:layout_marginStart="119dp"
-        android:layout_marginTop="30dp" />
+        android:layout_toRightOf="@+id/textView"
+        android:layout_toEndOf="@+id/textView"
+        android:layout_marginLeft="65dp"
+        android:layout_marginStart="65dp" />
 
     <TextView
         android:id="@+id/dest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
         android:text="dest"
+        android:textSize="24sp"
         tools:layout_editor_absoluteX="71dp"
         tools:layout_editor_absoluteY="148dp"
         android:layout_below="@+id/cur"
-        android:layout_toRightOf="@+id/leaving_time"
-        android:layout_toEndOf="@+id/leaving_time"
-        android:layout_marginLeft="75dp"
-        android:layout_marginStart="75dp" />
+        android:layout_alignRight="@+id/cur"
+        android:layout_alignEnd="@+id/cur" />
 
-    <TextView
-        android:id="@+id/leaving_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="leaving_time"
-        android:layout_marginLeft="35dp"
-        android:layout_marginStart="35dp"
-        android:layout_alignBaseline="@+id/dest"
-        android:layout_alignBottom="@+id/dest"
-        android:layout_toRightOf="@+id/cur"
-        android:layout_toEndOf="@+id/cur" />
 
     <TableLayout
         android:id="@+id/TrainsScheduleTable"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="24dp"
+        android:stretchColumns="3"
         android:layout_below="@+id/dest"
-        android:layout_marginTop="104dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:stretchColumns="3">
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <TableRow
             android:layout_width="match_parent"
@@ -103,6 +92,7 @@
                 android:textSize="20sp" />
 
             <TextView
+                android:id="@+id/tn1"
                 android:layout_column="3"
                 android:padding="3dip"
                 android:text=" "
@@ -129,6 +119,7 @@
                 android:textSize="24sp" />
 
             <TextView
+                android:id="@+id/tn2"
                 android:layout_column="3"
                 android:padding="3dip"
                 android:text=" "
@@ -156,6 +147,7 @@
                 android:textSize="20sp" />
 
             <TextView
+                android:id="@+id/tn3"
                 android:layout_column="3"
                 android:padding="3dip"
                 android:text=" "
@@ -183,6 +175,7 @@
                 android:textSize="20sp" />
 
             <TextView
+                android:id="@+id/tn4"
                 android:layout_column="3"
                 android:padding="3dip"
                 android:text=" "
@@ -210,6 +203,7 @@
                 android:textSize="20sp" />
 
             <TextView
+                android:id="@+id/tn5"
                 android:layout_column="3"
                 android:padding="3dip"
                 android:text=" "
@@ -237,6 +231,7 @@
                 android:textSize="20sp" />
 
             <TextView
+                android:id="@+id/tn6"
                 android:layout_column="3"
                 android:padding="3dip"
                 android:text=" "
@@ -264,6 +259,7 @@
                 android:textSize="20sp" />
 
             <TextView
+                android:id="@+id/tn7"
                 android:layout_column="3"
                 android:padding="3dip"
                 android:text=" "
@@ -291,6 +287,7 @@
                 android:textSize="20sp" />
 
             <TextView
+                android:id="@+id/tn8"
                 android:layout_column="3"
                 android:padding="3dip"
                 android:text=" "
@@ -299,5 +296,27 @@
         </TableRow>
 
     </TableLayout>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="From:"
+        android:textSize="24sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/dest"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_alignStart="@+id/textView"
+        android:text="To:"
+        android:textSize="24sp" />
 
 </RelativeLayout>

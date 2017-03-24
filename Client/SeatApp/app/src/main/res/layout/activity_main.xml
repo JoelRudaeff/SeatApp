@@ -19,40 +19,44 @@
 
     <Button
         android:id="@+id/Train_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/title"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="53dp"
+        android:layout_width="100sp"
+        android:layout_height="80sp"
+        android:layout_marginTop="47dp"
         android:onClick="startTrains"
         android:text="Trains"
-        android:textColor="@android:color/holo_blue_light" />
+        android:textSize="20sp"
+        android:textColor="@android:color/holo_blue_light"
+        android:layout_below="@+id/title"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/Bus_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/Train_button"
-        android:layout_alignLeft="@+id/Taxi_button"
-        android:layout_alignRight="@+id/Train_button"
-        android:layout_alignStart="@+id/Taxi_button"
-        android:layout_centerVertical="true"
+        android:layout_width="100sp"
+        android:layout_height="80sp"
+        android:layout_marginTop="47dp"
         android:onClick="startBuses"
         android:text="Buses"
-        android:textColor="@android:color/holo_blue_light" />
+        android:textSize="20sp"
+        android:textColor="@android:color/holo_blue_light"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/Train_button"
+        android:layout_alignStart="@+id/Train_button"
+        android:layout_alignRight="@+id/Train_button"
+        android:layout_alignEnd="@+id/Train_button" />
 
     <Button
         android:id="@+id/Taxi_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/Train_button"
-        android:layout_alignLeft="@+id/Train_button"
-        android:layout_alignRight="@+id/Train_button"
-        android:layout_alignStart="@+id/Train_button"
-        android:layout_below="@+id/Bus_button"
-        android:layout_marginTop="80dp"
+        android:layout_width="100sp"
+        android:layout_height="80sp"
+        android:layout_marginTop="47dp"
         android:onClick="startTaxis"
         android:text="Taxis"
-        android:textColor="@android:color/holo_blue_light" />
+        android:textSize="20sp"
+        android:textColor="@android:color/holo_blue_light"
+        android:layout_below="@+id/Bus_button"
+        android:layout_alignLeft="@+id/Bus_button"
+        android:layout_alignStart="@+id/Bus_button"
+        android:layout_alignRight="@+id/Bus_button"
+        android:layout_alignEnd="@+id/Bus_button" />
 
 </RelativeLayout>

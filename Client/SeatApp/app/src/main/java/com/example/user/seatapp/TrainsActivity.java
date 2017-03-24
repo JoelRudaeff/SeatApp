@@ -33,50 +33,6 @@ public class TrainsActivity extends ActionBarActivity
         current_spinner.setAdapter(places_adapter);
         destination_spinner.setAdapter(places_adapter);
         leaving_time_spinner.setAdapter(leaving_time_adapter);
-
-        current_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
-            {
-                Object item = parent.getItemAtPosition(pos);
-                TextView cur = (TextView) findViewById(R.id.cur);
-                cur.setText(item.toString());
-            }
-
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-            }
-        });
-
-        destination_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
-            {
-                Object item = parent.getItemAtPosition(pos);
-                TextView dest = (TextView) findViewById(R.id.dest);
-                dest.setText(item.toString());
-            }
-
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-            }
-        });
-
-        leaving_time_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
-            {
-                Object item = parent.getItemAtPosition(pos);
-                TextView company = (TextView) findViewById(R.id.company);
-                company.setText(item.toString());
-            }
-
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-            }
-
-        });
-
     }
 
     public void startTrainSchedule(View view)
