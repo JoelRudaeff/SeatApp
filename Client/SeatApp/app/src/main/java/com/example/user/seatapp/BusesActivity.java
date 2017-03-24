@@ -1,8 +1,6 @@
 package com.example.user.seatapp;
 
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,7 +19,7 @@ public class BusesActivity extends ActionBarActivity
 
         Spinner current_spinner = (Spinner) findViewById(R.id.CurrentSpinner);
         Spinner destination_spinner = (Spinner) findViewById(R.id.DestinationSpinner);
-        Spinner company_spinner = (Spinner) findViewById(R.id.CompanySpinner);
+        Spinner company_spinner = (Spinner) findViewById(R.id.TimeSpinner);
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> places_adapter = ArrayAdapter.createFromResource(this, R.array.places_array, android.R.layout.simple_spinner_item);

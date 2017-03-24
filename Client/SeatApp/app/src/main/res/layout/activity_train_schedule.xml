@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.user.seatapp.TrainScheduleActivity">
+
+    <TextView
+        android:id="@+id/cur"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="cur"
+        tools:layout_editor_absoluteX="71dp"
+        tools:layout_editor_absoluteY="90dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="119dp"
+        android:layout_marginStart="119dp"
+        android:layout_marginTop="30dp" />
+
+    <TextView
+        android:id="@+id/dest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="dest"
+        tools:layout_editor_absoluteX="71dp"
+        tools:layout_editor_absoluteY="148dp"
+        android:layout_below="@+id/cur"
+        android:layout_toRightOf="@+id/leaving_time"
+        android:layout_toEndOf="@+id/leaving_time"
+        android:layout_marginLeft="75dp"
+        android:layout_marginStart="75dp" />
+
+    <TextView
+        android:id="@+id/leaving_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="leaving_time"
+        android:layout_marginLeft="35dp"
+        android:layout_marginStart="35dp"
+        android:layout_alignBaseline="@+id/dest"
+        android:layout_alignBottom="@+id/dest"
+        android:layout_toRightOf="@+id/cur"
+        android:layout_toEndOf="@+id/cur" />
+
+    <TableLayout
+        android:id="@+id/TrainsScheduleTable"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/dest"
+        android:layout_marginTop="104dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:stretchColumns="3">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:baselineAligned="false">
+
+            <TextView
+                android:id="@+id/LeavingTimeTitle"
+                android:layout_column="1"
+                android:padding="3dip"
+                android:text="Leaving time"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/ArrivingTimeTitle"
+                android:layout_column="2"
+                android:padding="3dip"
+                android:text="Arriving time"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/TrainNumberTitle"
+                android:layout_column="3"
+                android:padding="3dip"
+                android:text="Train number"
+                android:textSize="20sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:baselineAligned="false">
+
+            <TextView
+                android:id="@+id/lt1"
+                android:layout_column="1"
+                android:padding="3dip"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/at1"
+                android:layout_column="2"
+                android:padding="3dip"
+                android:text=" "
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_column="3"
+                android:padding="3dip"
+                android:text=" "
+                android:textSize="20sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:baselineAligned="false">
+
+            <TextView
+                android:id="@+id/lt2"
+                android:layout_column="1"
+                android:padding="3dip"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/at2"
+                android:layout_column="2"
+                android:padding="3dip"
+                android:text=" "
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_column="3"
+                android:padding="3dip"
+                android:text=" "
+                android:textSize="20sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:baselineAligned="false">
+
+            <TextView
+                android:id="@+id/lt3"
+                android:layout_column="1"
+                android:padding="3dip"
+                android:text=" "
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/at3"
+                android:layout_column="2"
+                android:padding="3dip"
+                android:text=" "
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_column="3"
+                android:padding="3dip"
+                android:text=" "
+                android:textSize="20sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:baselineAligned="false">
+
+            <TextView
+                android:id="@+id/lt4"
+                android:layout_column="1"
+                android:padding="3dip"
+                android:text=" "
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/at4"
+                android:layout_column="2"
+                android:padding="3dip"
+                android:text=" "
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_column="3"
+                android:padding="3dip"
+                android:text=" "
+                android:textSize="20sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:baselineAligned="false">
+
+            <TextView
+                android:id="@+id/lt5"
+                android:layout_column="1"
+                android:padding="3dip"
+                android:text=" "
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/at5"
+                android:layout_column="2"
+                android:padding="3dip"
+                android:text=" "
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_column="3"
+                android:padding="3dip"
+                android:text=" "
+                android:textSize="20sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:baselineAligned="false">
+
+            <TextView
+                android:id="@+id/lt6"
+                android:layout_column="1"
+                android:padding="3dip"
+                android:text=" "
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/at6"
+                android:layout_column="2"
+                android:padding="3dip"
+                android:text=" "
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_column="3"
+                android:padding="3dip"
+                android:text=" "
+                android:textSize="20sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:baselineAligned="false">
+
+            <TextView
+                android:id="@+id/lt7"
+                android:layout_column="1"
+                android:padding="3dip"
+                android:text=" "
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/at7"
+                android:layout_column="2"
+                android:padding="3dip"
+                android:text=" "
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_column="3"
+                android:padding="3dip"
+                android:text=" "
+                android:textSize="20sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:baselineAligned="false">
+
+            <TextView
+                android:id="@+id/lt8"
+                android:layout_column="1"
+                android:padding="3dip"
+                android:text=" "
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/at8"
+                android:layout_column="2"
+                android:padding="3dip"
+                android:text=" "
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_column="3"
+                android:padding="3dip"
+                android:text=" "
+                android:textSize="20sp" />
+
+        </TableRow>
+
+    </TableLayout>
+
+</RelativeLayout>

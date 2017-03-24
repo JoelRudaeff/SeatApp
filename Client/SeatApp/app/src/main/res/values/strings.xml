@@ -18,8 +18,17 @@
     <string-array name="bus_companies_array">
         <item> </item>
         <item>Eged</item>
+        <item>Kavim</item>
         <item>Nativ Express</item>
         <item>Metropollin</item>
+    </string-array>
+
+    <string-array name="trains_time">
+        <item> </item>
+        <item>7:00</item>
+        <item>7:30</item>
+        <item>8:00</item>
+        <item>8:30</item>
     </string-array>
 
 </resources>
