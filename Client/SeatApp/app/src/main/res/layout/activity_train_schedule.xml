@@ -116,7 +116,7 @@
                 android:layout_column="2"
                 android:padding="3dip"
                 android:text=" "
-                android:textSize="24sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/tn2"

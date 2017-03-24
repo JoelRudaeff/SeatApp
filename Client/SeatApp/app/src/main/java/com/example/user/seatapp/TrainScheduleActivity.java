@@ -76,65 +76,81 @@ public class TrainScheduleActivity extends AppCompatActivity
 
         TextView table_leaving_time_1 = (TextView) findViewById(R.id.lt1);
         TextView table_arriving_time_1 = (TextView) findViewById(R.id.at1);
+        TextView table_train_number_1 = (TextView) findViewById(R.id.tn1);
         arriving_time = getArrivingTime(current_place, destination_place, leaving_time, times_linkedlist, places_linkedlist);
         table_leaving_time_1.setText(leaving_time);
         table_arriving_time_1.setText(arriving_time);
+        table_train_number_1.setText("101");
 
         TextView table_leaving_time_2 = (TextView) findViewById(R.id.lt2);
         TextView table_arriving_time_2 = (TextView) findViewById(R.id.at2);
+        TextView table_train_number_2 = (TextView) findViewById(R.id.tn2);
         add_to_lt += 22;
         NextLeavingTime = get_next_leaving_time(leaving_time, add_to_lt);
         arriving_time = getArrivingTime(current_place, destination_place, NextLeavingTime, times_linkedlist, places_linkedlist);
         table_leaving_time_2.setText(NextLeavingTime);
         table_arriving_time_2.setText(arriving_time);
+        table_train_number_2.setText("11");
 
         TextView table_leaving_time_3 = (TextView) findViewById(R.id.lt3);
         TextView table_arriving_time_3 = (TextView) findViewById(R.id.at3);
+        TextView table_train_number_3 = (TextView) findViewById(R.id.tn3);
         add_to_lt += 27;
         NextLeavingTime = get_next_leaving_time(leaving_time, add_to_lt);
         arriving_time = getArrivingTime(current_place, destination_place, NextLeavingTime, times_linkedlist, places_linkedlist);
         table_leaving_time_3.setText(NextLeavingTime);
         table_arriving_time_3.setText(arriving_time);
+        table_train_number_3.setText("21");
 
         TextView table_leaving_time_4 = (TextView) findViewById(R.id.lt4);
         TextView table_arriving_time_4 = (TextView) findViewById(R.id.at4);
+        TextView table_train_number_4 = (TextView) findViewById(R.id.tn4);
         add_to_lt += 20;
         NextLeavingTime = get_next_leaving_time(leaving_time, add_to_lt);
         arriving_time = getArrivingTime(current_place, destination_place, NextLeavingTime, times_linkedlist, places_linkedlist);
         table_leaving_time_4.setText(NextLeavingTime);
         table_arriving_time_4.setText(arriving_time);
+        table_train_number_4.setText("151");
 
         TextView table_leaving_time_5 = (TextView) findViewById(R.id.lt5);
         TextView table_arriving_time_5 = (TextView) findViewById(R.id.at5);
+        TextView table_train_number_5 = (TextView) findViewById(R.id.tn5);
         add_to_lt += 22;
         NextLeavingTime = get_next_leaving_time(leaving_time, add_to_lt);
         arriving_time = getArrivingTime(current_place, destination_place, NextLeavingTime, times_linkedlist, places_linkedlist);
         table_leaving_time_5.setText(NextLeavingTime);
         table_arriving_time_5.setText(arriving_time);
+        table_train_number_5.setText("153");
 
         TextView table_leaving_time_6 = (TextView) findViewById(R.id.lt6);
         TextView table_arriving_time_6 = (TextView) findViewById(R.id.at6);
+        TextView table_train_number_6 = (TextView) findViewById(R.id.tn6);
         add_to_lt += 27;
         NextLeavingTime = get_next_leaving_time(leaving_time, add_to_lt);
         arriving_time = getArrivingTime(current_place, destination_place, NextLeavingTime, times_linkedlist, places_linkedlist);
         table_leaving_time_6.setText(NextLeavingTime);
         table_arriving_time_6.setText(arriving_time);
+        table_train_number_6.setText("103");
 
         TextView table_leaving_time_7 = (TextView) findViewById(R.id.lt7);
         TextView table_arriving_time_7 = (TextView) findViewById(R.id.at7);
+        TextView table_train_number_7 = (TextView) findViewById(R.id.tn7);
         add_to_lt += 20;
         NextLeavingTime = get_next_leaving_time(leaving_time, add_to_lt);
         arriving_time = getArrivingTime(current_place, destination_place, NextLeavingTime, times_linkedlist, places_linkedlist);
         table_leaving_time_7.setText(NextLeavingTime);
         table_arriving_time_7.setText(arriving_time);
+        table_train_number_7.setText("23");
 
         TextView table_leaving_time_8 = (TextView) findViewById(R.id.lt8);
         TextView table_arriving_time_8 = (TextView) findViewById(R.id.at8);
+        TextView table_train_number_8 = (TextView) findViewById(R.id.tn8);
         add_to_lt += 22;
         NextLeavingTime = get_next_leaving_time(leaving_time, add_to_lt);
         arriving_time = getArrivingTime(current_place, destination_place, NextLeavingTime, times_linkedlist, places_linkedlist);
         table_leaving_time_8.setText(NextLeavingTime);
         table_arriving_time_8.setText(arriving_time);
+        table_train_number_8.setText("105");
 
     }
 
