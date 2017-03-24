@@ -72,6 +72,7 @@ public class SignUpActivity extends ActionBarActivity
             input.close();
             s.close();
 
+            ret = 1;
         }
 
         catch (IOException e)

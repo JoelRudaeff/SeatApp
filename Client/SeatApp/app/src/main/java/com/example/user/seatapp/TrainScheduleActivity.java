@@ -3,10 +3,17 @@ package com.example.user.seatapp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Socket;
 import java.util.LinkedList;
 
 public class TrainScheduleActivity extends AppCompatActivity
@@ -229,5 +236,169 @@ public class TrainScheduleActivity extends AppCompatActivity
         arriving_time = get_next_leaving_time(leaving_time, time_difference); // This function return the time after X minutes, like we need
 
         return arriving_time;
+    }
+
+    public int SendingDetailsToServer(String TrainNumber)
+    {
+        int ret = 0;
+        String vehicle_type = "Train";
+        String vehicle_company = "Israel RailWays";
+        String vehicle_number = TrainNumber;
+        String vehicle_type_length = String.valueOf(vehicle_type.length());
+        String vehicle_company_length = String.valueOf(vehicle_company.length());
+        String vehicle_number_length = String.valueOf(vehicle_number.length());
+        String data_from_server = "";
+        String read = null;
+
+        // The data that the client sends to the server when he signs-up
+        String string_to_send = "g" + vehicle_type_length + vehicle_type + vehicle_company_length + vehicle_company + vehicle_number_length + vehicle_number;
+
+        try
+        {
+            Socket s = new Socket("127.0.0.1", 7000); //TODO: Change the IP and the port number
+            DataOutputStream output = new DataOutputStream(s.getOutputStream());
+            output.writeUTF(string_to_send); //The sending to the server
+
+            //read input stream
+            DataInputStream input = new DataInputStream(s.getInputStream());
+            InputStreamReader input_reader = new InputStreamReader(input);
+            BufferedReader br = new BufferedReader(input_reader); //create a BufferReader object for input
+
+            while ( (read = br.readLine()) != null) // The data which sent back by the server
+            {
+                data_from_server = data_from_server + read;
+            }
+
+            //print the input to the application screen
+            final TextView receivedMsg = (TextView) findViewById(R.id.cur); //TODO: change the id of the text view!
+            receivedMsg.setText(read);
+
+            output.close();
+            input_reader.close();
+            input.close();
+            s.close();
+
+            ret = 1;
+        }
+
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            ret = 0; //Because an error was occurred
+        }
+
+        return ret;
+    }
+
+    public void startTrain1(View view)
+    {
+        int ret = 0;
+        Button button_train_number = (Button) findViewById(R.id.tn1);
+        String TrainNumber = button_train_number.getText().toString();
+
+        //ret = SendingDetailsToServer(TrainNumber);
+
+        if(ret == 0)
+        {
+            ;
+        }
+    }
+
+    public void startTrain2(View view)
+    {
+        int ret = 0;
+        Button button_train_number = (Button) findViewById(R.id.tn2);
+        String TrainNumber = button_train_number.getText().toString();
+
+        //ret = SendingDetailsToServer(TrainNumber);
+
+        if(ret == 0)
+        {
+            ;
+        }
+    }
+
+    public void startTrain3(View view)
+    {
+        int ret = 0;
+        Button button_train_number = (Button) findViewById(R.id.tn3);
+        String TrainNumber = button_train_number.getText().toString();
+
+        //ret = SendingDetailsToServer(TrainNumber);
+
+        if(ret == 0)
+        {
+            ;
+        }
+    }
+
+    public void startTrain4(View view)
+    {
+        int ret = 0;
+        Button button_train_number = (Button) findViewById(R.id.tn4);
+        String TrainNumber = button_train_number.getText().toString();
+
+        //ret = SendingDetailsToServer(TrainNumber);
+
+        if(ret == 0)
+        {
+            ;
+        }
+    }
+
+    public void startTrain5(View view)
+    {
+        int ret = 0;
+        Button button_train_number = (Button) findViewById(R.id.tn5);
+        String TrainNumber = button_train_number.getText().toString();
+
+        //ret = SendingDetailsToServer(TrainNumber);
+
+        if(ret == 0)
+        {
+            ;
+        }
+    }
+
+    public void startTrain6(View view)
+    {
+        int ret = 0;
+        Button button_train_number = (Button) findViewById(R.id.tn6);
+        String TrainNumber = button_train_number.getText().toString();
+
+        //ret = SendingDetailsToServer(TrainNumber);
+
+        if(ret == 0)
+        {
+            ;
+        }
+    }
+
+    public void startTrain7(View view)
+    {
+        int ret = 0;
+        Button button_train_number = (Button) findViewById(R.id.tn7);
+        String TrainNumber = button_train_number.getText().toString();
+
+        //ret = SendingDetailsToServer(TrainNumber);
+
+        if(ret == 0)
+        {
+            ;
+        }
+    }
+
+    public void startTrain8(View view)
+    {
+        int ret = 0;
+        Button button_train_number = (Button) findViewById(R.id.tn8);
+        String TrainNumber = button_train_number.getText().toString();
+
+        //ret = SendingDetailsToServer(TrainNumber);
+
+        if(ret == 0)
+        {
+            ;
+        }
     }
 }

@@ -101,6 +101,7 @@
             <Button
                 android:id="@+id/tn1"
                 android:layout_column="3"
+                android:onClick="startTrain1"
                 android:padding="3dip"
                 android:text=" "
                 android:textColor="@android:color/black"
@@ -131,6 +132,7 @@
             <Button
                 android:id="@+id/tn2"
                 android:layout_column="3"
+                android:onClick="startTrain2"
                 android:padding="3dip"
                 android:text=""
                 android:textColor="@android:color/black"
@@ -162,6 +164,7 @@
             <Button
                 android:id="@+id/tn3"
                 android:layout_column="3"
+                android:onClick="startTrain3"
                 android:padding="3dip"
                 android:text=" "
                 android:textColor="@android:color/black"
@@ -193,6 +196,7 @@
             <Button
                 android:id="@+id/tn4"
                 android:layout_column="3"
+                android:onClick="startTrain4"
                 android:padding="3dip"
                 android:text=" "
                 android:textColor="@android:color/black"
@@ -224,6 +228,7 @@
             <Button
                 android:id="@+id/tn5"
                 android:layout_column="3"
+                android:onClick="startTrain5"
                 android:padding="3dip"
                 android:text=" "
                 android:textColor="@android:color/black"
@@ -255,6 +260,7 @@
             <Button
                 android:id="@+id/tn6"
                 android:layout_column="3"
+                android:onClick="startTrain6"
                 android:padding="3dip"
                 android:text=" "
                 android:textColor="@android:color/black"
@@ -317,6 +323,7 @@
             <Button
                 android:id="@+id/tn8"
                 android:layout_column="3"
+                android:onClick="startTrain8"
                 android:padding="3dip"
                 android:text=" "
                 android:textColor="@android:color/black"
