@@ -53,16 +53,6 @@
         android:layout_alignStart="@+id/CurrentSpinner" />
 
     <TextView
-        android:id="@+id/cur"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="cur"
-        android:layout_below="@+id/company"
-        android:layout_alignLeft="@+id/dest"
-        android:layout_alignStart="@+id/dest"
-        android:layout_marginTop="38dp" />
-
-    <TextView
         android:id="@+id/CompanyTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -76,18 +66,15 @@
         android:textSize="18sp" />
 
     <Spinner
-        android:id="@+id/TimeSpinner"
+        android:id="@+id/TimesSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/CompanyTitle"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/CurrentTitle"
-        android:layout_alignLeft="@+id/DestinationSpinner"
-        android:layout_alignStart="@+id/DestinationSpinner" />
+        android:layout_toRightOf="@+id/DestainationTitle"
+        android:layout_toEndOf="@+id/DestainationTitle" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/ChooseTrainButton"
         android:layout_width="150sp"
         android:layout_height="80sp"
         android:layout_centerHorizontal="true"

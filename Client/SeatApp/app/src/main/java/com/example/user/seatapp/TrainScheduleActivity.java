@@ -26,11 +26,11 @@ public class TrainScheduleActivity extends AppCompatActivity
         setContentView(R.layout.activity_train_schedule);
 
         Intent intent = getIntent();
-        TextView cur = (TextView) findViewById(R.id.cur);
-        TextView dest = (TextView) findViewById(R.id.dest);
+        TextView cur = (TextView) findViewById(R.id.t_cur);
+        TextView dest = (TextView) findViewById(R.id.t_dest);
         LinkedList<String> places_linkedlist = new LinkedList<String>(); // a linked list of the place
         LinkedList<Integer> times_linkedlist = new LinkedList<Integer>(); // a linked list of the time to go from a place after the place before
-        ArrayAdapter<CharSequence> places_adapter = ArrayAdapter.createFromResource(this, R.array.places_array, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> places_adapter = ArrayAdapter.createFromResource(this, R.array.train_stations, android.R.layout.simple_spinner_item);
 
         int i;
         int add_to_lt = 0; //add this time to the leaving time - the time difference between 2 trains
@@ -103,7 +103,7 @@ public class TrainScheduleActivity extends AppCompatActivity
         TextView table_leaving_time_3 = (TextView) findViewById(R.id.lt3);
         TextView table_arriving_time_3 = (TextView) findViewById(R.id.at3);
         Button table_train_number_3 = (Button) findViewById(R.id.tn3);
-        add_to_lt += 27;
+        add_to_lt += 18;
         NextLeavingTime = get_next_leaving_time(leaving_time, add_to_lt);
         arriving_time = getArrivingTime(current_place, destination_place, NextLeavingTime, times_linkedlist, places_linkedlist);
         table_leaving_time_3.setText(NextLeavingTime);
@@ -133,7 +133,7 @@ public class TrainScheduleActivity extends AppCompatActivity
         TextView table_leaving_time_6 = (TextView) findViewById(R.id.lt6);
         TextView table_arriving_time_6 = (TextView) findViewById(R.id.at6);
         Button table_train_number_6 = (Button) findViewById(R.id.tn6);
-        add_to_lt += 27;
+        add_to_lt += 18;
         NextLeavingTime = get_next_leaving_time(leaving_time, add_to_lt);
         arriving_time = getArrivingTime(current_place, destination_place, NextLeavingTime, times_linkedlist, places_linkedlist);
         table_leaving_time_6.setText(NextLeavingTime);
@@ -173,7 +173,7 @@ public class TrainScheduleActivity extends AppCompatActivity
         int lt_minutes = Integer.parseInt(LeavingTime_minutes);
         int times;
 
-        if(lt_minutes + add_to_lt > 60)
+        if(lt_minutes + add_to_lt >= 60)
         {
             lt_hours += (lt_minutes + add_to_lt) / 60; // add division, in an int number, to the hour number
             times = (lt_minutes+add_to_lt) / 60;
@@ -183,6 +183,11 @@ public class TrainScheduleActivity extends AppCompatActivity
         else
         {
             lt_minutes += add_to_lt;
+        }
+
+        if(lt_hours > 23)
+        {
+            lt_hours -= 24; //if the hour is after midnight, turn it to 0:00 and so on..
         }
 
         LeavingTime_hours = String.valueOf(lt_hours);
@@ -270,7 +275,7 @@ public class TrainScheduleActivity extends AppCompatActivity
             }
 
             //print the input to the application screen
-            final TextView receivedMsg = (TextView) findViewById(R.id.cur); //TODO: change the id of the text view!
+            final TextView receivedMsg = (TextView) findViewById(R.id.t_cur); //TODO: change the id of the text view!
             receivedMsg.setText(read);
 
             output.close();

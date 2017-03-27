@@ -64,7 +64,7 @@ public class SignUpActivity extends ActionBarActivity
             }
 
             //print the input to the application screen
-            final TextView receivedMsg = (TextView) findViewById(R.id.cur); //TODO: change the id of the text view!
+            final TextView receivedMsg = (TextView) findViewById(R.id.t_cur); //TODO: change the id of the text view!
             receivedMsg.setText(read);
 
             output.close();

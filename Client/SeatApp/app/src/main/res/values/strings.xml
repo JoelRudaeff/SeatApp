@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">SeatApp</string>
 
-    <string-array name="places_array">
+    <string-array name="train_stations">
         <item>Nahariya</item>
         <item>Akko</item>
         <item>Qiryat Mozkin</item>
@@ -15,6 +15,21 @@
         <item>Tel-Aviv Savidor-Merkaz</item>
         <item>Tel-Aviv Hashalom</item>
         <item>Tel-Aviv HaHagana</item>
+    </string-array>
+
+    <string-array name="cities_array">
+        <item>Nahariya</item>
+        <item>Akko</item>
+        <item>Qiryat Mozkin</item>
+        <item>Qiryat Haim</item>
+        <item>Huzot-Hamifratz</item>
+        <item>Lev-Hamifratz</item>
+        <item>Haifa</item>
+        <item>Tel-Aviv</item>
+        <item>Jerusalem</item>
+        <item>Ashdod</item>
+        <item>Ashkelon</item>
+        <item>Eilat</item>
     </string-array>
 
     <string-array name="train_companies_array">

@@ -4,10 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 public class TrainsActivity extends ActionBarActivity
 {
@@ -19,10 +17,10 @@ public class TrainsActivity extends ActionBarActivity
 
         Spinner current_spinner = (Spinner) findViewById(R.id.CurrentSpinner);
         Spinner destination_spinner = (Spinner) findViewById(R.id.DestinationSpinner);
-        Spinner leaving_time_spinner = (Spinner) findViewById(R.id.TimeSpinner);
+        Spinner leaving_time_spinner = (Spinner) findViewById(R.id.TimesSpinner);
 
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> places_adapter = ArrayAdapter.createFromResource(this, R.array.places_array, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> places_adapter = ArrayAdapter.createFromResource(this, R.array.train_stations, android.R.layout.simple_spinner_item);
         ArrayAdapter<CharSequence> leaving_time_adapter = ArrayAdapter.createFromResource(this, R.array.trains_time, android.R.layout.simple_spinner_item);
 
         // Specify the layout to use when the list of choices appears - the spinner type
@@ -39,7 +37,7 @@ public class TrainsActivity extends ActionBarActivity
     {
         Spinner current_spinner = (Spinner) findViewById(R.id.CurrentSpinner);
         Spinner destination_spinner = (Spinner) findViewById(R.id.DestinationSpinner);
-        Spinner leaving_time_spinner = (Spinner) findViewById(R.id.TimeSpinner);
+        Spinner leaving_time_spinner = (Spinner) findViewById(R.id.TimesSpinner);
 
         Intent intent = new Intent(this, TrainScheduleActivity.class);
         intent.putExtra("current", current_spinner.getSelectedItem().toString());

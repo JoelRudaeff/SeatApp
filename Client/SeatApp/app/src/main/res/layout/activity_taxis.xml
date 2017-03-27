@@ -11,17 +11,15 @@
         android:id="@+id/CurrentTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="59dp"
+        android:layout_marginTop="61dp"
         android:text="Current place"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="67dp" />
+        tools:layout_editor_absoluteY="67dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Spinner
         android:id="@+id/CurrentSpinner"
@@ -55,7 +53,7 @@
         android:layout_toRightOf="@+id/DestinationTitle" />
 
     <TextView
-        android:id="@+id/cur"
+        android:id="@+id/t_cur"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="139dp"
@@ -64,11 +62,11 @@
         android:layout_centerHorizontal="true" />
 
     <TextView
-        android:id="@+id/dest"
+        android:id="@+id/t_dest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:text="dest"
-        android:layout_below="@+id/cur"
+        android:layout_below="@+id/t_cur"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

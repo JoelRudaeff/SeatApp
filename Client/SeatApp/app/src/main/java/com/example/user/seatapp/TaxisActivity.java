@@ -21,7 +21,7 @@ public class TaxisActivity extends AppCompatActivity
         Spinner destination_spinner = (Spinner) findViewById(R.id.DestinationSpinner);
 
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> places_adapter = ArrayAdapter.createFromResource(this, R.array.places_array, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> places_adapter = ArrayAdapter.createFromResource(this, R.array.cities_array, android.R.layout.simple_spinner_item);
 
         // Specify the layout to use when the list of choices appears - the spinner type
         places_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -35,7 +35,7 @@ public class TaxisActivity extends AppCompatActivity
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
             {
                 Object item = parent.getItemAtPosition(pos);
-                TextView cur = (TextView) findViewById(R.id.cur);
+                TextView cur = (TextView) findViewById(R.id.t_cur);
                 cur.setText(item.toString());
             }
 
@@ -50,7 +50,7 @@ public class TaxisActivity extends AppCompatActivity
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
             {
                 Object item = parent.getItemAtPosition(pos);
-                TextView dest = (TextView) findViewById(R.id.dest);
+                TextView dest = (TextView) findViewById(R.id.t_dest);
                 dest.setText(item.toString());
             }
 

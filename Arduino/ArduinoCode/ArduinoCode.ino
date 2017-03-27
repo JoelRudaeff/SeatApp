@@ -1,16 +1,20 @@
 #include <Arduino.h>
 #include <NewPing.h>
 #include <String.h>
-
-#define TRIGGER_PIN  12  
-#define ECHO_PIN     11  
+     
+#define TRIGGER_PIN1  13  
+#define ECHO_PIN1     12
+#define TRIGGER_PIN2 9   
+#define ECHO_PIN2  8
+#define TRIGGER_PIN3 5
+#define ECHO_PIN3 4
 #define MAX_DISTANCE 200 
 
-#define SONAR_NUM 1      // Number of sensors
+#define SONAR_NUM 3      // Number of sensors
 #define START_PIN 11     // From which pin does the sequence of sensors start ( input, output )
 #define SERIAL_PORT 9600
 
-NewPing sonar[] = {NewPing(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE)}; 
+NewPing sonar[SONAR_NUM] = {NewPing(TRIGGER_PIN1, ECHO_PIN1, MAX_DISTANCE), NewPing(TRIGGER_PIN2, ECHO_PIN2, MAX_DISTANCE),  NewPing(TRIGGER_PIN3, ECHO_PIN3, MAX_DISTANCE)}; 
 
 //previous seats data
 String old_data_to_send;
@@ -20,7 +24,7 @@ String responsible_lines = "1:2";
 
 void setup() 
 {
-  Serial.begin(SERIAL_PORT); // The serial is actually the usb, which we want to send the data to. The usb will send it forward to the Raspberry Pi. Open serial monitor at 115200 baud to see ping results
+  Serial.begin(SERIAL_PORT); // The serial is actually the usb, which we want to send the data to. The usb will send it forward to the Raspberry Pi. Open serial monitor at 9600 baud to see ping results
 }
 
 void loop() 
@@ -38,8 +42,9 @@ void loop()
     if (distance > 0 && distance < 200)
     {
       dis = "1"; // person was found inrange 
-      
-      Serial.print("Distance: ");
+      Serial.print("Sensor ");
+      Serial.print(i+1);
+      Serial.print(": ");
       Serial.print(distance);
       Serial.println("cm");
     }

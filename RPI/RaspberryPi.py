@@ -80,6 +80,7 @@ def handle_missions():
     stored_sensors_data = [-1, -1, -1,-1]  # for the first run of the functions, then, it changes to the results themselves
     while True:
         list_of_sensors = list(ser.readline())  # turn the given string into a list of chars
+        print "the list of the sensors is:" + list_of_sensors
         send_sensors_data_to_server(list_of_sensors.pop(0), stored_sensors_data,try_connecting_to_server())  # first cell in the list is always '', so remove it.
         time.sleep(1)  # sleep for ONE second ( 1s )
 

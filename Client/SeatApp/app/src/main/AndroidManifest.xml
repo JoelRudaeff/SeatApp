@@ -44,7 +44,7 @@
         </activity>
         <activity
             android:name=".BusesActivity"
-            android:label="SeatApp"
+            android:label="Buses"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -65,6 +65,13 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".TrainsActivity" />
+        </activity>
+        <activity android:name=".BusScheduleActivity"
+            android:label="Buses schedule"
+            android:parentActivityName=".BusesActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".BusesActivity" />
         </activity>
     </application>
 

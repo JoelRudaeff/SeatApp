@@ -60,7 +60,7 @@
         android:textSize="18sp" />
 
     <Spinner
-        android:id="@+id/TimeSpinner"
+        android:id="@+id/TimesSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/DestinationSpinner"
@@ -68,30 +68,33 @@
         android:layout_alignTop="@+id/CompanyTitle" />
 
     <TextView
-        android:id="@+id/cur"
+        android:id="@+id/LeavingTimeTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/TimeSpinner"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="165dp"
-        android:text="cur" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/TimesSpinner"
+        android:layout_marginTop="23dp"
+        android:text="Leaving time"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
 
-    <TextView
-        android:id="@+id/dest"
-        android:layout_width="wrap_content"
+    <Spinner
+        android:id="@+id/TimeSpinner"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/cur"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="59dp"
-        android:text="dest" />
+        android:layout_alignLeft="@+id/TimesSpinner"
+        android:layout_alignStart="@+id/TimesSpinner"
+        android:layout_alignTop="@+id/LeavingTimeTitle" />
 
-    <TextView
-        android:id="@+id/company"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/dest"
-        android:layout_alignLeft="@+id/CompanyTitle"
-        android:layout_alignStart="@+id/CompanyTitle"
-        android:layout_marginBottom="40dp"
-        android:text="comp" />
+    <Button
+        android:id="@+id/ChooseBusButton"
+        android:layout_width="150sp"
+        android:layout_height="80sp"
+        android:onClick="startBusScheduleActivity"
+        android:text="CHOOSE BUS"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="24sp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
