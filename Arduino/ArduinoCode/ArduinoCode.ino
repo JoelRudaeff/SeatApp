@@ -42,11 +42,11 @@ void loop()
     if (distance > 0 && distance < 200)
     {
       dis = "1"; // person was found inrange 
-      Serial.print("Sensor ");
-      Serial.print(i+1);
-      Serial.print(": ");
-      Serial.print(distance);
-      Serial.println("cm");
+      //Serial.print("Sensor ");
+      //Serial.print(i+1);
+      //Serial.print(": ");
+      //Serial.print(distance);
+      //Serial.println("cm");
     }
     
     else

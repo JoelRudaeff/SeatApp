@@ -2,8 +2,8 @@ import serial
 import time
 import socket
 
-PORT = 5839  # TODO: port to send data to server - DEFINE A DEFAULT PORT FOR THE SERVER
-HOST = "127.0.0.1"  # TODO: ip of server - DEFINE IP FOR THE SERVER
+PORT = 8886  # TODO: port to send data to server - DEFINE A DEFAULT PORT FOR THE SERVER
+HOST = '127.0.0.1'  # TODO: ip of server - DEFINE IP FOR THE SERVER
 PROTOCOL_UPDATE_KEY = "u"  # TODO: number of message that the server will understand that the RPI sends updated data - DEFINE A KEY FOR UPDATE THE DATA
 PROTOCOL_CLOSE_KEY = "c"  # TODO: message that will be sent to the server if the RPI is closing the code - DEFINE A KEY FOR CLOSING THE COMMUNICATION
 SERIAL_PORT = 9600  # port for communication between the RPI and the Arduino
@@ -37,10 +37,11 @@ def try_connecting_to_server():
     socket_to_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # setup the socket for future use
     connected = False
 
-    while not connected:
+    while connected == False:
         try:
             socket_to_server.connect((HOST, PORT))  # connect to the server
             connected = True
+            print "connected to server!"
         except:
             print "couldn't connect to server, sleeping for 0.5 seconds"
             time.sleep(0.5)
@@ -58,15 +59,28 @@ every cell in the list belongs to a sensor and its result, for example: [0] - re
 
 
 def send_sensors_data_to_server(sensors_data, stored_sensors_data, socket_to_server):
+    sensors_data_len = int(sensors_data[2]) #what is the number of the seats which were sent to the RPi
+    stored_sensors_data_len = len(stored_sensors_data) #what is the number of the seats which were sent to the RPi
     sensors_data_in_string = "".join(sensors_data)  # turn the list to a string
     stored_sensors_data_in_string = "".join(stored_sensors_data)  # turn the list to a string
+
+    if(stored_sensors_data_in_string != "-1-1-1-1"):
+        stored_sensors_data_len = int(stored_sensors_data[2]) #what is the number of the seats which were sent to the RPi
+        stored_sensors_data_in_string = stored_sensors_data_in_string[4:4+sensors_data_len]
+
+
+    sensors_data_in_string = sensors_data_in_string[4:4+sensors_data_len]
+    print "stored sensors data = " + stored_sensors_data_in_string
+    print "sensors_data_in_string = " + sensors_data_in_string
 
     if (stored_sensors_data_in_string == "-1-1-1-1") or (stored_sensors_data_in_string != sensors_data_in_string):  # if stored data is different than the new data or it's first time, else don't do anything
         server_reply = ""
         socket_to_server.sendall(PROTOCOL_UPDATE_KEY + sensors_data_in_string)
-        socket_to_server.recv(server_reply)
+        server_reply = socket_to_server.recv(1024) #1024 - the size of the buffer which recieves the message (int bytes)
         parse_server_response(server_reply)
+        print "server replay = " + server_reply + "\n"
         stored_sensors_data = sensors_data  # LIST - is a mutable type - passes as a reference and can be changed, SO if the new sensors data is different than the older data, redirect the to the new list of data
+        return stored_sensors_data
     socket_to_server.sendall(PROTOCOL_CLOSE_KEY)
     socket_to_server.close()
 
@@ -75,20 +89,20 @@ def send_sensors_data_to_server(sensors_data, stored_sensors_data, socket_to_ser
 
 
 def handle_missions():
-    # serial - our "physical socket" to the sensors and the arduino - gets the data of the sensors from the output of the arduino code we made
-    ser = serial.Serial('/dev/ttyACM0', SERIAL_PORT)
-    stored_sensors_data = [-1, -1, -1,-1]  # for the first run of the functions, then, it changes to the results themselves
+    ser = serial.Serial("COM5", SERIAL_PORT) # serial - our "physical socket" to the sensors and the arduino - gets the data of the sensors from the output of the arduino code we made
+    stored_sensors_data = ["-1","-1","-1","-1"]  # for the first run of the functions, then, it changes to the results themselves
+
     while True:
         list_of_sensors = list(ser.readline())  # turn the given string into a list of chars
-        print "the list of the sensors is:" + list_of_sensors
-        send_sensors_data_to_server(list_of_sensors.pop(0), stored_sensors_data,try_connecting_to_server())  # first cell in the list is always '', so remove it.
+        print "".join(list_of_sensors)
+        stored_sensors_data = send_sensors_data_to_server(list_of_sensors, stored_sensors_data,try_connecting_to_server())  # first cell in the list is always '', so remove it.
         time.sleep(1)  # sleep for ONE second ( 1s )
 
 
 def main():
     try:
-        if VEHICLE_TYPE is not "train":
-            read_configuration_file()
+        #if VEHICLE_TYPE is not "train":
+            #read_configuration_file()
         handle_missions()
     except:
         print "encountered an error"

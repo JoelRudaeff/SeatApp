@@ -3,10 +3,10 @@ import sqlite3
 import sys
 from threading import Thread, Lock
 
-RPI_HOST = ''  # Symbolic name, meaning all available interfaces. TODO: need to change it
-RPI_PORT = 8887  # TODO: Need to change it
+RPI_HOST = '127.0.0.1'  # Symbolic name, meaning all available interfaces. TODO: need to change it
+RPI_PORT = 8886  # TODO: Need to change it
 
-CLIENT_HOST = ''  # TODO: need to change it
+CLIENT_HOST = '127.0.0.1'  # TODO: need to change it
 CLIENT_PORT = 8888  # TODO: need to change it
 
 # kind of a mutex lock, will be used for DataBase access
@@ -122,6 +122,7 @@ class ThreadedServer:
         self.host = host
         self.port = port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        print host, port
         self.sock.bind((self.host, self.port))
 
     def rpi_listener(self):
