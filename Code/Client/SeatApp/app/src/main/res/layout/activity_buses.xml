@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.user.seatapp.BusesActivity">
+
+    <TextView
+        android:id="@+id/CurrentTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="37dp"
+        android:text="Current place"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/DestinationTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="DestinationPlace"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:layout_below="@+id/CurrentSpinner"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Spinner
+        android:id="@+id/CurrentSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/CurrentTitle"
+        android:layout_toEndOf="@+id/DestinationTitle"
+        android:layout_toRightOf="@+id/DestinationTitle" />
+
+    <Spinner
+        android:id="@+id/DestinationSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/DestinationTitle"
+        android:layout_toEndOf="@+id/DestinationTitle"
+        android:layout_toRightOf="@+id/DestinationTitle" />
+
+    <TextView
+        android:id="@+id/CompanyTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/DestinationTitle"
+        android:layout_alignStart="@+id/DestinationTitle"
+        android:layout_below="@+id/DestinationSpinner"
+        android:layout_marginTop="22dp"
+        android:text="Company"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <Spinner
+        android:id="@+id/TimesSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/DestinationSpinner"
+        android:layout_alignStart="@+id/DestinationSpinner"
+        android:layout_alignTop="@+id/CompanyTitle" />
+
+    <TextView
+        android:id="@+id/LeavingTimeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/TimesSpinner"
+        android:layout_marginTop="23dp"
+        android:text="Leaving time"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <Spinner
+        android:id="@+id/TimeSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/TimesSpinner"
+        android:layout_alignStart="@+id/TimesSpinner"
+        android:layout_alignTop="@+id/LeavingTimeTitle" />
+
+    <Button
+        android:id="@+id/ChooseBusButton"
+        android:layout_width="150sp"
+        android:layout_height="80sp"
+        android:onClick="startBusScheduleActivity"
+        android:text="CHOOSE BUS"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="24sp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>

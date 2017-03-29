@@ -1,0 +1,50 @@
+package com.example.user.seatapp;
+
+import android.content.Intent;
+import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
+public class TrainsActivity extends ActionBarActivity
+{
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_trains);
+
+        Spinner current_spinner = (Spinner) findViewById(R.id.CurrentSpinner);
+        Spinner destination_spinner = (Spinner) findViewById(R.id.DestinationSpinner);
+        Spinner leaving_time_spinner = (Spinner) findViewById(R.id.TimesSpinner);
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> places_adapter = ArrayAdapter.createFromResource(this, R.array.train_stations, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> leaving_time_adapter = ArrayAdapter.createFromResource(this, R.array.trains_time, android.R.layout.simple_spinner_item);
+
+        // Specify the layout to use when the list of choices appears - the spinner type
+        places_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        leaving_time_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Apply the adapter to the spinner
+        current_spinner.setAdapter(places_adapter);
+        destination_spinner.setAdapter(places_adapter);
+        leaving_time_spinner.setAdapter(leaving_time_adapter);
+    }
+
+    public void startTrainSchedule(View view)
+    {
+        Spinner current_spinner = (Spinner) findViewById(R.id.CurrentSpinner);
+        Spinner destination_spinner = (Spinner) findViewById(R.id.DestinationSpinner);
+        Spinner leaving_time_spinner = (Spinner) findViewById(R.id.TimesSpinner);
+
+        Intent intent = new Intent(this, TrainScheduleActivity.class);
+        intent.putExtra("current", current_spinner.getSelectedItem().toString());
+        intent.putExtra("destination", destination_spinner.getSelectedItem().toString());
+        intent.putExtra("leaving time", leaving_time_spinner.getSelectedItem().toString());
+
+        startActivity(intent);
+    }
+
+}

@@ -1,0 +1,80 @@
+<resources>
+    <string name="app_name">SeatApp</string>
+
+    <string-array name="train_stations">
+        <item>Nahariya</item>
+        <item>Akko</item>
+        <item>Qiryat Mozkin</item>
+        <item>Qiryat Haim</item>
+        <item>Huzot-Hamifratz</item>
+        <item>Lev-Hamifratz</item>
+        <item>Haifa Merkaz-Hashmona</item>
+        <item>Haifa Bat-Galim</item>
+        <item>Haifa Hof-Hacarmel</item>
+        <item>Tel-Aviv University</item>
+        <item>Tel-Aviv Savidor-Merkaz</item>
+        <item>Tel-Aviv Hashalom</item>
+        <item>Tel-Aviv HaHagana</item>
+    </string-array>
+
+    <string-array name="cities_array">
+        <item>Nahariya</item>
+        <item>Akko</item>
+        <item>Qiryat Mozkin</item>
+        <item>Qiryat Haim</item>
+        <item>Huzot-Hamifratz</item>
+        <item>Lev-Hamifratz</item>
+        <item>Haifa</item>
+        <item>Tel-Aviv</item>
+        <item>Jerusalem</item>
+        <item>Ashdod</item>
+        <item>Ashkelon</item>
+        <item>Eilat</item>
+    </string-array>
+
+    <string-array name="train_companies_array">
+        <item> </item>
+        <item>Israel RailWays</item>
+    </string-array>
+
+    <string-array name="bus_companies_array">
+        <item>Eged</item>
+        <item>Kavim</item>
+        <item>Nativ Express</item>
+        <item>Metropollin</item>
+    </string-array>
+
+    <string-array name="trains_time">
+        <item> </item>
+        <item>7:00</item>
+        <item>7:30</item>
+        <item>8:00</item>
+        <item>8:30</item>
+        <item>9:00</item>
+        <item>9:30</item>
+        <item>10:00</item>
+        <item>10:30</item>
+        <item>11:00</item>
+        <item>11:30</item>
+        <item>12:00</item>
+        <item>12:30</item>
+        <item>13:00</item>
+        <item>13:30</item>
+        <item>14:00</item>
+        <item>14:30</item>
+        <item>15:00</item>
+        <item>15:30</item>
+        <item>16:00</item>
+        <item>16:30</item>
+        <item>17:00</item>
+        <item>17:30</item>
+        <item>18:00</item>
+        <item>18:30</item>
+        <item>19:00</item>
+        <item>19:30</item>
+        <item>20:00</item>
+        <item>20:30</item>
+        <item>21:00</item>
+    </string-array>
+
+</resources>
