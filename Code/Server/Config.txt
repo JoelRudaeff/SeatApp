@@ -1,0 +1,3 @@
+VEHICLE_TYPE ; VEHICLE_COMPANY ; VEHICLE_NUMBER ; AMOUNT_OF_LINES ; PATH:DELAY_PATH1:DELAY1 ; START:END_START1:END1  
+===================================================================================================================
+Bus ; Egged ; 263 ; 60 ; Rabin:0000_Big:0025 ; 0830:0900_0900:0930
