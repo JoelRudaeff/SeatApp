@@ -6,8 +6,8 @@
         <item>Akko</item>
         <item>Qiryat Mozkin</item>
         <item>Qiryat Haim</item>
-        <item>Huzot-Hamifratz</item>
         <item>Lev-Hamifratz</item>
+        <item>Huzot-Hamifratz</item>
         <item>Haifa Merkaz-Hashmona</item>
         <item>Haifa Bat-Galim</item>
         <item>Haifa Hof-Hacarmel</item>
@@ -22,11 +22,10 @@
         <item>Akko</item>
         <item>Qiryat Mozkin</item>
         <item>Qiryat Haim</item>
-        <item>Huzot-Hamifratz</item>
         <item>Lev-Hamifratz</item>
+        <item>Huzot-Hamifratz</item>
         <item>Haifa</item>
         <item>Tel-Aviv</item>
-        <item>Jerusalem</item>
         <item>Ashdod</item>
         <item>Ashkelon</item>
         <item>Eilat</item>
@@ -45,7 +44,6 @@
     </string-array>
 
     <string-array name="trains_time">
-        <item> </item>
         <item>7:00</item>
         <item>7:30</item>
         <item>8:00</item>

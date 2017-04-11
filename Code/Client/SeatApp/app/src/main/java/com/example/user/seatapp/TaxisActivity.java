@@ -35,7 +35,7 @@ public class TaxisActivity extends AppCompatActivity
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
             {
                 Object item = parent.getItemAtPosition(pos);
-                TextView cur = (TextView) findViewById(R.id.t_cur);
+                TextView cur = (TextView) findViewById(R.id.cur);
                 cur.setText(item.toString());
             }
 
@@ -50,7 +50,7 @@ public class TaxisActivity extends AppCompatActivity
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
             {
                 Object item = parent.getItemAtPosition(pos);
-                TextView dest = (TextView) findViewById(R.id.t_dest);
+                TextView dest = (TextView) findViewById(R.id.dest);
                 dest.setText(item.toString());
             }
 

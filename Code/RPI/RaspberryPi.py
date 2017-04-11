@@ -3,7 +3,7 @@ import time
 import socket
 
 PORT = 8886  # TODO: port to send data to server - DEFINE A DEFAULT PORT FOR THE SERVER
-HOST = '127.0.0.1'  # TODO: ip of server - DEFINE IP FOR THE SERVER
+HOST = '10.10.0.14'  # TODO: ip of server - DEFINE IP FOR THE SERVER
 PROTOCOL_UPDATE_KEY = "u"  # TODO: number of message that the server will understand that the RPI sends updated data - DEFINE A KEY FOR UPDATE THE DATA
 PROTOCOL_CLOSE_KEY = "c"  # TODO: message that will be sent to the server if the RPI is closing the code - DEFINE A KEY FOR CLOSING THE COMMUNICATION
 SERIAL_PORT = 9600  # port for communication between the RPI and the Arduino

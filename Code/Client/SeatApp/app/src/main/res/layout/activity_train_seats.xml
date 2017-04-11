@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.user.seatapp.TrainSeatsActivity">
+
+    <TextView
+        android:id="@+id/SeatsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="55dp"
+        android:layout_x="130dp"
+        android:layout_y="16dp"
+        android:text="Seats"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="36sp"
+        tools:layout_editor_absoluteX="126dp"
+        tools:layout_editor_absoluteY="43dp" />
+
+    <TextView
+        android:id="@+id/ln1"
+        android:layout_width="43dp"
+        android:layout_height="36dp"
+        android:layout_x="10dp"
+        android:layout_y="90dp"
+        android:text="1"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/cl1"
+        android:layout_width="300dp"
+        android:layout_height="36dp"
+        android:layout_x="70dp"
+        android:layout_y="90dp"
+        android:text="c1"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/ln2"
+        android:layout_width="43dp"
+        android:layout_height="36dp"
+        android:layout_x="10dp"
+        android:layout_y="130dp"
+        android:text="2"
+        android:textSize="24sp"/>
+
+    <TextView
+        android:id="@+id/cl2"
+        android:layout_width="300dp"
+        android:layout_height="36dp"
+        android:layout_x="70dp"
+        android:layout_y="130dp"
+        android:text="c2"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/ln3"
+        android:layout_width="43dp"
+        android:layout_height="36dp"
+        android:layout_x="10dp"
+        android:layout_y="170dp"
+        android:text="3"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/cl3"
+        android:layout_width="300dp"
+        android:layout_height="36dp"
+        android:layout_x="70dp"
+        android:layout_y="170dp"
+        android:text="c3"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/ln4"
+        android:layout_width="43dp"
+        android:layout_height="36dp"
+        android:layout_x="10dp"
+        android:layout_y="210dp"
+        android:text="4"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/cl4"
+        android:layout_width="300dp"
+        android:layout_height="36dp"
+        android:layout_x="70dp"
+        android:layout_y="210dp"
+        android:text="c4"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/ln5"
+        android:layout_width="43dp"
+        android:layout_height="36dp"
+        android:layout_x="10dp"
+        android:layout_y="250dp"
+        android:text="5"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/cl5"
+        android:layout_width="300dp"
+        android:layout_height="36dp"
+        android:layout_x="70dp"
+        android:layout_y="250dp"
+        android:text="c5"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/ln6"
+        android:layout_width="43dp"
+        android:layout_height="36dp"
+        android:layout_x="10dp"
+        android:layout_y="290dp"
+        android:text="6"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/cl6"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_x="70dp"
+        android:layout_y="290dp"
+        android:text="c6"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/ln7"
+        android:layout_width="43dp"
+        android:layout_height="36dp"
+        android:layout_x="10dp"
+        android:layout_y="330dp"
+        android:text="7"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/cl7"
+        android:layout_width="300dp"
+        android:layout_height="36dp"
+        android:layout_x="70dp"
+        android:layout_y="330dp"
+        android:text="c7"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/ln8"
+        android:layout_width="43dp"
+        android:layout_height="36dp"
+        android:layout_x="10dp"
+        android:layout_y="370dp"
+        android:text="8"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/cl8"
+        android:layout_width="300dp"
+        android:layout_height="36dp"
+        android:layout_x="70dp"
+        android:layout_y="370dp"
+        android:text="c8"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/ln9"
+        android:layout_width="43dp"
+        android:layout_height="36dp"
+        android:layout_x="10dp"
+        android:layout_y="410dp"
+        android:text="9"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/cl9"
+        android:layout_width="300dp"
+        android:layout_height="36dp"
+        android:layout_x="70dp"
+        android:layout_y="410dp"
+        android:text="c9"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/ln10"
+        android:layout_width="43dp"
+        android:layout_height="36dp"
+        android:layout_x="10dp"
+        android:layout_y="450dp"
+        android:text="10"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/cl10"
+        android:layout_width="300dp"
+        android:layout_height="36dp"
+        android:layout_x="70dp"
+        android:layout_y="450dp"
+        android:text="c10"
+        android:textSize="24sp" />
+
+</AbsoluteLayout>

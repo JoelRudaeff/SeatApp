@@ -29,7 +29,7 @@ public class TrainScheduleActivity extends AppCompatActivity
         TextView cur = (TextView) findViewById(R.id.t_cur);
         TextView dest = (TextView) findViewById(R.id.t_dest);
         LinkedList<String> places_linkedlist = new LinkedList<String>(); // a linked list of the place
-        LinkedList<Integer> times_linkedlist = new LinkedList<Integer>(); // a linked list of the time to go from a place after the place before
+        LinkedList<Integer> times_linkedlist = new LinkedList<Integer>(); // a linked list of the time to go from a place to the next place in the places' list
         ArrayAdapter<CharSequence> places_adapter = ArrayAdapter.createFromResource(this, R.array.train_stations, android.R.layout.simple_spinner_item);
 
         int i;
@@ -185,7 +185,7 @@ public class TrainScheduleActivity extends AppCompatActivity
             lt_minutes += add_to_lt;
         }
 
-        if(lt_hours > 23)
+        if(lt_hours >= 24)
         {
             lt_hours -= 24; //if the hour is after midnight, turn it to 0:00 and so on..
         }
@@ -243,9 +243,9 @@ public class TrainScheduleActivity extends AppCompatActivity
         return arriving_time;
     }
 
-    public int SendingDetailsToServer(String TrainNumber)
+    public String SendingDetailsToServer(String TrainNumber)
     {
-        int ret = 0;
+        String ret = "0";
         String vehicle_type = "Train";
         String vehicle_company = "Israel RailWays";
         String vehicle_number = TrainNumber;
@@ -283,13 +283,13 @@ public class TrainScheduleActivity extends AppCompatActivity
             input.close();
             s.close();
 
-            ret = 1;
+            ret = data_from_server;
         }
 
         catch (IOException e)
         {
             e.printStackTrace();
-            ret = 0; //Because an error was occurred
+            ret = "0"; //Because an error was occurred
         }
 
         return ret;
@@ -297,113 +297,189 @@ public class TrainScheduleActivity extends AppCompatActivity
 
     public void startTrain1(View view)
     {
-        int ret = 0;
+        String ret = "1"; //TODO: cahnge it to "0"
         Button button_train_number = (Button) findViewById(R.id.tn1);
         String TrainNumber = button_train_number.getText().toString();
 
         //ret = SendingDetailsToServer(TrainNumber);
 
-        if(ret == 0)
+        if(ret == "0")
         {
+
             ;
+        }
+
+        else // if the client recieved the correct message from the server
+        {
+            Intent intent = new Intent(this, TrainSeatsActivity.class);
+            intent.putExtra("message", ret);
+
+            startActivity(intent);
         }
     }
 
     public void startTrain2(View view)
     {
-        int ret = 0;
+        String ret = "1"; //TODO: cahnge it to "0"
         Button button_train_number = (Button) findViewById(R.id.tn2);
         String TrainNumber = button_train_number.getText().toString();
 
         //ret = SendingDetailsToServer(TrainNumber);
 
-        if(ret == 0)
+        if(ret == "0")
         {
+
             ;
+        }
+
+        else // if the client recieved the correct message from the server
+        {
+            Intent intent = new Intent(this, TrainSeatsActivity.class);
+            intent.putExtra("message", ret);
+
+            startActivity(intent);
         }
     }
 
     public void startTrain3(View view)
     {
-        int ret = 0;
+        String ret = "1"; //TODO: cahnge it to "0"
         Button button_train_number = (Button) findViewById(R.id.tn3);
         String TrainNumber = button_train_number.getText().toString();
 
         //ret = SendingDetailsToServer(TrainNumber);
 
-        if(ret == 0)
+        if(ret == "0")
         {
+
             ;
+        }
+
+        else // if the client recieved the correct message from the server
+        {
+            Intent intent = new Intent(this, TrainSeatsActivity.class);
+            intent.putExtra("message", ret);
+
+            startActivity(intent);
         }
     }
 
     public void startTrain4(View view)
     {
-        int ret = 0;
+        String ret = "1"; //TODO: cahnge it to "0"
         Button button_train_number = (Button) findViewById(R.id.tn4);
         String TrainNumber = button_train_number.getText().toString();
 
         //ret = SendingDetailsToServer(TrainNumber);
 
-        if(ret == 0)
+        if(ret == "0")
         {
+
             ;
         }
+
+        else // if the client recieved the correct message from the server
+        {
+            Intent intent = new Intent(this, TrainSeatsActivity.class);
+            intent.putExtra("message", ret);
+
+            startActivity(intent);
+        }
+
     }
 
     public void startTrain5(View view)
     {
-        int ret = 0;
+        String ret = "1"; //TODO: cahnge it to "0"
         Button button_train_number = (Button) findViewById(R.id.tn5);
         String TrainNumber = button_train_number.getText().toString();
 
         //ret = SendingDetailsToServer(TrainNumber);
 
-        if(ret == 0)
+        if(ret == "0")
         {
+
             ;
         }
+
+        else // if the client recieved the correct message from the server
+        {
+            Intent intent = new Intent(this, TrainSeatsActivity.class);
+            intent.putExtra("message", ret);
+
+            startActivity(intent);
+        }
+
     }
 
     public void startTrain6(View view)
     {
-        int ret = 0;
+        String ret = "1"; //TODO: change it to "0"
         Button button_train_number = (Button) findViewById(R.id.tn6);
         String TrainNumber = button_train_number.getText().toString();
 
         //ret = SendingDetailsToServer(TrainNumber);
 
-        if(ret == 0)
+        if(ret == "0")
         {
+
             ;
         }
+
+        else // if the client recieved the correct message from the server
+        {
+            Intent intent = new Intent(this, TrainSeatsActivity.class);
+            intent.putExtra("message", ret);
+
+            startActivity(intent);
+        }
+
     }
 
     public void startTrain7(View view)
     {
-        int ret = 0;
+        String ret = "1"; //TODO: change it to "0"
         Button button_train_number = (Button) findViewById(R.id.tn7);
         String TrainNumber = button_train_number.getText().toString();
 
         //ret = SendingDetailsToServer(TrainNumber);
 
-        if(ret == 0)
+        if(ret == "0")
         {
+
             ;
         }
+
+        else // if the client recieved the correct message from the server
+        {
+            Intent intent = new Intent(this, TrainSeatsActivity.class);
+            intent.putExtra("message", ret);
+
+            startActivity(intent);
+        }
+
     }
 
     public void startTrain8(View view)
     {
-        int ret = 0;
+        String ret = "1"; //TODO: cahnge it to "0"
         Button button_train_number = (Button) findViewById(R.id.tn8);
         String TrainNumber = button_train_number.getText().toString();
 
         //ret = SendingDetailsToServer(TrainNumber);
 
-        if(ret == 0)
+        if(ret == "0")
         {
+
             ;
+        }
+
+        else // if the client recieved the correct message from the server
+        {
+            Intent intent = new Intent(this, TrainSeatsActivity.class);
+            intent.putExtra("message", ret);
+
+            startActivity(intent);
         }
     }
 }

@@ -309,8 +309,8 @@
             <Button
                 android:id="@+id/tn7"
                 android:layout_column="3"
+                android:onClick="startTrain7"
                 android:padding="3dip"
-                android:text=" "
                 android:textColor="@android:color/black"
                 android:textSize="20sp" />
 

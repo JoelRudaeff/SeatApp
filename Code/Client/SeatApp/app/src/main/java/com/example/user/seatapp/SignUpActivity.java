@@ -15,6 +15,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 public class SignUpActivity extends ActionBarActivity
@@ -49,7 +50,9 @@ public class SignUpActivity extends ActionBarActivity
 
         try
         {
-            Socket s = new Socket("127.0.0.1", 7000); //TODO: Change the IP and the port number
+            //ServerSocket server = new ServerSocket(8888);//
+            // Socket client = server.accept();
+            Socket s = new Socket("10.10.0.14", 8888); //TODO: Change the IP and the port number
             DataOutputStream output = new DataOutputStream(s.getOutputStream());
             output.writeUTF(string_to_send); //The sending to the server
 
@@ -64,14 +67,14 @@ public class SignUpActivity extends ActionBarActivity
             }
 
             //print the input to the application screen
-            final TextView receivedMsg = (TextView) findViewById(R.id.t_cur); //TODO: change the id of the text view!
+            final TextView receivedMsg = (TextView) findViewById(R.id.cur); //TODO: change the id of the text view!
             receivedMsg.setText(read);
 
             output.close();
             input_reader.close();
             input.close();
             s.close();
-
+            //server.close();
             ret = 1;
         }
 
@@ -124,19 +127,23 @@ public class SignUpActivity extends ActionBarActivity
 
             else
             {
-                int ret;
+                String ret = "1"; //TODO: change it to ret = "0"
 
-                Intent intent = new Intent(this, HomePageActivity.class);
+                Intent intent = new Intent(this, MainActivity.class);
                 intent.putExtra("NewUsername", NewUserName.getText().toString());
                 intent.putExtra("NewPassword", NewPassword.getText().toString());
 
                 //Sending the necessary details to the server, and getting back the answer from it
                 //ret = SendingDetailsToServer(NewUserName.getText().toString(), NewPassword.getText().toString(), NewEmail.getText().toString());
 
-                Toast toast_successful = Toast.makeText(context, "Successfully signing-up!", duration);
-                toast_successful.show();
+                if(ret == "1")
+                {
+                    Toast toast_successful = Toast.makeText(context, "Successfully signing-up!", duration);
+                    toast_successful.show();
 
-                startActivity(intent);
+                    startActivity(intent);
+                }
+
             }
         }
     }

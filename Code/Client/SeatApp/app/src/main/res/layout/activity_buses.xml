@@ -60,7 +60,7 @@
         android:textSize="18sp" />
 
     <Spinner
-        android:id="@+id/TimesSpinner"
+        android:id="@+id/CompanySpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/DestinationSpinner"
@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/TimesSpinner"
+        android:layout_below="@+id/CompanySpinner"
         android:layout_marginTop="23dp"
         android:text="Leaving time"
         android:textColor="@android:color/black"
@@ -83,8 +83,8 @@
         android:id="@+id/TimeSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/TimesSpinner"
-        android:layout_alignStart="@+id/TimesSpinner"
+        android:layout_alignLeft="@+id/CompanySpinner"
+        android:layout_alignStart="@+id/CompanySpinner"
         android:layout_alignTop="@+id/LeavingTimeTitle" />
 
     <Button

@@ -7,12 +7,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.io.*;
+import java.net.*;
+import java.net.InetAddress;
+
+
 public class HomePageActivity extends ActionBarActivity
 {
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        final String HOST = "10.10.0.11";
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
 
@@ -20,6 +27,8 @@ public class HomePageActivity extends ActionBarActivity
         final EditText Password = (EditText) findViewById(R.id.password);
 
         final Button SignIn = (Button) findViewById(R.id.Sign_in);
+
+
     }
 
     public void startMainActivitySignIn(View view)

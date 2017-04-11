@@ -3,10 +3,10 @@ import sqlite3
 import sys
 from threading import Thread, Lock
 
-RPI_HOST = '127.0.0.1'  # Symbolic name, meaning all available interfaces. TODO: need to change it
+RPI_HOST = '10.10.0.14'  # Symbolic name, meaning all available interfaces. TODO: need to change it
 RPI_PORT = 8886  # TODO: Need to change it
 
-CLIENT_HOST = '127.0.0.1'  # TODO: need to change it
+CLIENT_HOST = '10.10.0.14'  # TODO: need to change it
 CLIENT_PORT = 8888  # TODO: need to change it
 
 # kind of a mutex lock, will be used for DataBase access
@@ -34,7 +34,7 @@ def update_database(data):
 
     with lock:
         # TODO: conn = sqlite3.connect(vehicle_type+'\'+vehicle_company+'\'vehicle_number+'\'+'Seats.db')
-        conn = sqlite3.connect('DataBase.db')  # connection to the database
+        conn = sqlite3.connect('C:\\Users\\User\\Desktop\\Liran\\Studing - Liran\\Magshimim\\12th Grade\\Joel_and_Liran_Magshimim_Porject\\Code\\Server\\DataBase.db')  # connection to the database (just for trying! TODO: change this path)
         db = conn.cursor()
         i = 0  # Reset the value of 'i'
         try:
@@ -42,14 +42,13 @@ def update_database(data):
             # first of all, if an error has been occured in the process, get the data before changing it so if something happened we can restore the OLD_DATA
             seat_results = db.execute("SELECT * FROM seats")
             for row in seat_results:
-                old_data += str(row[0])  # append the seat's number, after converting from int to string
-                old_data += str(row[1])  # append the seat's status, after converting from int to string
+                old_data += str(row[1])  # append the seat's status, after converting from int to string, because the data includes only the seats' status
 
             # after we stored the backup data, we can change to the new data
             while i < len(data):  # For each seat (seat number and status), do:
-                to_executre = "UPDATE seats SET status = " + data[i + 1] + " WHERE seat_num = " + data[i]
+                to_executre = "UPDATE seats SET status = " + str(data[i]) + " WHERE seat_num = " + str(i+1)
                 db.execute(to_executre)  # Updating the data for each seat's data
-                i += 2  # The next seat's number-status element in the list
+                i += 1  # The next seat's number-status element in the list
 
             # save changes and close db
             conn.commit()
@@ -57,10 +56,10 @@ def update_database(data):
 
         except:  # restoring the old data
             data = old_data
-            while i < len(data):  # For each seat (seat number and status), do:
-                to_executre = "UPDATE seats SET status = " + data[i + 1] + " WHERE seat_num = " + data[i]
+            while i < len(old_data):  # For each seat (seat number and status), do:
+                to_execute = "UPDATE seats SET status = " + str(data[i]) + " WHERE seat_num = " + str(i+1)
                 db.execute(to_executre)  # Updating the data for each seat's data
-                i += 2  # The next seat's number-status element in the list
+                i += 1  # The next seat's number-status element in the list
 
             # save changes and close db
             conn.commit()
@@ -98,6 +97,7 @@ def send_client_seats(client_socket,client_msg ):
 def register_client(client_socket,client_msg):
     #Username, Password , Email
     client_msg = client_msg.split(";")  # dividing the msg into a list to include the parts separately
+    print client_msg
     #TODO: check if username is available, if yes - create a new entry with username,password,email and return ack to the client
 
 def login_client(client_socket,client_msg):
@@ -129,6 +129,7 @@ class ThreadedServer:
         self.sock.listen(5)
         while True:
             rpi, address = self.sock.accept()
+            print "RPI connected"
             rpi.settimeout(60)
             Thread(target=self.handle_rpi, args=(rpi, address)).start()
 
