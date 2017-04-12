@@ -3,11 +3,15 @@ import sqlite3
 import sys
 from threading import Thread, Lock
 
-RPI_HOST = '10.10.0.14'  # Symbolic name, meaning all available interfaces. TODO: need to change it
+RPI_HOST = '127.0.0.1'  # Symbolic name, meaning all available interfaces. TODO: need to change it
 RPI_PORT = 8886  # TODO: Need to change it
 
-CLIENT_HOST = '10.10.0.14'  # TODO: need to change it
+CLIENT_HOST = '127.0.0.1'  # TODO: need to change it
 CLIENT_PORT = 8888  # TODO: need to change it
+
+# Path files
+ACCOUNTS_FOLDER = 'Accounts'
+VEHICLES_FOLDER = 'Vehicles'
 
 # kind of a mutex lock, will be used for DataBase access
 lock = Lock()
@@ -17,103 +21,184 @@ lock = Lock()
 #                                                   RPI_SIDE
 
 # function that will update the seats data inside the data-base. will be used during communication with the RPI
-def update_database(data):
+def update_transport_database(vehicle_type, vehicle_company, vehicle_number, data):
     old_data = ""
-    """
-	d = []
-	i = 0
-	j = 0
-
-	An another method to arrange the data to more understandable way
-	while i < length: # For each seat (seat number and status), do:
-		dict = {'seat_num' : data[i], 'status' : data[i+1]}
-		d[j].append(dict) # Append the data of each seat (number & status) to the dictionary
-		j+=1 # The next cell in the list
-		i+=2 # The next seat's number-status element to append the dictionaries list
-	"""
-
     with lock:
         # TODO: conn = sqlite3.connect(vehicle_type+'\'+vehicle_company+'\'vehicle_number+'\'+'Seats.db')
-        conn = sqlite3.connect('C:\\Users\\User\\Desktop\\Liran\\Studing - Liran\\Magshimim\\12th Grade\\Joel_and_Liran_Magshimim_Porject\\Code\\Server\\DataBase.db')  # connection to the database (just for trying! TODO: change this path)
-        db = conn.cursor()
+        db_path = VEHICLES_FOLDER + '/'
+        vehicle_type + '/' + vehicle_company + '/' + vehicle_number + '/Transport.db'
+        conn = sqlite3.connect(db_path)  # connection to the database
+        c = conn.cursor()
         i = 0  # Reset the value of 'i'
         try:
-
             # first of all, if an error has been occured in the process, get the data before changing it so if something happened we can restore the OLD_DATA
-            seat_results = db.execute("SELECT * FROM seats")
-            for row in seat_results:
-                old_data += str(row[1])  # append the seat's status, after converting from int to string, because the data includes only the seats' status
+            try:
+                seat_results = c.execute('''SELECT * FROM seats''')
+                for row in seat_results:
+                    old_data += str(row[0])  # append the seat's line number, after converting from int to string
+                    old_data += str(row[1])  # append the seat's status, after converting from int to string
+            except:
+                conn.close() #if there's no access to db, backup won't work
+                lock.release()
+                return
 
             # after we stored the backup data, we can change to the new data
             while i < len(data):  # For each seat (seat number and status), do:
-                to_executre = "UPDATE seats SET status = " + str(data[i]) + " WHERE seat_num = " + str(i+1)
-                db.execute(to_executre)  # Updating the data for each seat's data
-                i += 1  # The next seat's number-status element in the list
-
-            # save changes and close db
+                c.execute('''UPDATE seats SET status = ? WHERE line = ?''', (data[i + 1], data[i],))  # Updating the data for each seat's data
+                i += 2  # The next seat's number-status element in the list
+            # save changes
             conn.commit()
-            conn.close()
 
         except:  # restoring the old data
             data = old_data
-            while i < len(old_data):  # For each seat (seat number and status), do:
-                to_execute = "UPDATE seats SET status = " + str(data[i]) + " WHERE seat_num = " + str(i+1)
-                db.execute(to_executre)  # Updating the data for each seat's data
-                i += 1  # The next seat's number-status element in the list
-
+            while i < len(data):  # For each seat (seat number and status), do:
+                c.execute('''UPDATE seats SET status = ? WHERE line = ?''', (data[i+1],data[i],))  # Updating the data for each seat's data
+                i += 2  # The next seat's number-status element in the list
             # save changes and close db
             conn.commit()
-            conn.close()
+        conn.close()
 
 ########################################################################################################################
 #                                                   CLIENT SIDE
 
 
-def get_seats_from_database_by_vehicle_type(msg):  # return the data about the seats, from the database, as a string
+def send_get_seats(client_socket, client_msg):
+    # g;len(vehicle_type);vehicle_type;len(vehicle_company);vehicle_company;len(vehicle_number); vehicle_number
+    vehicle_type = client_msg[2]
+    vehicle_company = client_msg[4]
+    vehicle_number = client_msg[6]
+
+    db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + vehicle_number + '/Transport.db'
+    conn = sqlite3.connect(db_path)  # connection to the database
+    c = conn.cursor()
+
     seats = ""
+    with lock.acquire():  # tries to gain access to the data base. WITH - whenever it's done, release the lock - it's like the state "USING" in c#
+        try:
+            index = 0
+            data = c.execute('''SELECT * FROM seats''')
+            for row in data:
+                if index is not 0:
+                    seats += "|" #indicates space between the previous line and the current
+                else:
+                    index +=1
+                seats += str(row[0])  # append the seat's line number, after converting from int to string
+                seats += "_" #indicates the line number before the sign, and the seats' status after the sign
+                seats += str(row[1])  # append the seat's status, after converting from int to string
+            conn.close()
+        except:
+            print "Error in send_get_seats: " + vehicle_type + "" + vehicle_company + "" + vehicle_number
+            seats = ""  # an error has been occured
+            conn.close()
+    client_socket.sendall('g'+str(len(seats)) + str(seats)) # by the protocol
+
+
+def send_register_client(client_socket, client_msg):
+    # r;length(username);username;length(password);password;length(email);email
+    username = client_msg[2]
+    password = client_msg[4]
+    email = client_msg[6]
+
+    db_path = ACCOUNTS_FOLDER + '/users.db'
+    conn = sqlite3.connect(db_path)  # connection to the database
+    c = conn.cursor()
+
+    confirmation = "r;0"
+    with lock:  # tries to gain access to the data base. WITH - whenever it's done, release the lock - it's like the state "USING" in c#
+        try:
+            result = c.execute('''SELECT username FROM users WHERE username = ? AND password = ? AND email = ?''',(username, password, email,))
+            data = c.fetchall()
+            if len(data) is 0:  # if no user was found under these conditions - a success of registrations
+                c.execute('''INSERT INTO users(username,password,email) VALUES(?,?,?)''', (username, password, email,))
+                confirmation = "r;1"
+            conn.close()
+        except:
+            print "Error in send_register_client: " + username + "" + password + "" + email
+            conn.close()
+    client_socket.sendall(confirmation)
+
+
+def send_login_client(client_socket, client_msg):
+    # l;length(username);username;length(password);password
+    username = client_msg[2]
+    password = client_msg[4]
+
+    db_path = ACCOUNTS_FOLDER + '/users.db'
+    conn = sqlite3.connect(db_path)  # connection to the database
+    c = conn.cursor()
+
+    confirmation = "l;0"
+    with lock:  # tries to gain access to the data base. WITH - whenever it's done, release the lock - it's like the state "USING" in c#
+        try:
+            result = c.execute('''SELECT username FROM users WHERE username = ? AND password = ? ''',(username, password,))
+            data = c.fetchall()
+            if len(data) is not 0:  # the user was found
+                confirmation = "l;1"  # success
+            conn.close()
+        except:
+            print "Error in send_login_client: " + username + "" + password
+            conn.close()
+    client_socket.sendall(confirmation)
+
+
+def send_view_vehicle(client_socket, client_msg):
+    # v;len(vehicle_type);vehicle_type;len(vehicle_company);vehicle_company;len(vehicle_number); vehicle_number
+    vehicle_type = client_msg[2]
+    vehicle_company = client_msg[4]
+    vehicle_number = client_msg[6]
+
+    view_vehicle = ""
+    start_and_end = ""
+    location_and_delay = ""
 
     with lock.acquire():  # tries to gain access to the data base. WITH - whenever it's done, release the lock - it's like the state "USING" in c#
         try:
-            #TODO: conn = sqlite3.connect(vehicle_type+'\'+vehicle_company+'\'vehicle_number+'\'+'Seats.db')
-            conn = sqlite3.connect('DataBase.db')  # connection to the database
-            db = conn.cursor()
+            db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + vehicle_number + '/Transport.db'
+            conn = sqlite3.connect(db_path)  # connection to the database
+            c = conn.cursor()
 
-            data = db.execute("SELECT * FROM seats")
-
+            index = 0
+            # start_time -> end_time
+            data = c.execute('''SELECT * FROM active''')
             for row in data:
-                seats += str(row[0])  # append the seat's number, after converting from int to string
-                seats += str(row[1])  # append the seat's status, after converting from int to string
+                if index is not 0:
+                    start_and_end += '|'
+                else:
+                    index +=1
+                start_and_end += str(row[0])  # append the start time number
+                start_and_end += "_"
+                start_and_end += str(row[1])  # append the end time number
 
+            index = 0
+            # location -> delay
+            data = c.execute('''SELECT * FROM information''')
+            for row in data:
+                if index is not 0:
+                    location_and_delay += '|'
+                else:
+                    index +=1
+                location_and_delay += str(row[0])  # append the location number
+                location_and_delay += "_"
+                location_and_delay += str(row[1])  # append the delay number
+
+            view_vehicle = 'v;' + str(len(start_and_end)) + ';' + str(start_and_end) + ';' + str(len(location_and_delay)) + ';' + str(location_and_delay)
             conn.close()
         except:
-            seats = ""  # an error has been occured
-    return seats
+            view_vehicle = ""
+            print "Error in send_view_vehicle: " + vehicle_type + "" + vehicle_company + "" + vehicle_number
+    client_socket.sendall(view_vehicle)
 
-def send_client_seats(client_socket,client_msg ):
-    client_msg = client_msg.split(";") #dividing the msg into a list to include the parts separately
-    client_socket.sendall(get_seats_from_database_by_vehicle_type(client_msg))
-
-
-def register_client(client_socket,client_msg):
-    #Username, Password , Email
-    client_msg = client_msg.split(";")  # dividing the msg into a list to include the parts separately
-    print client_msg
-    #TODO: check if username is available, if yes - create a new entry with username,password,email and return ack to the client
-
-def login_client(client_socket,client_msg):
-    # Username, Password
-    client_msg = client_msg.split(";")  # dividing the msg into a list to include the parts separately
-    #TODO: check if username + password appears on the database, if exists send ack to the client
 
 def handle_client(client_msg, client_socket):
     option = client_msg[0]
-    if option is "1":  # If the client sent a seats request-message to the server ("1" - protocol message for request for the seats' status)
-        send_client_seats(client_socket,client_msg[1:])
-    if option is "2":  # register
-        register_client(client_socket, client_msg[1:])
-    if option is "3":  # login
-        login_client(client_socket, client_msg[1:])
-
+    if option is "g":  # If the client sent a seats request-message to the server ("g" - protocol message for request for the seats' status)
+        send_get_seats(client_socket, client_msg)
+    elif option is "r":  # register
+        send_register_client(client_socket, client_msg)
+    elif option is "l":  # login
+        send_login_client(client_socket, client_msg)
+    elif option is "v":  # view vehicle
+        send_view_vehicle(client_socket, client_msg)
 
 ########################################################################################################################
 
@@ -129,19 +214,21 @@ class ThreadedServer:
         self.sock.listen(5)
         while True:
             rpi, address = self.sock.accept()
-            print "RPI connected"
-            rpi.settimeout(60)
+            rpi.settimeout(10) # 10 seconds
             Thread(target=self.handle_rpi, args=(rpi, address)).start()
 
     def handle_rpi(self, rpi, address):
         size = 1024
         while True:
             try:
+                seat_data = ""
                 seat_data = rpi.recv(size)
                 if seat_data:
-                    if not seat_data.startswith('c') and seat_data.startswith('u'):  # TODO: define protocol - not close but update
-                        update_database(seat_data[1:])
-                        rpi.sendall('r')
+                    if not seat_data.startswith('c') and seat_data.startswith('u'):  #not close but update
+                        seat_data = seat_data.split(';')
+                        #u/c;t;C;n;L1;A
+                        update_transport_database(seat_data[1],seat_data[2],seat_data[3],seat_data[5]) #send the information of the vehicle + actual status of every line
+                        rpi.sendall('r') #ack - recieved
                     else:  # close
                         raise Exception('Rpi disconnected')
             except:
@@ -165,8 +252,9 @@ class ThreadedServer:
                     if data.startswith("c"):  # c - close
                         client.close()
                         break
-                    elif data.startswith("g"): # g - get
-                        handle_client(data[1:], client)
+                    else:
+                        data = data.split(';')
+                        handle_client(data, client)
                 else:
                     raise Exception('Client disconnected')
             except:
@@ -174,15 +262,16 @@ class ThreadedServer:
                 break
         return
 
+
 ########################################################################################################################
 
 def main():
     try:
-        rpi_handler = ThreadedServer(RPI_HOST,RPI_PORT)
-        client_handler = ThreadedServer(CLIENT_HOST,CLIENT_PORT)
+        rpi_handler = ThreadedServer(RPI_HOST, RPI_PORT)
+        client_handler = ThreadedServer(CLIENT_HOST, CLIENT_PORT)
 
         t = Thread(target=rpi_handler.rpi_listener())
-        t.daemon = True # means, background thread - will be closed once the program is closed
+        t.daemon = True  # means, background thread - will be closed once the program is closed
         t.start()
         client_handler.client_listener()
 

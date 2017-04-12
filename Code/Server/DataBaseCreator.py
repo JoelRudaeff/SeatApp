@@ -8,7 +8,52 @@ VEHICLE_INSTRUCTOR_FILE = 'Config.txt'
 ACCOUNTS_FOLDER = 'Accounts'
 VEHICLES_FOLDER = 'Vehicles'
 
+def prepare_seats_table(c,amount_of_lines):
+	#SEATS - TABLE
+    c.execute('''CREATE TABLE IF NOT EXISTS seats(line int,status text NOT NULL);''')
+    #c.execute('''CREATE TABLE IF NOT EXISTS seats(line int,status text NOT NULL,parts int NOT NULL,chairs_per_part int NOT NULL);''')				
+    
+    result = c.execute('''SELECT line FROM seats WHERE line = ?''',(amount_of_lines,))
+    data = c.fetchall()
+    if  len(data) is 0:
+        x = 1
+        for x in xrange(1, int(amount_of_lines) + 1):
+            try:
+                c.execute('''INSERT INTO seats(line,status) VALUES(?,?);''',(str(x),"0101",))
+            except sqlite3.Error as e:
+                print e
 
+def prepare_active_table(c,start_and_end):
+    #ACTIVE - TABLE
+    c.execute('''CREATE TABLE IF NOT EXISTS active(start_time text NOT NULL,end_time text NOT NULL);''')
+    
+    start_and_end = start_and_end.split("_")
+    for temp in start_and_end:
+        start,end = temp.split(":")
+        result = c.execute('''SELECT start_time FROM active WHERE start_time = ?''',(start,))
+        data = c.fetchall()
+        if len(data) is 0:
+            try:
+                c.execute('''INSERT INTO active(start_time,end_time) VALUES(?,?);''',(str(start),str(end),))
+            except sqlite3.Error as e:
+                print e
+
+def prepare_information_table(c,path_and_delay):
+    #INFORMATION - TABLE
+    c.execute('''CREATE TABLE IF NOT EXISTS information(path text NOT NULL,delay text NOT NULL);''')
+    
+    path_and_delay = path_and_delay.split("_")
+    for temp in path_and_delay:
+        path,delay = temp.split(":")
+        result = c.execute('''SELECT path FROM information WHERE path = ?''',(path,))
+        data = c.fetchall()
+        if len(data) is 0:
+            try:
+                c.execute('''INSERT INTO information(path,delay) VALUES(?,?)'''(str(path),str(delay),))
+            except sqlite3.Error as e:
+                print e
+                
+                
 # checks if the account.db and its foldier exists, otherwise creates it
 def create_account_db():
     # checks if the accounts folder for the db exist
@@ -23,8 +68,7 @@ def create_account_db():
         c = conn.cursor()
 
         print "Creating 'users' table inside the 'Accounts' DataBase!"
-        c.execute(
-            '''CREATE TABLE IF NOT EXISTS users(username text NOT NULL,email text NOT NULL,password text NOT NULL,PRIMARY KEY(username,email))''')
+        c.execute('''CREATE TABLE IF NOT EXISTS users(username text NOT NULL,email text NOT NULL,password text NOT NULL,PRIMARY KEY(username,email))''')
         conn.commit()
         conn.close()
 
@@ -72,62 +116,18 @@ def create_vehicle_db():
                         os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company)
                         os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + vehicle_number)
                     else:
-                        if not os.path.isdir(
-                                                                                VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + vehicle_number):
-                            os.makedirs(
-                                VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + vehicle_number)
+                        if not os.path.isdir(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + vehicle_number):
+                            os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + vehicle_number)
 
-                # TODO: add the required db format for each one
                 conn = sqlite3.connect(dest_path + '/Transport.db')
                 c = conn.cursor()
-                c.execute('''CREATE TABLE IF NOT EXISTS information(path text NOT NULL,delay text NOT NULL);''')
-                c.execute('''CREATE TABLE IF NOT EXISTS seats(line int,status text NOT NULL,parts int NOT NULL,chairs_per_part int NOT NULL);''')
-                c.execute('''CREATE TABLE IF NOT EXISTS active(start_time text NOT NULL,end_time text NOT NULL);''')
-
-
-                #SEATS - TABLE
-                result = c.execute('''SELECT line FROM seats WHERE line = ?''',(amount_of_lines,))
-                data = c.fetchall()
-                if  len(data) is 0:
-                    x = 1
-                    for x in xrange(1, int(amount_of_lines) + 1):
-                        command = '''INSERT INTO seats(line,status,parts,chairs_per_part) VALUES('''
-                        command += str(x)
-                        command += ''',"0101",1,1);'''
-                        try:
-                            c.execute(command)
-                        except sqlite3.Error as e:
-                            print e
-
-                #ACTIVE - TABLE
-                start_and_end = start_and_end.split("_")
-                for temp in start_and_end:
-                    start,end = temp.split(":")
-                    result = c.execute('''SELECT start_time FROM active WHERE start_time = ?''',(start,))
-                    data = c.fetchall()
-                    if len(data) is 0:
-                        command = '''INSERT INTO active(start_time,end_time) VALUES("''' + str(start) + '''","''' + str(end) + '''");'''
-                        try:
-                            c.execute(command)
-                        except sqlite3.Error as e:
-                            print e
-
-                #INFORMATION - TABLE
-                path_and_delay = path_and_delay.split("_")
-                for temp in path_and_delay:
-                    path,delay = temp.split(":")
-                    result = c.execute('''SELECT path FROM information WHERE path = ?''',(path,))
-                    data = c.fetchall()
-                    if len(data) is 0:
-                        command = '''INSERT INTO information(path,delay) VALUES("''' + str(path) + '''","''' + str(delay) + '''");'''
-                        try:
-                            c.execute(command)
-                        except sqlite3.Error as e:
-                            print e
-
+                prepare_seats_table(c,amount_of_lines)
+                prepare_active_table(c,start_and_end)
+                prepare_information_table(c,path_and_delay)
                 conn.commit()
                 conn.close()
-            index += 1
+            else:    
+                index +=1
 
 
 print "Vehicles DataBase is all set!"

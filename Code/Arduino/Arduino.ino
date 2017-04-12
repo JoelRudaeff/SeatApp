@@ -18,7 +18,7 @@ NewPing sonar[SONAR_NUM] = {NewPing(TRIGGER_PIN1, ECHO_PIN1, MAX_DISTANCE), NewP
 String old_data_to_send;
 
 //which lines does the current arduino provides
-String responsible_lines = "1:2";
+String responsible_line = "1";
 
 void setup() 
 {
@@ -49,11 +49,12 @@ void loop()
   {
     //by the protocol
     data_to_RPi += "s;";
+    data_to_RPi += responsible_lines.length();
+    data_to_RPi += ";" + responsible_line;
     data_to_RPi += data_to_send.length();
     data_to_RPi += ";";
     data_to_RPi += data_to_send + ";";
-    data_to_RPi += responsible_lines.length();
-    data_to_RPi += ";" + responsible_lines;
+
 
     Serial.println(data_to_RPI); //send data to the rpi
     old_data_to_send = data_to_send;
