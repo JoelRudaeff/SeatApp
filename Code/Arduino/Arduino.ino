@@ -49,14 +49,14 @@ void loop()
   {
     //by the protocol
     data_to_RPi += "s;";
-    data_to_RPi += responsible_lines.length();
-    data_to_RPi += ";" + responsible_line;
+    data_to_RPi += responsible_line.length();
+    data_to_RPi += ";" + responsible_line + ";";
     data_to_RPi += data_to_send.length();
     data_to_RPi += ";";
     data_to_RPi += data_to_send + ";";
 
 
-    Serial.println(data_to_RPI); //send data to the rpi
+    Serial.println(data_to_RPi); //send data to the rpi
     old_data_to_send = data_to_send;
   }
   
