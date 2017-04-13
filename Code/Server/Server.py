@@ -22,36 +22,31 @@ lock = Lock()
 
 # function that will update the seats data inside the data-base. will be used during communication with the RPI
 def update_transport_database(vehicle_type, vehicle_company, vehicle_number, line_number, data):
-    old_data = ""
+    old_line_status = ""
     with lock:
-        # TODO: conn = sqlite3.connect(vehicle_type+'\'+vehicle_company+'\'vehicle_number+'\'+'Seats.db')
         db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + vehicle_number + '/Transport.db'
         conn = sqlite3.connect(db_path)  # connection to the database
         c = conn.cursor()
-        i = 0  # Reset the value of 'i'
+
         try:
             # first of all, if an error has been occured in the process, get the data before changing it so if something happened we can restore the OLD_DATA
             try:
-                seat_results = c.execute('''SELECT * FROM seats''')
-                for row in seat_results:
-                    old_data += str(row[0])  # append the seat's line number, after converting from int to string
-                    old_data += str(row[1])  # append the seat's status, after converting from int to string
+                seat_results = c.execute('''SELECT status FROM seats WHERE line=?''',(line_number,))
+                old_line_status = seat_results
             except:
                 conn.close() #if there's no access to db, backup won't work
                 lock.release()
                 return
 
             # after we stored the backup data, we can change to the new data
-            to_executre = "UPDATE seats SET status = " + data + " WHERE line = " + line_number + ";"
-            c.execute(to_executre)  # Updating the data for each seat's data
+            c.execute('''UPDATE seats SET status = ? WHERE line = ?;''',(data,line_number,))  # Updating the data for each seat's data
 
             # save changes
             conn.commit()
 
         except:  # restoring the old data
-            data = old_data
-            to_executre = "UPDATE seats SET status = " + data + " WHERE line = " + line_number + ";"
-            c.execute(to_executre)  # Updating the data for each seat's data
+            data = old_line_status
+            c.execute('''UPDATE seats SET status = ? WHERE line = ?;''',(data, line_number,))  # Updating the data for each seat's data
             # save changes and close db
             conn.commit()
         conn.close()
