@@ -52,7 +52,7 @@ def send_sensors_data_to_server(line_number,sensors_data, socket_to_server):
 
     if (stored_sensors_data is "-1-1-1-1") or (stored_sensors_data is not sensors_data):  # if stored data is different than the new data or it's first time, else don't do anything
         server_reply = ""
-        socket_to_server.sendall(PROTOCOL_UPDATE_KEY + ";" + VEHICLE_TYPE + ";" + VEHICLE_COMPANY + ";" + VEHICLE_NUMBER + ";" + str(len(line_number)) + ";" + line_number + ";" + str(len(sensors_data_in_string)) + ";" + sensors_data_in_string)
+        socket_to_server.sendall(PROTOCOL_UPDATE_KEY + ";" + VEHICLE_TYPE + ";" + VEHICLE_COMPANY + ";" + VEHICLE_NUMBER + ";" + str(len(line_number)) + ";" + line_number + ";" + str(len(sensors_data)) + ";" + sensors_data)
         server_reply = socket_to_server.recv(1024) #1024 - the size of the buffer which recieves the message (int bytes)
         
         if server_reply == "r": #server got the data

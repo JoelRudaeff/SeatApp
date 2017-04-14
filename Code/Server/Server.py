@@ -39,7 +39,7 @@ def update_transport_database(vehicle_type, vehicle_company, vehicle_number, lin
                 return
 
             # after we stored the backup data, we can change to the new data
-            c.execute('''UPDATE seats SET status = ? WHERE line = ?;''',(data,line_number,))  # Updating the data for each seat's data
+            c.execute('''UPDATE seats SET status = ? WHERE line = ?;''',(data,line_number))  # Updating the data for each seat's data
 
             # save changes
             conn.commit()
