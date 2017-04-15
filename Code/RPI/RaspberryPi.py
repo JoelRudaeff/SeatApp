@@ -2,7 +2,7 @@ import serial
 import time
 import socket
 
-PORT = 8886  # TODO: port to send data to server - DEFINE A DEFAULT PORT FOR THE SERVER
+PORT = 8888  # TODO: port to send data to server - DEFINE A DEFAULT PORT FOR THE SERVER
 HOST = '10.10.0.14'  # TODO: ip of server - DEFINE IP FOR THE SERVER
 PROTOCOL_UPDATE_KEY = "u"  # TODO: number of message that the server will understand that the RPI sends updated data - DEFINE A KEY FOR UPDATE THE DATA
 PROTOCOL_CLOSE_KEY = "c"  # TODO: message that will be sent to the server if the RPI is closing the code - DEFINE A KEY FOR CLOSING THE COMMUNICATION
@@ -11,8 +11,8 @@ AMOUNT_OF_LINES = 10  #how many lines are in the vehicle
 SEATS = {}
 
 #vehicle information - hard coded
-VEHICLE_TYPE = "bus"
-VEHICLE_COMPANY = "egged"
+VEHICLE_TYPE = "Bus"
+VEHICLE_COMPANY = "Egged"
 VEHICLE_NUMBER = "263"
 
 # will try to connect to the server

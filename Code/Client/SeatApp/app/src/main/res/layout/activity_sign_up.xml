@@ -54,16 +54,16 @@
         android:id="@+id/SignUpEmail"
         android:layout_width="215dp"
         android:layout_height="43dp"
-        android:layout_alignEnd="@+id/SignUpPasswordAgain"
-        android:layout_alignRight="@+id/SignUpPasswordAgain"
-        android:layout_below="@+id/SignUpPasswordAgain"
         android:layout_marginTop="29dp"
         android:ems="10"
         android:hint="Enter your E-mail address"
         android:inputType="textEmailAddress"
         android:textAlignment="center"
         tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="105dp" />
+        tools:layout_editor_absoluteY="105dp"
+        android:layout_below="@+id/SignUpPasswordAgain"
+        android:layout_alignLeft="@+id/SignUpPasswordAgain"
+        android:layout_alignStart="@+id/SignUpPasswordAgain" />
 
     <Button
         android:id="@+id/SignUpButton"

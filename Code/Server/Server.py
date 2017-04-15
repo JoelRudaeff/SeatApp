@@ -3,10 +3,7 @@ import sqlite3
 import sys
 from threading import Thread, Lock
 
-RPI_HOST = '10.10.0.14'  # Symbolic name, meaning all available interfaces. TODO: need to change it
-RPI_PORT = 8886  # TODO: Need to change it
-
-CLIENT_HOST = '10.10.0.14'  # TODO: need to change it
+CLIENT_HOST = '192.168.1.42'  # TODO: need to change it
 CLIENT_PORT = 8888  # TODO: need to change it
 
 # Path files
@@ -200,39 +197,15 @@ class ThreadedServer:
         self.host = host
         self.port = port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        print host, port
+        print "Server's running at: " , host, port
         self.sock.bind((self.host, self.port))
-
-    def rpi_listener(self):
-        self.sock.listen(5)
-        while True:
-            rpi, address = self.sock.accept()
-            rpi.settimeout(10) # 10 seconds
-            Thread(target=self.handle_rpi, args=(rpi, address)).start()
-
-    def handle_rpi(self, rpi, address):
-        size = 1024
-        while True:
-            try:
-                seat_data = ""
-                seat_data = rpi.recv(size)
-                if seat_data:
-                    if not seat_data.startswith('c') and seat_data.startswith('u'):  #not close but update
-                        seat_data = seat_data.split(';')
-                        #u/c;t;C;n;L1;A
-                        update_transport_database(seat_data[1],seat_data[2],seat_data[3],seat_data[5], seat_data[7]) #send the information of the vehicle + actual status of every line
-                        rpi.sendall('r') #ack - recieved
-                    else:  # close
-                        raise Exception('Rpi disconnected')
-            except:
-                rpi.close()
-                break
-        return
 
     def client_listener(self):
         self.sock.listen(5)
+        print "CLIENT_LISTENER UP"
         while True:
             client, address = self.sock.accept()
+            print "Client connected!"
             client.settimeout(60)
             Thread(target=self.handle_client, args=(client, address)).start()
 
@@ -245,7 +218,14 @@ class ThreadedServer:
                     if data.startswith("c"):  # c - close
                         client.close()
                         break
-                    else:
+                    elif data.startswith('u'):  #not close but update seats -RPI
+                        print data
+                        seat_data = data.split(';')
+                        #u/c;t;C;n;L1;A
+                        update_transport_database(seat_data[1],seat_data[2],seat_data[3],seat_data[5], seat_data[7]) #send the information of the vehicle + actual status of every line
+                        client.sendall('r') #ack - recieved:
+                    else: #Client
+                        print data
                         data = data.split(';')
                         handle_client(data, client)
                 else:
@@ -260,14 +240,8 @@ class ThreadedServer:
 
 def main():
     try:
-        rpi_handler = ThreadedServer(RPI_HOST, RPI_PORT)
         client_handler = ThreadedServer(CLIENT_HOST, CLIENT_PORT)
-
-        t = Thread(target=rpi_handler.rpi_listener())
-        t.daemon = True  # means, background thread - will be closed once the program is closed
-        t.start()
         client_handler.client_listener()
-
     except:
         sys.exit()
 
