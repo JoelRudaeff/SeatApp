@@ -3,8 +3,8 @@ import sqlite3
 import sys
 from threading import Thread, Lock
 
-CLIENT_HOST = '192.168.1.42'  # TODO: need to change it
-CLIENT_PORT = 8888  # TODO: need to change it
+CLIENT_HOST = '10.10.0.14'  # TODO: need to change it
+CLIENT_PORT = 8886  # TODO: need to change it
 
 # Path files
 ACCOUNTS_FOLDER = 'Accounts'
@@ -101,6 +101,7 @@ def send_register_client(client_socket, client_msg):
             if len(data) is 0:  # if no user was found under these conditions - a success of registrations
                 c.execute('''INSERT INTO users(username,password,email) VALUES(?,?,?)''', (username, password, email,))
                 confirmation = "r;1"
+            conn.commit(); #save changes
             conn.close()
         except:
             print "Error in send_register_client: " + username + "" + password + "" + email
@@ -181,6 +182,7 @@ def send_view_vehicle(client_socket, client_msg):
 
 def handle_client(client_msg, client_socket):
     option = client_msg[0]
+    option = option[-1]
     if option is "g":  # If the client sent a seats request-message to the server ("g" - protocol message for request for the seats' status)
         send_get_seats(client_socket, client_msg)
     elif option is "r":  # register

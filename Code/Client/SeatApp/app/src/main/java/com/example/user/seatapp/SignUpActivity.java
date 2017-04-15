@@ -22,14 +22,14 @@ import android.os.AsyncTask;
 
 public class SignUpActivity extends ActionBarActivity
 {
-    String host = "192.168.1.42";
+    String host = "10.10.0.14";
     char response_from_server = '-';
 
     //TODO: New part
     public class MyClientTask extends AsyncTask<Void, Void, Void> {
         String NewPassword,NewUsername,NewEmail;
         String dstAddress = host;
-        int dstPort = 8888;
+        int dstPort = 8886;
         char ret;
 
         public MyClientTask(String NU, String NP, String NE)
@@ -75,7 +75,7 @@ public class SignUpActivity extends ActionBarActivity
 
 
                 // l;0/1
-                if ( data_from_server.startsWith("l"))
+                if ( data_from_server.startsWith("r"))
                     ret = data_from_server.charAt(2); // 1 - success, 0 - failure
                 else
                     ret = '0'; //replied msg is not defined by the protocol.
@@ -87,6 +87,7 @@ public class SignUpActivity extends ActionBarActivity
                 e.printStackTrace();
                 ret = '0';
             }
+
             return null;
         }
 
