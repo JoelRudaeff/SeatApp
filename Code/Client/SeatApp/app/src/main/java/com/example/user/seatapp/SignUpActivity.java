@@ -1,5 +1,6 @@
 package com.example.user.seatapp;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -7,29 +8,26 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
+import android.os.AsyncTask;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
-import android.os.AsyncTask;
+
 
 public class SignUpActivity extends ActionBarActivity
 {
-    String host = "10.10.0.14";
+    String host = "192.168.1.42";
     char response_from_server = '-';
 
-    //TODO: New part
+
     public class MyClientTask extends AsyncTask<Void, Void, Void> {
         String NewPassword,NewUsername,NewEmail;
         String dstAddress = host;
-        int dstPort = 8886;
+        int dstPort = 8888;
         char ret;
 
         public MyClientTask(String NU, String NP, String NE)
@@ -47,11 +45,11 @@ public class SignUpActivity extends ActionBarActivity
                 String username_length = String.valueOf(NewUsername.length());
                 String password_length = String.valueOf(NewPassword.length());
                 String email_length = String.valueOf(NewEmail.length());
-                String data_from_server = "";
-                String read = null;
+                String data_from_server;
 
                 // The data that the client sends to the server when he signs-up
-                String string_to_send = "r;" + username_length + ";" + NewUsername + ";" + password_length + ";" + NewPassword + ";" + email_length + ";" + NewEmail;
+                String string_to_send = ";r;" + username_length + ";" + NewUsername + ";" + password_length + ";" + NewPassword + ";" + email_length + ";" + NewEmail;
+
 
                 Socket socket = new Socket(dstAddress, dstPort);
                 DataOutputStream output = new DataOutputStream(socket.getOutputStream());
@@ -63,39 +61,30 @@ public class SignUpActivity extends ActionBarActivity
                 InputStreamReader input_reader = new InputStreamReader(input);
                 BufferedReader br = new BufferedReader(input_reader); //create a BufferReader object for input
 
-                while ( (read = br.readLine()) != null) // The data which sent back by the server
-                    data_from_server = data_from_server + read;
+                data_from_server = br.readLine();
 
+                if ((data_from_server).contains("r;0"))
+                    response_from_server = '0';
+                else if ((data_from_server).contains("r;1"))
+                    response_from_server = '1';
 
                 //server.close();
-                output.close();
-                input_reader.close();
+
+                br.close();
                 input.close();
+                input_reader.close();
+                output.close();
                 socket.close();
-
-
-                // l;0/1
-                if ( data_from_server.startsWith("r"))
-                    ret = data_from_server.charAt(2); // 1 - success, 0 - failure
-                else
-                    ret = '0'; //replied msg is not defined by the protocol.
 
             }
             catch ( Exception e)
             {
-                String str = e.toString();
                 e.printStackTrace();
                 ret = '0';
             }
-
             return null;
         }
 
-        @Override
-        protected void onPostExecute(Void result) {
-            response_from_server = ret;
-            super.onPostExecute(result);
-        }
 
     }
 
@@ -181,17 +170,25 @@ public class SignUpActivity extends ActionBarActivity
                     intent.putExtra("NewPassword", password);
                     try
                     {
+                        ProgressDialog progress = new ProgressDialog(this);
+                        progress.setTitle("Loading");
+                        progress.setMessage("Wait while loading...");
+                        progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
+                        progress.show();
+
                         MyClientTask myClientTask = new MyClientTask(name,password,email);
                         myClientTask.execute();
+
                         int times = 0;
-                        //wait for the client to get response from the server
-                        while (response_from_server== '-') {
-                            if ( times < 5)
-                                Thread.sleep(1500);
-                            else
-                                break;
+                        //wait for the client to get response from the server, if it doesn't connect in a few seconds, terminate the waiting
+                        while (response_from_server== '-')
+                        {
+                            if (times < 10)
+                                Thread.sleep(1000);
                             times++;
                         }
+                        progress.hide();
+
                         //Sending the necessary details to the server, and getting back the answer from it
                         if( response_from_server == '1')
                         {
@@ -201,8 +198,17 @@ public class SignUpActivity extends ActionBarActivity
                         }
                         else
                         {
-                            Toast toast_unsuccessful = Toast.makeText(context, "Couldn't sign up, try again!", duration);
-                            toast_unsuccessful.show();
+                            if ( response_from_server == '0')
+                            {
+                                Toast toast_unsuccessful = Toast.makeText(context, "registration failed, try again!", duration);
+                                toast_unsuccessful.show();
+                            }
+                            else
+                            {
+                                Toast toast_unsuccessful_connection = Toast.makeText(context, "Couldn't connect to server, try again!", duration);
+                                toast_unsuccessful_connection.show();
+                            }
+
                         }
                     }
                     catch (Exception e)

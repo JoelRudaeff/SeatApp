@@ -1,5 +1,6 @@
 import os
 import sqlite3
+import traceback
 
 # Configuration files
 VEHICLE_INSTRUCTOR_FILE = 'Config.txt'
@@ -8,50 +9,58 @@ VEHICLE_INSTRUCTOR_FILE = 'Config.txt'
 ACCOUNTS_FOLDER = 'Accounts'
 VEHICLES_FOLDER = 'Vehicles'
 
+
 def prepare_seats_table(c,amount_of_lines):
-	#SEATS - TABLE
-    c.execute('''CREATE TABLE IF NOT EXISTS seats(line int,status text NOT NULL);''')
-    #c.execute('''CREATE TABLE IF NOT EXISTS seats(line int,status text NOT NULL,parts int NOT NULL,chairs_per_part int NOT NULL);''')				
-    
-    result = c.execute('''SELECT line FROM seats WHERE line = ?''',(amount_of_lines,))
-    data = c.fetchall()
-    if  len(data) is 0:
-        x = 1
-        for x in xrange(1, int(amount_of_lines) + 1):
-            try:
-                c.execute('''INSERT INTO seats(line,status) VALUES(?,?);''',(str(x),"0101",))
-            except sqlite3.Error as e:
-                print e
+    #SEATS - TABLE
+    try:
+        c.execute('''CREATE TABLE IF NOT EXISTS seats(line int,status text NOT NULL);''')
+        #c.execute('''CREATE TABLE IF NOT EXISTS seats(line int,status text NOT NULL,parts int NOT NULL,chairs_per_part int NOT NULL);''')
+
+        c.execute('''SELECT line FROM seats WHERE line = ?''',(amount_of_lines,))
+        data = c.fetchall()
+        if  len(data) is 0:
+            x = 1
+            for x in xrange(1, int(amount_of_lines) + 1):
+                c.execute('''INSERT INTO seats(line,status) VALUES(?,?);''',(x,"0000"))
+
+    except sqlite3.Error as e:
+        print "Error in function 'prepare_active_table'"
+        print e
 
 def prepare_active_table(c,start_and_end):
     #ACTIVE - TABLE
-    c.execute('''CREATE TABLE IF NOT EXISTS active(start_time text NOT NULL,end_time text NOT NULL);''')
-    
-    start_and_end = start_and_end.split("_")
-    for temp in start_and_end:
-        start,end = temp.split(":")
-        result = c.execute('''SELECT start_time FROM active WHERE start_time = ?''',(start,))
-        data = c.fetchall()
-        if len(data) is 0:
-            try:
-                c.execute('''INSERT INTO active(start_time,end_time) VALUES(?,?);''',(str(start),str(end),))
-            except sqlite3.Error as e:
-                print e
+
+    try:
+        c.execute('''CREATE TABLE IF NOT EXISTS active(start_time text NOT NULL,end_time text NOT NULL);''')
+
+        start_and_end = start_and_end.split("_")
+        for temp in start_and_end:
+            start,end = temp.split(":")
+            c.execute('''SELECT start_time FROM active WHERE start_time = ?''',(start,))
+            data = c.fetchall()
+            if len(data) is 0:
+                c.execute('''INSERT INTO active(start_time,end_time) VALUES(?,?);''',(start,end))
+    except sqlite3.Error as e:
+        print "Error in function 'prepare_active_table'"
+        print e
 
 def prepare_information_table(c,path_and_delay):
     #INFORMATION - TABLE
-    c.execute('''CREATE TABLE IF NOT EXISTS information(path text NOT NULL,delay text NOT NULL);''')
-    
-    path_and_delay = path_and_delay.split("_")
-    for temp in path_and_delay:
-        path,delay = temp.split(":")
-        result = c.execute('''SELECT path FROM information WHERE path = ?''',(path,))
-        data = c.fetchall()
-        if len(data) is 0:
-            try:
-                c.execute('''INSERT INTO information(path,delay) VALUES(?,?)'''(str(path),str(delay),))
-            except sqlite3.Error as e:
-                print e
+    try:
+        c.execute('''CREATE TABLE IF NOT EXISTS information(path text NOT NULL,delay text NOT NULL);''')
+
+        path_and_delay = path_and_delay.split("_")
+        for temp in path_and_delay:
+            path, delay = temp.split(":")
+            c.execute('''SELECT path FROM information WHERE path = ?''', (path,))
+            data = c.fetchall()
+            if len(data) is 0:
+                c.execute('''INSERT INTO information(path,delay) VALUES(?,?)''',(path, delay))
+
+    except sqlite3.Error as e:
+        print "Error in function 'prepare_information_table'"
+        print e
+
                 
                 
 # checks if the account.db and its foldier exists, otherwise creates it
@@ -66,7 +75,8 @@ def create_account_db():
         print "Connecting to the: 'Accounts' DataBase!"
         conn = sqlite3.connect(ACCOUNTS_FOLDER + '/Accounts.db')
         c = conn.cursor()
-
+        
+        print "Preparing the 'users' table!"
         print "Creating 'users' table inside the 'Accounts' DataBase!"
         c.execute('''CREATE TABLE IF NOT EXISTS users(username text NOT NULL,email text NOT NULL,password text NOT NULL,PRIMARY KEY(username,email))''')
         conn.commit()
@@ -75,8 +85,8 @@ def create_account_db():
         print "Accounts DataBase is all set!"
 
     except sqlite3.Error as e:
-        print e
         print "Failed to create 'Accounts' DataBase!"
+        print e
 
 
 def create_vehicle_db():
@@ -89,6 +99,7 @@ def create_vehicle_db():
         temp.write("VEHICLE_TYPE ; VEHICLE_COMPANY ; VEHICLE_NUMBER ; AMOUNT_OF_LINES ; PATH:DELAY_PATH1:DELAY1 ; START:END_START1:END1\n")
         temp.write("===================================================================================================================\n")
         temp.close()
+        print "Please fill the Configuration file if you wish to proceed with the process!"
         return
     else:
         print "Checking if the Vehicles folder exists!"
@@ -101,46 +112,59 @@ def create_vehicle_db():
         lines = data_file.readlines()
         data_file.close()
 
-        index = 0  # will be used to skip the format tutorials - the first two lines
-        for line in lines:
-            if index >= 2:
-                # remove whitespaces,\n,lower case, upper case the first letter  and split into the required data
-                vehicle_type, vehicle_company, vehicle_number, amount_of_lines,path_and_delay,start_and_end = line.replace(" ", "").replace('\n',"").lower().title().split(';')
-                dest_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + vehicle_number
-                if not os.path.isdir(VEHICLES_FOLDER + '/' + vehicle_type):
-                    os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type)
-                    os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company)
-                    os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + vehicle_number)
-                else:
-                    if not os.path.isdir(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company):
+        try:
+            index = 0  # will be used to skip the format tutorials - the first two lines
+            for line in lines:
+                if index >= 2:
+                    # remove whitespaces,\n,lower case, upper case the first letter  and split into the required data
+                    vehicle_type, vehicle_company, vehicle_number, amount_of_lines,path_and_delay,start_and_end = line.replace(" ", "").replace('\n',"").lower().title().split(';')
+                    dest_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + vehicle_number
+                    if not os.path.isdir(VEHICLES_FOLDER + '/' + vehicle_type):
+                        os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type)
                         os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company)
                         os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + vehicle_number)
                     else:
-                        if not os.path.isdir(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + vehicle_number):
+                        if not os.path.isdir(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company):
+                            os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company)
                             os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + vehicle_number)
+                        else:
+                            if not os.path.isdir(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + vehicle_number):
+                                os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + vehicle_number)
 
-                conn = sqlite3.connect(dest_path + '/Transport.db')
-                c = conn.cursor()
-                prepare_seats_table(c,amount_of_lines)
-                prepare_active_table(c,start_and_end)
-                prepare_information_table(c,path_and_delay)
-                conn.commit()
-                conn.close()
-            else:    
-                index +=1
+                    conn = sqlite3.connect(dest_path + '/Transport.db')
+                    c = conn.cursor()
+                    print "Preparing the 'seats' table!"
+                    prepare_seats_table(c,amount_of_lines)
+                    print "Preparing the 'active' table!"
+                    prepare_active_table(c,start_and_end)
+                    print "Preparing the 'information' table!"
+                    prepare_information_table(c,path_and_delay)
 
 
-print "Vehicles DataBase is all set!"
+                    print "Vehicle: ",vehicle_type," Company: ",vehicle_company," Number: ",vehicle_number," Was added to DB"
+                    conn.commit()
+                    conn.close()
+                else:    
+                    index +=1
+            print "Vehicles DataBase is all set!"
+        except:
+            print "Error while creating the vehicles part!"
+            traceback.print_exc()
 
-
+    
 def main():
     try:
         print "Checking accounts"
         create_account_db()
         print "\nChecking vehicles"
         create_vehicle_db()
+
     except:
         print "ran into global error"
+        traceback.print_exc()
+
+    raw_input("Press any key to continue")
+
 
 if __name__ == "__main__":
     main()
