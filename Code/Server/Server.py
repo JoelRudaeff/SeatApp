@@ -5,7 +5,7 @@ import time
 import os
 from threading import Thread, Lock
 
-CLIENT_HOST = '192.168.1.42'  # TODO:
+CLIENT_HOST = '10.10.0.14'  # TODO:
 CLIENT_PORT = 8888
 
 # Path files
@@ -69,7 +69,7 @@ def delete_user_from_logs(address,username):
     if username in SERVER_LOG and SERVER_LOG[username]==address:
         del SERVER_LOG[username]
     else:
-        print "ERROR! Unregistered user logged out!" #security failure 
+        print "ERROR! Unregistered user logged out!" #security failure
 
 def insert_user_to_logs(address,username):
     if not username in SERVER_LOG and not address in SERVER_LOG.values(): #username and ip must be unique
@@ -83,7 +83,7 @@ def insert_user_to_logs(address,username):
     if username not in SERVER_LOG and address in SERVER_LOG.values(): #same computer uses different users
         return False
     '''
-    
+
 def send_get_seats(client_socket, client_msg):
     # g;len(vehicle_type);vehicle_type;len(vehicle_company);vehicle_company;len(vehicle_number); vehicle_number
     vehicle_type = client_msg[2]
@@ -95,7 +95,7 @@ def send_get_seats(client_socket, client_msg):
     c = conn.cursor()
 
     seats = ""
-    with lock.acquire():  # tries to gain access to the data base. WITH - whenever it's done, release the lock - it's like the state "USING" in c#
+    with lock:  # tries to gain access to the data base. WITH - whenever it's done, release the lock - it's like the state "USING" in c#
         try:
             index = 0
             data = c.execute('''SELECT * FROM seats''')

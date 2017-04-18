@@ -48,7 +48,7 @@ public class TrainSeatsActivity extends AppCompatActivity
         String line = "";
 
         ArrayList<String> msg_list = new ArrayList<String>(Arrays.asList(msg.split(";")));
-        ArrayList<String> seats_list = new ArrayList<String>(Arrays.asList(msg_list.get(2).split("|")));
+        ArrayList<String> seats_list = new ArrayList<String>(Arrays.asList(msg_list.get(2).split("\\|"))); //The split should be written like that (not "|" but "\\|")
 
         ArrayList<TextView> lines_list = new ArrayList<TextView>();
 
@@ -73,7 +73,7 @@ public class TrainSeatsActivity extends AppCompatActivity
         lines_list.add(Cl9);
         lines_list.add(Cl10);
 
-        for(i=0; i<seats_list.size(); i++)
+        for(i=0; i<9; i++)
         {
             line_number = Character.getNumericValue(seats_list.get(i).charAt(0)); //getting the first char of each line's seats, and convert it to an int
             line = seats_list.get(i).substring(2); //insert the line's seats into a parameter. Also start from the seats' statusses

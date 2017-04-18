@@ -1,12 +1,16 @@
 package com.example.user.seatapp;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -18,6 +22,76 @@ import java.util.LinkedList;
 
 public class TrainScheduleActivity extends AppCompatActivity
 {
+
+    final String host = "10.10.0.14"; //TODO:
+    String response_from_server = "-";
+
+
+    public class MyClientTask extends AsyncTask<Void, Void, Void> {
+        String Vehicle_type,Vehicle_company, Vehicle_number;
+        String dstAddress = host;
+        int dstPort = 8888;
+        String ret;
+
+        public MyClientTask(String VT, String VC, String VN)
+        {
+            Vehicle_type = VT;
+            Vehicle_company = VC;
+            Vehicle_number = VN;
+        }
+
+        //Execute()
+        @Override
+        protected Void doInBackground(Void... arg0) {
+
+            try
+            {
+                String vehicle_type_length = String.valueOf(Vehicle_type.length());
+                String vehicle_company_length = String.valueOf(Vehicle_company.length());
+                String vehicle_number_length = String.valueOf(Vehicle_number.length());
+                String data_from_server;
+
+                // The data that the client sends to the server when he signs-up
+                String string_to_send = ";" + "g" + ";" + vehicle_type_length + ";" + Vehicle_type + ";"  + vehicle_company_length + ";"   + Vehicle_company + ";"   + vehicle_number_length + ";"   + Vehicle_number + ";"  ;
+
+                Socket socket = new Socket(dstAddress, dstPort);
+
+
+                DataOutputStream output = new DataOutputStream(socket.getOutputStream());
+                output.writeUTF(string_to_send); //The msg to the server
+                output.flush(); // Send off the data
+
+                //read input stream
+                DataInputStream input = new DataInputStream(socket.getInputStream());
+                InputStreamReader input_reader = new InputStreamReader(input);
+                BufferedReader br = new BufferedReader(input_reader); //create a BufferReader object for input
+
+                data_from_server = br.readLine();
+
+                if ((data_from_server).contains("g;"))
+                    response_from_server = data_from_server;
+                else
+                    response_from_server = "0";
+
+                //server.close();
+
+                br.close();
+                input.close();
+                input_reader.close();
+                output.close();
+                socket.close();
+
+            }
+            catch ( Exception e)
+            {
+                e.printStackTrace();
+                ret = "0";
+            }
+            return null;
+        }
+
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -243,56 +317,73 @@ public class TrainScheduleActivity extends AppCompatActivity
         return arriving_time;
     }
 
-    public String SendingDetailsToServer(String TrainNumber)
+    public void SendingDetailsToServer(String TrainNumber)
     {
+        Context context = getApplicationContext();
+        int duration = Toast.LENGTH_SHORT;
+
         String ret = "0";
         String vehicle_type = "Train";
-        String vehicle_company = "Israel RailWays";
+        String vehicle_company = "IsraelRailways";
         String vehicle_number = TrainNumber;
-        String vehicle_type_length = String.valueOf(vehicle_type.length());
-        String vehicle_company_length = String.valueOf(vehicle_company.length());
-        String vehicle_number_length = String.valueOf(vehicle_number.length());
         String data_from_server = "";
         String read = null;
 
-        // The data that the client sends to the server when he signs-up
-        String string_to_send = "g" + vehicle_type_length + vehicle_type + vehicle_company_length + vehicle_company + vehicle_number_length + vehicle_number;
-
         try
         {
-            Socket s = new Socket("127.0.0.1", 7000); //TODO: Change the IP and the port number
-            DataOutputStream output = new DataOutputStream(s.getOutputStream());
-            output.writeUTF(string_to_send); //The sending to the server
+            ProgressDialog progress = new ProgressDialog(this);
+            progress.setTitle("Loading");
+            progress.setMessage("Wait while loading...");
+            progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
+            progress.show();
+            MyClientTask myClientTask = new MyClientTask(vehicle_type, vehicle_company, vehicle_number);
+            myClientTask.execute(); //will run like a thread
 
-            //read input stream
-            DataInputStream input = new DataInputStream(s.getInputStream());
-            InputStreamReader input_reader = new InputStreamReader(input);
-            BufferedReader br = new BufferedReader(input_reader); //create a BufferReader object for input
-
-            while ( (read = br.readLine()) != null) // The data which sent back by the server
+            int times = 0;
+            //wait for the client to get response from the server, if it doesn't connect in a few seconds, terminate the waiting
+            while (response_from_server == "-")
             {
-                data_from_server = data_from_server + read;
+                if (times < 5)
+                    Thread.sleep(1000);
+                times++;
             }
+            progress.hide();
 
-            //print the input to the application screen
-            final TextView receivedMsg = (TextView) findViewById(R.id.t_cur); //TODO: change the id of the text view!
-            receivedMsg.setText(read);
+            //success
+            if (response_from_server.contains("g;"))
+            {
+                Intent intent = new Intent(this, TrainSeatsActivity.class);
+                intent.putExtra("message", response_from_server);
 
-            output.close();
-            input_reader.close();
-            input.close();
-            s.close();
+                Toast toast_successful = Toast.makeText(context, "Your train's seats", duration);
+                toast_successful.show();
 
-            ret = data_from_server;
+                response_from_server = "-";
+                startActivity(intent);
+            }
+            //failure or not connected
+            else
+            {
+                if (response_from_server == "0")
+                {
+                    Toast toast_unsuccessful = Toast.makeText(context, "Couldn't get the seats of this train. Try again!", duration);
+                    toast_unsuccessful.show();
+                }
+
+                else
+                {
+                    Toast toast_unsuccessful_connection = Toast.makeText(context, "Couldn't connect to server, try again!", duration);
+                    toast_unsuccessful_connection.show();
+                }
+
+            }
         }
 
-        catch (IOException e)
+        catch (Exception e)
         {
             e.printStackTrace();
-            ret = "0"; //Because an error was occurred
         }
 
-        return ret;
     }
 
     public void startTrain1(View view)
@@ -301,21 +392,7 @@ public class TrainScheduleActivity extends AppCompatActivity
         Button button_train_number = (Button) findViewById(R.id.tn1);
         String TrainNumber = button_train_number.getText().toString();
 
-        //ret = SendingDetailsToServer(TrainNumber);
-
-        if(ret == "0")
-        {
-
-            ;
-        }
-
-        else // if the client recieved the correct message from the server
-        {
-            Intent intent = new Intent(this, TrainSeatsActivity.class);
-            intent.putExtra("message", ret);
-
-            startActivity(intent);
-        }
+        SendingDetailsToServer(TrainNumber);
     }
 
     public void startTrain2(View view)
@@ -324,162 +401,54 @@ public class TrainScheduleActivity extends AppCompatActivity
         Button button_train_number = (Button) findViewById(R.id.tn2);
         String TrainNumber = button_train_number.getText().toString();
 
-        //ret = SendingDetailsToServer(TrainNumber);
-
-        if(ret == "0")
-        {
-
-            ;
-        }
-
-        else // if the client recieved the correct message from the server
-        {
-            Intent intent = new Intent(this, TrainSeatsActivity.class);
-            intent.putExtra("message", ret);
-
-            startActivity(intent);
-        }
+        SendingDetailsToServer(TrainNumber);
     }
 
     public void startTrain3(View view)
     {
-        String ret = "1"; //TODO: cahnge it to "0"
         Button button_train_number = (Button) findViewById(R.id.tn3);
         String TrainNumber = button_train_number.getText().toString();
 
-        //ret = SendingDetailsToServer(TrainNumber);
-
-        if(ret == "0")
-        {
-
-            ;
-        }
-
-        else // if the client recieved the correct message from the server
-        {
-            Intent intent = new Intent(this, TrainSeatsActivity.class);
-            intent.putExtra("message", ret);
-
-            startActivity(intent);
-        }
+        SendingDetailsToServer(TrainNumber);
     }
 
     public void startTrain4(View view)
     {
-        String ret = "1"; //TODO: cahnge it to "0"
         Button button_train_number = (Button) findViewById(R.id.tn4);
         String TrainNumber = button_train_number.getText().toString();
 
-        //ret = SendingDetailsToServer(TrainNumber);
-
-        if(ret == "0")
-        {
-
-            ;
-        }
-
-        else // if the client recieved the correct message from the server
-        {
-            Intent intent = new Intent(this, TrainSeatsActivity.class);
-            intent.putExtra("message", ret);
-
-            startActivity(intent);
-        }
-
+        SendingDetailsToServer(TrainNumber);
     }
 
     public void startTrain5(View view)
     {
-        String ret = "1"; //TODO: cahnge it to "0"
         Button button_train_number = (Button) findViewById(R.id.tn5);
         String TrainNumber = button_train_number.getText().toString();
 
-        //ret = SendingDetailsToServer(TrainNumber);
-
-        if(ret == "0")
-        {
-
-            ;
-        }
-
-        else // if the client recieved the correct message from the server
-        {
-            Intent intent = new Intent(this, TrainSeatsActivity.class);
-            intent.putExtra("message", ret);
-
-            startActivity(intent);
-        }
-
+        SendingDetailsToServer(TrainNumber);
     }
 
     public void startTrain6(View view)
     {
-        String ret = "1"; //TODO: change it to "0"
         Button button_train_number = (Button) findViewById(R.id.tn6);
         String TrainNumber = button_train_number.getText().toString();
 
-        //ret = SendingDetailsToServer(TrainNumber);
-
-        if(ret == "0")
-        {
-
-            ;
-        }
-
-        else // if the client recieved the correct message from the server
-        {
-            Intent intent = new Intent(this, TrainSeatsActivity.class);
-            intent.putExtra("message", ret);
-
-            startActivity(intent);
-        }
-
+        SendingDetailsToServer(TrainNumber);
     }
 
     public void startTrain7(View view)
     {
-        String ret = "1"; //TODO: change it to "0"
         Button button_train_number = (Button) findViewById(R.id.tn7);
         String TrainNumber = button_train_number.getText().toString();
 
-        //ret = SendingDetailsToServer(TrainNumber);
-
-        if(ret == "0")
-        {
-
-            ;
-        }
-
-        else // if the client recieved the correct message from the server
-        {
-            Intent intent = new Intent(this, TrainSeatsActivity.class);
-            intent.putExtra("message", ret);
-
-            startActivity(intent);
-        }
-
+        SendingDetailsToServer(TrainNumber);
     }
 
     public void startTrain8(View view)
     {
-        String ret = "1"; //TODO: cahnge it to "0"
         Button button_train_number = (Button) findViewById(R.id.tn8);
         String TrainNumber = button_train_number.getText().toString();
 
-        //ret = SendingDetailsToServer(TrainNumber);
-
-        if(ret == "0")
-        {
-
-            ;
-        }
-
-        else // if the client recieved the correct message from the server
-        {
-            Intent intent = new Intent(this, TrainSeatsActivity.class);
-            intent.putExtra("message", ret);
-
-            startActivity(intent);
-        }
+        SendingDetailsToServer(TrainNumber);
     }
 }

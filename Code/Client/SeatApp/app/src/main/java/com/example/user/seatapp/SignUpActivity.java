@@ -20,7 +20,7 @@ import java.net.Socket;
 
 public class SignUpActivity extends ActionBarActivity
 {
-    String host = "192.168.1.42";
+    String host = "10.10.0.14";
     char response_from_server = '-';
 
 
@@ -184,14 +184,14 @@ public class SignUpActivity extends ActionBarActivity
                         while (response_from_server== '-')
                         {
                             if (times < 10)
-                                Thread.sleep(1000);
-                            times++;
-                        }
-                        progress.hide();
+                        Thread.sleep(1000);
+                        times++;
+                    }
+                    progress.hide();
 
-                        //Sending the necessary details to the server, and getting back the answer from it
-                        if( response_from_server == '1')
-                        {
+                    //Sending the necessary details to the server, and getting back the answer from it
+                    if( response_from_server == '1')
+                    {
                             Toast toast_successful = Toast.makeText(context, "Successfully signing-up!", duration);
                             toast_successful.show();
                             startActivity(intent);

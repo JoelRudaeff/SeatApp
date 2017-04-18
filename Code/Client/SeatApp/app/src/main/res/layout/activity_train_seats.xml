@@ -29,7 +29,7 @@
 
     <TextView
         android:id="@+id/cl1"
-        android:layout_width="300dp"
+        android:layout_width="232dp"
         android:layout_height="36dp"
         android:layout_x="70dp"
         android:layout_y="90dp"
@@ -47,7 +47,7 @@
 
     <TextView
         android:id="@+id/cl2"
-        android:layout_width="300dp"
+        android:layout_width="232dp"
         android:layout_height="36dp"
         android:layout_x="70dp"
         android:layout_y="130dp"
@@ -64,15 +64,6 @@
         android:textSize="24sp" />
 
     <TextView
-        android:id="@+id/cl3"
-        android:layout_width="300dp"
-        android:layout_height="36dp"
-        android:layout_x="70dp"
-        android:layout_y="170dp"
-        android:text="c3"
-        android:textSize="24sp" />
-
-    <TextView
         android:id="@+id/ln4"
         android:layout_width="43dp"
         android:layout_height="36dp"
@@ -83,7 +74,7 @@
 
     <TextView
         android:id="@+id/cl4"
-        android:layout_width="300dp"
+        android:layout_width="227dp"
         android:layout_height="36dp"
         android:layout_x="70dp"
         android:layout_y="210dp"
@@ -101,7 +92,7 @@
 
     <TextView
         android:id="@+id/cl5"
-        android:layout_width="300dp"
+        android:layout_width="228dp"
         android:layout_height="36dp"
         android:layout_x="70dp"
         android:layout_y="250dp"
@@ -119,7 +110,7 @@
 
     <TextView
         android:id="@+id/cl6"
-        android:layout_width="300dp"
+        android:layout_width="227dp"
         android:layout_height="wrap_content"
         android:layout_x="70dp"
         android:layout_y="290dp"
@@ -137,7 +128,7 @@
 
     <TextView
         android:id="@+id/cl7"
-        android:layout_width="300dp"
+        android:layout_width="227dp"
         android:layout_height="36dp"
         android:layout_x="70dp"
         android:layout_y="330dp"
@@ -155,7 +146,7 @@
 
     <TextView
         android:id="@+id/cl8"
-        android:layout_width="300dp"
+        android:layout_width="227dp"
         android:layout_height="36dp"
         android:layout_x="70dp"
         android:layout_y="370dp"
@@ -173,7 +164,7 @@
 
     <TextView
         android:id="@+id/cl9"
-        android:layout_width="300dp"
+        android:layout_width="227dp"
         android:layout_height="36dp"
         android:layout_x="70dp"
         android:layout_y="410dp"
@@ -191,11 +182,20 @@
 
     <TextView
         android:id="@+id/cl10"
-        android:layout_width="300dp"
+        android:layout_width="229dp"
         android:layout_height="36dp"
         android:layout_x="70dp"
         android:layout_y="450dp"
         android:text="c10"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/cl3"
+        android:layout_width="229dp"
+        android:layout_height="36dp"
+        android:layout_x="70dp"
+        android:layout_y="171dp"
+        android:text="c3"
         android:textSize="24sp" />
 
 </AbsoluteLayout>

@@ -20,7 +20,7 @@ import java.net.*;
 public class HomePageActivity extends ActionBarActivity
 {
 
-    final String host = "192.168.1.42"; //TODO:
+    final String host = "10.10.0.14"; //TODO:
     char response_from_server = '-';
 
 
