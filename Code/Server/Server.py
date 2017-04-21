@@ -221,8 +221,8 @@ def send_view_vehicle(client_socket, client_msg):
 
 
 def handle_client(address,client_socket,client_msg):
+    client_msg.pop(0)
     option = client_msg[0]
-    option = option[-1]
     if option is "g":  # If the client sent a seats request-message to the server ("g" - protocol message for request for the seats' status)
         send_get_seats(client_socket, client_msg)
     elif option is "r":  # register       
@@ -260,7 +260,7 @@ class ThreadedServer:
                 if client is None:
                     break
                 data = client.recv(size)
-                data = data.split(";",1)[1] # clears all the junk at the start, basically separates only once ; in order to get the message itself without the junk
+                #data = data.split(";",1)[1] # clears all the junk at the start, basically separates only once ; in order to get the message itself without the junk
                 print data
                 if data:
                     if data.startswith("c"):  # c - close
