@@ -323,9 +323,9 @@ public class TrainScheduleActivity extends AppCompatActivity
         int duration = Toast.LENGTH_SHORT;
 
         String ret = "0";
-        String vehicle_type = "Train";
-        String vehicle_company = "IsraelRailways";
-        String vehicle_number = TrainNumber;
+        String vehicle_type = "Bus";
+        String vehicle_company = "Egged";
+        String vehicle_number = "263";
         String data_from_server = "";
         String read = null;
 
