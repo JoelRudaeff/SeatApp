@@ -5,7 +5,7 @@ import time
 import os
 from threading import Thread, Lock
 
-CLIENT_HOST = '10.10.0.14'  # TODO:
+CLIENT_HOST = '192.168.1.42'  # TODO:
 CLIENT_PORT = 8888
 
 # Path files
@@ -21,12 +21,15 @@ lock = Lock()
 
 def print_server_information():
     while True:
-        time.sleep(10) #update every 10 seconds
-        print "Client handler running!"
-        print "Running on ip: ",CLIENT_HOST," : ",CLIENT_PORT
-        print "Connected users:"
-        for username,address in SERVER_LOG.iteritems():
-            print "Name: ",username," Address: ",address,"\n"
+        try:
+            time.sleep(10) #update every 10 seconds
+            print "Client handler running!"
+            print "Running on ip: ",CLIENT_HOST," : ",CLIENT_PORT
+            print "Connected users:"
+            for username,address in SERVER_LOG.iteritems():
+                print "Name: ",username," Address: ",address,"\n"
+        except:
+            print "Error in print_server_information()"
 
 ########################################################################################################################
 #                                                   RPI_SIDE
@@ -66,10 +69,13 @@ def update_transport_database(vehicle_type, vehicle_company, vehicle_number, lin
 #                                                   CLIENT SIDE
 
 def delete_user_from_logs(address,username):
-    if username in SERVER_LOG and SERVER_LOG[username]==address:
-        del SERVER_LOG[username]
-    else:
-        print "ERROR! Unregistered user logged out!" #security failure
+    try:
+        if username in SERVER_LOG and SERVER_LOG[username]==address:
+            del SERVER_LOG[username]
+        else:
+            print "ERROR! Unregistered user logged out!" #security failure
+    except:
+        print "couldn't delete: ",address," ",username
 
 def insert_user_to_logs(address,username):
     if not username in SERVER_LOG and not address in SERVER_LOG.values(): #username and ip must be unique
@@ -83,7 +89,7 @@ def insert_user_to_logs(address,username):
     if username not in SERVER_LOG and address in SERVER_LOG.values(): #same computer uses different users
         return False
     '''
-
+    
 def send_get_seats(client_socket, client_msg):
     # g;len(vehicle_type);vehicle_type;len(vehicle_company);vehicle_company;len(vehicle_number); vehicle_number
     vehicle_type = client_msg[2]
@@ -182,7 +188,7 @@ def send_view_vehicle(client_socket, client_msg):
     start_and_end = ""
     location_and_delay = ""
 
-    with lock.acquire():  # tries to gain access to the data base. WITH - whenever it's done, release the lock - it's like the state "USING" in c#
+    with lock:  # tries to gain access to the data base. WITH - whenever it's done, release the lock - it's like the state "USING" in c#
         try:
             db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + vehicle_number + '/Transport.db'
             conn = sqlite3.connect(db_path)  # connection to the database
@@ -221,8 +227,8 @@ def send_view_vehicle(client_socket, client_msg):
 
 
 def handle_client(address,client_socket,client_msg):
-    client_msg.pop(0)
     option = client_msg[0]
+    option = option[-1]
     if option is "g":  # If the client sent a seats request-message to the server ("g" - protocol message for request for the seats' status)
         send_get_seats(client_socket, client_msg)
     elif option is "r":  # register       
@@ -260,7 +266,7 @@ class ThreadedServer:
                 if client is None:
                     break
                 data = client.recv(size)
-                #data = data.split(";",1)[1] # clears all the junk at the start, basically separates only once ; in order to get the message itself without the junk
+                data = data.split(";",1)[1] # clears all the junk at the start, basically separates only once ; in order to get the message itself without the junk
                 print data
                 if data:
                     if data.startswith("c"):  # c - close

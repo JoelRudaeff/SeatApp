@@ -2,21 +2,33 @@ package com.example.user.seatapp;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AbsoluteLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static android.R.attr.start;
+import static android.R.attr.width;
+import static android.R.id.list;
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
+
 public class TrainSeatsActivity extends AppCompatActivity
 {
-
+    private int maximum_seats_per_line = 10;
+    private int starting_y = 78;
+    private int starting_x = 71;
+    private int x_difference_between_seats = 61;
+    private int y_difference_between_lnes = 44;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -37,132 +49,93 @@ public class TrainSeatsActivity extends AppCompatActivity
             {
                 msg_length = msg.length();
 
-                analyze_message_to_seats_statusses(msg, msg_length);
+                parse_message(msg, msg_length);
             }
         }
 
     }
 
-
-    public void analyze_message_to_seats_statusses(String msg, int msg_length)
+    public void parse_message(String msg, int msg_length)
     {
         int i;
         int j;
-        int n = 0;
 
-        int line_number = 0; //The starting line number
-        int seats_data_length = Character.getNumericValue(msg.charAt(1)); // getting the 2nd element of the string and converting it to an int type
+        //screen variables
+        int screen_height = getWindowManager().getDefaultDisplay().getHeight();
+        int screen_width = getWindowManager().getDefaultDisplay().getWidth();
 
-        String line = "";
+        int diff_height = 200; //The height difference between each 2 line - starting value
+        int diff_width = 61; //The width diferrence between each 2 seats in a line - starting value
+
+        float current_x;
+        float current_y = (float)((findViewById(R.id.SeatsTitle)).getY()+0.1*screen_height);
+        final float inPixels= this.getResources().getDimension(R.dimen.dimen_entry_in_dp);
+
+        int dpWidthInPx  = (int) (diff_width * inPixels/5);
+        int dpHeightInPx = (int) (diff_height* inPixels/5);
+
+        char seat = '0';
+        String curr_line = "";
+
+        //TODO: change from colors to images
+        String green_color = "#7CFC00";
+        String red_color = "#FF0000";
+
+        AbsoluteLayout absoluteLayout1 = (AbsoluteLayout) findViewById(R.id.absoluteLayout1);
 
         ArrayList<String> msg_list = new ArrayList<String>(Arrays.asList(msg.split(";")));
         ArrayList<String> seats_list = new ArrayList<String>(Arrays.asList(msg_list.get(2).split("\\|"))); //The split should be written like that (not "|" but "\\|")
+        ArrayList<TextView> text_lines_list = new ArrayList<TextView>();
 
-        ArrayList<TextView> lines_list = new ArrayList<TextView>();
-        ArrayList<ImageView> image_list = new ArrayList<ImageView>();
-        ImageView[] line_image_list = {null, null, null, null};
-
-        create_image_array(image_list);
-
-
-
-        for(i=0; i<image_list.size(); i+=4)
-        {
-            for(j=i;j<i+4;j++)
-            {
-                line_image_list[n] = image_list.get(j); // getting the images of each line
-                n++;
-            }
-
-            n = 0;
-
-            line = seats_list.get(line_number).substring(2); //insert the line's seats into a parameter. Also start from the seats' statusses
-
-            set_seats_statusses(line_image_list, line_image_list.length, line);
-            line_number++;
-        }
-    }
-
-    public void set_seats_statusses(ImageView[] line, int line_length, String seats)
-    {
-        int i;
-        char seat = '0';
-
-        ColorFilter taken_seat = new LightingColorFilter(Color.RED, Color.RED); //the color of a taken seat
-        ColorFilter empty_seat = new LightingColorFilter(Color.GREEN, Color.GREEN); //the color of a empty seat
-
-        for (i=0; i<line_length; i++)
+        diff_height = (int)(screen_height*0.8 / seats_list.size()); // dynamic height to be divided by all of the lines
+        for(i=0; i<seats_list.size(); i++)
         {
             try
             {
-                seat = seats.charAt(i);
+                curr_line = seats_list.get(i).substring(2).replaceAll("_", "");; //insert the line's seats into a parameter. Also start from the seats' statuses
 
-                while (seat != '0' && seat!='1') //if somehow the substring didn't work as well
+                //Line number text
+                TextView line_number = new TextView(this);
+                line_number.setY(current_y);
+                line_number.setX(44);
+                line_number.setText(String.valueOf(i+1));
+                line_number.setTextSize(22);
+                absoluteLayout1.addView(line_number);
+                line_number.setVisibility(View.VISIBLE);
+
+                diff_width = (int)(screen_width*0.8 / curr_line.length()); // dynamic width to be divided by all of the line's seats
+                current_x = 78+line_number.getX();
+
+                for (j = 0; j < curr_line.length(); j++) // for each seat in the line
                 {
-                    seats = seats.replace("_", "");
-                    seat = seats.charAt(i);
+                    seat = curr_line.charAt(j);
+
+                    ImageView seat_image = new ImageView(this);
+                    seat_image.setLayoutParams(new android.view.ViewGroup.LayoutParams(dpWidthInPx, dpHeightInPx)); //TODO: Changing the resolution!
+                    seat_image.setX(current_x);
+                    seat_image.setY(current_y);
+
+
+                    if (seat == '0')
+                        seat_image.setBackgroundColor(Color.parseColor(green_color));
+
+                    else if (seat == '1')
+                        seat_image.setBackgroundColor(Color.parseColor(red_color));
+
+
+                    absoluteLayout1.addView(seat_image);
+                    seat_image.setVisibility(View.VISIBLE);
+                    current_x+=diff_width;
                 }
 
-                if (seat == '0')
-                {
-                    line[i].setColorFilter(taken_seat);
-                }
-
-                else if (seat == '1')
-                {
-                    line[i].setColorFilter(empty_seat);
-                }
+                current_y+=diff_height; //The y cordinate is changed between each 2 lines
             }
-
-            catch (Exception e)
+            catch(Exception e)
             {
-                line[i].setVisibility(View.INVISIBLE); //If there are less seats than the usual, delete their photo
+                e.printStackTrace();
             }
-        }
-    }
 
-    public void create_image_array(ArrayList<ImageView> image_list)
-    {
-        image_list.add((ImageView) findViewById(R.id.cl1ImageView1));
-        image_list.add((ImageView) findViewById(R.id.cl1ImageView2));
-        image_list.add((ImageView) findViewById(R.id.cl1ImageView3));
-        image_list.add((ImageView) findViewById(R.id.cl1ImageView4));
-        image_list.add((ImageView) findViewById(R.id.cl2ImageView1));
-        image_list.add((ImageView) findViewById(R.id.cl2ImageView2));
-        image_list.add((ImageView) findViewById(R.id.cl2ImageView3));
-        image_list.add((ImageView) findViewById(R.id.cl2ImageView4));
-        image_list.add((ImageView) findViewById(R.id.cl3ImageView1));
-        image_list.add((ImageView) findViewById(R.id.cl3ImageView2));
-        image_list.add((ImageView) findViewById(R.id.cl3ImageView3));
-        image_list.add((ImageView) findViewById(R.id.cl3ImageView4));
-        image_list.add((ImageView) findViewById(R.id.cl4ImageView1));
-        image_list.add((ImageView) findViewById(R.id.cl4ImageView2));
-        image_list.add((ImageView) findViewById(R.id.cl4ImageView3));
-        image_list.add((ImageView) findViewById(R.id.cl4ImageView4));
-        image_list.add((ImageView) findViewById(R.id.cl5ImageView1));
-        image_list.add((ImageView) findViewById(R.id.cl5ImageView2));
-        image_list.add((ImageView) findViewById(R.id.cl5ImageView3));
-        image_list.add((ImageView) findViewById(R.id.cl5ImageView4));
-        image_list.add((ImageView) findViewById(R.id.cl6ImageView1));
-        image_list.add((ImageView) findViewById(R.id.cl6ImageView2));
-        image_list.add((ImageView) findViewById(R.id.cl6ImageView3));
-        image_list.add((ImageView) findViewById(R.id.cl6ImageView4));
-        image_list.add((ImageView) findViewById(R.id.cl7ImageView1));
-        image_list.add((ImageView) findViewById(R.id.cl7ImageView2));
-        image_list.add((ImageView) findViewById(R.id.cl7ImageView3));
-        image_list.add((ImageView) findViewById(R.id.cl7ImageView4));
-        image_list.add((ImageView) findViewById(R.id.cl8ImageView1));
-        image_list.add((ImageView) findViewById(R.id.cl8ImageView2));
-        image_list.add((ImageView) findViewById(R.id.cl8ImageView3));
-        image_list.add((ImageView) findViewById(R.id.cl8ImageView4));
-        image_list.add((ImageView) findViewById(R.id.cl9ImageView1));
-        image_list.add((ImageView) findViewById(R.id.cl9ImageView2));
-        image_list.add((ImageView) findViewById(R.id.cl9ImageView3));
-        image_list.add((ImageView) findViewById(R.id.cl9ImageView4));
-        image_list.add((ImageView) findViewById(R.id.cl10ImageView1));
-        image_list.add((ImageView) findViewById(R.id.cl10ImageView2));
-        image_list.add((ImageView) findViewById(R.id.cl10ImageView3));
-        image_list.add((ImageView) findViewById(R.id.cl10ImageView4));
+        }
     }
 
 }
