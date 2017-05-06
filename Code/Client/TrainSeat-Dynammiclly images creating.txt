@@ -141,6 +141,7 @@ public class TrainSeatsActivity extends AppCompatActivity
 
             WindowManager.LayoutParams params = getWindow().getAttributes();
             params.height = (int) ( (diff_height) * (seats_list.size() - 16) * (inPixels/5));
+
         }
     }
 

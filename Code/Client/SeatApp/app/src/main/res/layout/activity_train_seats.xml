@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/absoluteLayout1"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+
+<ScrollView
     android:layout_height="match_parent"
-    tools:context="com.example.user.seatapp.TrainSeatsActivity">
+    android:layout_width="match_parent"
+    android:fillViewport="true"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-        android:id="@+id/SeatsTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="55dp"
-        android:layout_x="130dp"
-        android:layout_y="16dp"
-        android:text="Seats"
-        android:textColor="@android:color/holo_blue_dark"
-        android:textSize="36sp"
-        tools:layout_editor_absoluteX="126dp"
-        tools:layout_editor_absoluteY="43dp" />
+    <AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/absoluteLayout1"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="com.example.user.seatapp.TrainSeatsActivity">
 
+        <TextView
+            android:id="@+id/SeatsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="3300dp"
+            android:layout_x="130dp"
+            android:layout_y="16dp"
+            android:text="Seats"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="36sp"
+            tools:layout_editor_absoluteX="126dp"
+            tools:layout_editor_absoluteY="43dp" />
 
-</AbsoluteLayout>
+    </AbsoluteLayout>
+
+</ScrollView>

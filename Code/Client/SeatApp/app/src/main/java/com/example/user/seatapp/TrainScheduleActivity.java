@@ -23,7 +23,7 @@ import java.util.LinkedList;
 public class TrainScheduleActivity extends AppCompatActivity
 {
 
-    final String host = "192.168.1.42"; //TODO:
+    final String host = "10.10.0.20"; //TODO:
     String response_from_server = "-";
 
 
