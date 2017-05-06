@@ -2,6 +2,7 @@ package com.example.user.seatapp;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
@@ -12,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.AbsoluteLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -36,6 +38,7 @@ public class TrainSeatsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_train_seats);
 
+
         Intent intent = getIntent();
 
         int i;
@@ -55,6 +58,8 @@ public class TrainSeatsActivity extends AppCompatActivity
         }
 
     }
+
+
 
     public void parse_message(String msg, int msg_length)
     {
@@ -78,19 +83,23 @@ public class TrainSeatsActivity extends AppCompatActivity
         char seat = '0';
         String curr_line = "";
 
+        boolean large_amount_of_lines_flag = false ; // if there are more than 10 lines - which is the limit for lines per page, this flag will be activated
+
         TextView title = (TextView) findViewById(R.id.SeatsTitle);
-
-        //TODO: change from colors to images
-        String green_color = "#7CFC00";
-        String red_color = "#FF0000";
-
         AbsoluteLayout absoluteLayout1 = (AbsoluteLayout) findViewById(R.id.absoluteLayout1);
 
         ArrayList<String> msg_list = new ArrayList<String>(Arrays.asList(msg.split(";")));
         ArrayList<String> seats_list = new ArrayList<String>(Arrays.asList(msg_list.get(2).split("\\|"))); //The split should be written like that (not "|" but "\\|")
         ArrayList<TextView> text_lines_list = new ArrayList<TextView>();
 
-        //diff_height = (int)(screen_height*0.8 / seats_list.size()); // dynamic height to be divided by all of the lines
+        //MAXIMUM OF 10 LINES PER PAGE
+        if (seats_list.size() < 10)
+            diff_height = (int)((screen_height) / seats_list.size()); // dynamic height to be divided by all of the lines
+        else {
+            diff_height = (int) ((screen_height) / 10);
+            large_amount_of_lines_flag = true;
+        }
+
         for(i=0; i<seats_list.size(); i++)
         {
             try
@@ -128,6 +137,11 @@ public class TrainSeatsActivity extends AppCompatActivity
 
                     absoluteLayout1.addView(seat_image);
                     seat_image.setVisibility(View.VISIBLE);
+
+                    if (title.getHeight() <current_y)
+                        title.getLayoutParams().height = (int)current_y + diff_height;
+
+
                     current_x+=diff_width;
                 }
 
@@ -140,7 +154,8 @@ public class TrainSeatsActivity extends AppCompatActivity
             }
 
             WindowManager.LayoutParams params = getWindow().getAttributes();
-            params.height = (int) ( (diff_height) * (seats_list.size() - 16) * (inPixels/5));
+            //params.height = (int) ( (diff_height) * (seats_list.size() ) * (inPixels/5));
+            params.height = screen_height ;
         }
     }
 

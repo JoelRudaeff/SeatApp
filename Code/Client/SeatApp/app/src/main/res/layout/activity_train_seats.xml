@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView
+    android:id="@+id/mScrollView"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:fillViewport="true"
@@ -18,7 +19,7 @@
         <TextView
             android:id="@+id/SeatsTitle"
             android:layout_width="wrap_content"
-            android:layout_height="3300dp"
+            android:layout_height="300dp"
             android:layout_x="130dp"
             android:layout_y="16dp"
             android:text="Seats"

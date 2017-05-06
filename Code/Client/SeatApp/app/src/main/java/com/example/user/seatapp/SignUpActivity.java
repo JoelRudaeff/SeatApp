@@ -20,7 +20,7 @@ import java.net.Socket;
 
 public class SignUpActivity extends ActionBarActivity
 {
-    String host = "10.10.0.20";
+    String host = "192.168.1.42";
     char response_from_server = '-';
 
 

@@ -24,7 +24,7 @@ public class MainActivity extends ActionBarActivity
 {
 
     String username;
-    String host = "10.10.0.20";
+    String host = "192.168.1.42";
     boolean sent_data_flag = false;
 
     public class MyClientTask extends AsyncTask<Void, Void, Void> {
