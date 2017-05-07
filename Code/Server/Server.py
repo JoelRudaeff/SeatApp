@@ -35,34 +35,23 @@ def print_server_information():
 #                                                   RPI_SIDE
 
 # function that will update the seats data inside the data-base. will be used during communication with the RPI
-def update_transport_database(vehicle_type, vehicle_company, vehicle_number, line_number, data):
+def update_transport_database(vehicle_type, vehicle_company, vehicle_number, data):
     old_line_status = ""
     with lock:
         db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + vehicle_number + '/Transport.db'
         conn = sqlite3.connect(db_path)  # connection to the database
         c = conn.cursor()
-
+        data = data.split("_") # make a list of lines basically 
         try:
-            # first of all, if an error has been occured in the process, get the data before changing it so if something happened we can restore the OLD_DATA
-            try:
-                seat_results = c.execute('''SELECT status FROM seats WHERE line=?''',(line_number,))
+            for i in xrange(0,len(data)):
+                seat_results = c.execute('''SELECT status FROM seats WHERE line=?''',(i+1,))
                 old_line_status = seat_results
-            except:
-                conn.close() #if there's no access to db, backup won't work
-                lock.release()
-                return
-
-            # after we stored the backup data, we can change to the new data
-            c.execute('''UPDATE seats SET status = ? WHERE line = ?;''',(data,line_number))  # Updating the data for each seat's data
-
-            # save changes
-            conn.commit()
-
+                
+                # after we stored the backup data, we can change to the new data
+                c.execute('''UPDATE seats SET status = ? WHERE line = ?;''',(data[i],i+1))  # Updating the data for each seat's data          
+                conn.commit()
         except:  # restoring the old data
-            data = old_line_status
-            c.execute('''UPDATE seats SET status = ? WHERE line = ?;''',(data, line_number))  # Updating the data for each seat's data
-            # save changes and close db
-            conn.commit()
+            print "Error in update_transport_database"                   
         conn.close()
 
 ########################################################################################################################
@@ -275,7 +264,7 @@ class ThreadedServer:
                     elif data.startswith('u'):  #not close but update seats -RPI
                         seat_data = data.split(';')
                         #u/c;t;C;n;L1;A
-                        update_transport_database(seat_data[1],seat_data[2],seat_data[3],seat_data[5], seat_data[7]) #send the information of the vehicle + actual status of every line
+                        update_transport_database(seat_data[1],seat_data[2],seat_data[3],seat_data[5]) #send the information of the vehicle + actual status of every line
                         client.sendall('r') #ack - recieved:
                     elif data.startswith('E'): #exit from server's logs - client
                         username = data.split(';')[2]
