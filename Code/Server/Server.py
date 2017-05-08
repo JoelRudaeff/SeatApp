@@ -5,7 +5,7 @@ import time
 import os
 from threading import Thread, Lock
 
-CLIENT_HOST = '192.168.1.42'  # TODO:
+CLIENT_HOST = '10.10.0.20'  # TODO:
 CLIENT_PORT = 8888
 
 # Path files
@@ -266,7 +266,6 @@ class ThreadedServer:
                 if client is None:
                     break
                 data = client.recv(size)
-                data = data.split(";",1)[1] # clears all the junk at the start, basically separates only once ; in order to get the message itself without the junk
                 print data
                 if data:
                     if data.startswith("c"):  # c - close
@@ -283,6 +282,7 @@ class ThreadedServer:
                         break
                     else: #Client
                         data = data.split(';')
+                        data.pop(0) # clears all the junk at the start, basically separates only once ; in order to get the message it
                         handle_client(address,client,data)
                 else:
                     raise Exception('Client disconnected')
