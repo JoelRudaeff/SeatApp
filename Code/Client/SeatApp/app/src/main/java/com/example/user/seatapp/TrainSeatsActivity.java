@@ -83,7 +83,6 @@ public class TrainSeatsActivity extends AppCompatActivity
         char seat = '0';
         String curr_line = "";
 
-        boolean large_amount_of_lines_flag = false ; // if there are more than 10 lines - which is the limit for lines per page, this flag will be activated
 
         TextView title = (TextView) findViewById(R.id.SeatsTitle);
         AbsoluteLayout absoluteLayout1 = (AbsoluteLayout) findViewById(R.id.absoluteLayout1);
@@ -95,10 +94,11 @@ public class TrainSeatsActivity extends AppCompatActivity
         //MAXIMUM OF 10 LINES PER PAGE
         if (seats_list.size() < 10)
             diff_height = (int)((screen_height) / seats_list.size()); // dynamic height to be divided by all of the lines
-        else {
+
+        else
             diff_height = (int) ((screen_height) / 10);
-            large_amount_of_lines_flag = true;
-        }
+
+
 
         for(i=0; i<seats_list.size(); i++)
         {
