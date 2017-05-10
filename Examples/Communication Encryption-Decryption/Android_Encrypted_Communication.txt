@@ -1,0 +1,142 @@
+
+public class MyClientTask extends AsyncTask<Void, Void, Void> {
+
+    private char Querry_type;
+    private final String dstAddress = "192.168.1.42";
+    private int dstPort = 8888;
+
+    String response_from_server = "-";
+    public boolean sent_to_server = false;
+
+    private static SecretKeySpec sks = null;
+    private static String key = "";
+    private static Cipher c;
+
+    private String Vehicle_type, Vehicle_company, Vehicle_number; //  view AND get
+    private String NewPassword,NewEmail; // register AND login
+    private static String NewUsername;
+
+    public MyClientTask(char qt,String first, String second, String third) {
+        try {
+            SecureRandom sr = SecureRandom.getInstance("CBC");
+            sr.setSeed("any data used as random seed".getBytes());
+            KeyGenerator kg = KeyGenerator.getInstance("AES");
+            kg.init(128, sr);
+
+            SecretKey sc = kg.generateKey();
+            key =sc.toString();
+
+            sks = new SecretKeySpec(sc.getEncoded(), "AES");
+            c = Cipher.getInstance("AES");
+        } catch (Exception e) {
+            Log.e(TAG, "AES secret key spec error");
+        }
+
+        Querry_type = qt;
+        switch (Querry_type)
+        {
+            case 'r':
+                NewEmail = third;
+            case 'l':
+                NewPassword = second;
+            case 'E':
+                NewUsername = first;
+                break;
+            case 'g':
+            case 'v':
+                Vehicle_type = first;
+                Vehicle_company = second;
+                Vehicle_number = third;
+                break;
+
+        }
+    }
+
+    //Execute()
+    @Override
+    protected Void doInBackground(Void... arg0) {
+
+        try {
+            String string_to_send = "";
+            String string_to_encrypt = "";
+            String data_from_server;
+            c.init(Cipher.ENCRYPT_MODE, sks);
+            switch (Querry_type)
+            {
+                case 'r':
+                    string_to_encrypt = ";" + Querry_type + ";" + String.valueOf(NewUsername.length()) + ";" + NewUsername + ";" + String.valueOf(NewPassword.length()) + ";" + NewPassword + ";" + String.valueOf(NewEmail.length()) + ";" + NewEmail;
+                    string_to_encrypt = new String(c.doFinal(string_to_encrypt.getBytes("UTF-8")), "UTF-8");
+                    string_to_send = ";" + "X" + ";" + String.valueOf(NewUsername.length()) + ";" + NewUsername + ";" + string_to_encrypt;
+                    break;
+                case 'l':
+                    string_to_encrypt = ";" + Querry_type + ";" + String.valueOf(NewUsername.length()) + ";" + NewUsername + ";" + String.valueOf(NewPassword.length()) + ";" + NewPassword;
+                    string_to_encrypt = new String(c.doFinal(string_to_encrypt.getBytes("UTF-8")), "UTF-8");
+                    string_to_send = ";" + "X" + ";" + String.valueOf(NewUsername.length()) + ";" + NewUsername + ";" + string_to_encrypt;
+                    break;
+                case 'g':
+                case 'v':
+                    string_to_encrypt = ";" + Querry_type + ";" + String.valueOf(Vehicle_type.length()) + ";" + Vehicle_type + ";" + String.valueOf(Vehicle_company.length()) + ";" + Vehicle_company + ";" + String.valueOf(Vehicle_number.length()) + ";" + Vehicle_number + ";";
+                    string_to_encrypt = new String(c.doFinal(string_to_encrypt.getBytes("UTF-8")), "UTF-8");
+                    string_to_send = ";" + "X" + ";" + String.valueOf(NewUsername.length()) + ";" + NewUsername + ";" + string_to_encrypt;
+                    break;
+            }
+
+
+            Socket socket = new Socket(dstAddress, dstPort);
+
+
+            DataOutputStream output = new DataOutputStream(socket.getOutputStream());
+            if (Querry_type== 'r' || Querry_type == 'l') {
+                output.writeUTF(";" +'x' + ";" + String.valueOf(NewUsername.length()) + ";" + NewUsername + String.valueOf(key.length()) + ";" + key);
+                Thread.sleep(500);
+            }
+            output.writeUTF(string_to_send); //The msg to the server
+            output.flush(); // Send off the data
+
+            //read input stream
+            DataInputStream input = new DataInputStream(socket.getInputStream());
+            InputStreamReader input_reader = new InputStreamReader(input);
+            BufferedReader br = new BufferedReader(input_reader); //create a BufferReader object for input
+
+            if (Querry_type=='E')
+                sent_to_server = true;
+
+            else
+            {
+                data_from_server = br.readLine();
+                switch (Querry_type)
+                {
+                    case 'r':
+                    case 'l':
+                        if ((data_from_server).contains(Querry_type+";0"))
+                            response_from_server = "0";
+                        else if ((data_from_server).contains(Querry_type+";1"))
+                            response_from_server = "1";
+                        break;
+
+                    case 'v':
+                    case 'g':
+                        if ((data_from_server).contains(Querry_type + ";"))
+                            response_from_server = data_from_server;
+                        else
+                            response_from_server = "0";
+                        break;
+
+                }
+
+            }
+            //server.close();
+
+            br.close();
+            input.close();
+            input_reader.close();
+            output.close();
+            socket.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+}

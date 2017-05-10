@@ -3,7 +3,6 @@ package com.example.user.seatapp;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,85 +11,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.Socket;
 import java.util.LinkedList;
 
 public class TrainScheduleActivity extends AppCompatActivity
 {
-
-    final String host = "192.168.1.42"; //TODO:
-    String response_from_server = "-";
-
-
-    public class MyClientTask extends AsyncTask<Void, Void, Void> {
-        String Vehicle_type,Vehicle_company, Vehicle_number;
-        String dstAddress = host;
-        int dstPort = 8888;
-        String ret;
-
-        public MyClientTask(String VT, String VC, String VN)
-        {
-            Vehicle_type = VT;
-            Vehicle_company = VC;
-            Vehicle_number = VN;
-        }
-
-        //Execute()
-        @Override
-        protected Void doInBackground(Void... arg0) {
-
-            try
-            {
-                String vehicle_type_length = String.valueOf(Vehicle_type.length());
-                String vehicle_company_length = String.valueOf(Vehicle_company.length());
-                String vehicle_number_length = String.valueOf(Vehicle_number.length());
-                String data_from_server;
-
-                // The data that the client sends to the server when he signs-up
-                String string_to_send = ";" + "g" + ";" + vehicle_type_length + ";" + Vehicle_type + ";"  + vehicle_company_length + ";"   + Vehicle_company + ";"   + vehicle_number_length + ";"   + Vehicle_number + ";"  ;
-
-                Socket socket = new Socket(dstAddress, dstPort);
-
-
-                DataOutputStream output = new DataOutputStream(socket.getOutputStream());
-                output.writeUTF(string_to_send); //The msg to the server
-                output.flush(); // Send off the data
-
-                //read input stream
-                DataInputStream input = new DataInputStream(socket.getInputStream());
-                InputStreamReader input_reader = new InputStreamReader(input);
-                BufferedReader br = new BufferedReader(input_reader); //create a BufferReader object for input
-
-                data_from_server = br.readLine();
-
-                if ((data_from_server).contains("g;"))
-                    response_from_server = data_from_server;
-                else
-                    response_from_server = "0";
-
-                //server.close();
-
-                br.close();
-                input.close();
-                input_reader.close();
-                output.close();
-                socket.close();
-
-            }
-            catch ( Exception e)
-            {
-                e.printStackTrace();
-                ret = "0";
-            }
-            return null;
-        }
-
-    }
 
 
     @Override
@@ -336,12 +260,12 @@ public class TrainScheduleActivity extends AppCompatActivity
             progress.setMessage("Wait while loading...");
             progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
             progress.show();
-            MyClientTask myClientTask = new MyClientTask(vehicle_type, vehicle_company, vehicle_number);
+            MyClientTask myClientTask = new MyClientTask('g',vehicle_type, vehicle_company, vehicle_number);
             myClientTask.execute(); //will run like a thread
 
             int times = 0;
             //wait for the client to get response from the server, if it doesn't connect in a few seconds, terminate the waiting
-            while (response_from_server == "-")
+            while (myClientTask.response_from_server == "-")
             {
                 if (times < 5)
                     Thread.sleep(1000);
@@ -350,21 +274,21 @@ public class TrainScheduleActivity extends AppCompatActivity
             progress.hide();
 
             //success
-            if (response_from_server.contains("g;"))
+            if (myClientTask.response_from_server.contains("g;"))
             {
                 Intent intent = new Intent(this, TrainSeatsActivity.class);
-                intent.putExtra("message", response_from_server);
+                intent.putExtra("message", myClientTask.response_from_server);
 
                 Toast toast_successful = Toast.makeText(context, "Your train's seats", duration);
                 toast_successful.show();
 
-                response_from_server = "-";
+                myClientTask.response_from_server = "-";
                 startActivity(intent);
             }
             //failure or not connected
             else
             {
-                if (response_from_server == "0")
+                if (myClientTask.response_from_server == "0")
                 {
                     Toast toast_unsuccessful = Toast.makeText(context, "Couldn't get the seats of this train. Try again!", duration);
                     toast_unsuccessful.show();

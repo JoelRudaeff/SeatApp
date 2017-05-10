@@ -36,8 +36,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/CurrentTitle"
-        android:layout_toEndOf="@+id/DestinationTitle"
-        android:layout_toRightOf="@+id/DestinationTitle" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/DestinationTitle"
+        android:layout_toEndOf="@+id/DestinationTitle" />
 
     <Spinner
         android:id="@+id/DestinationSpinner"

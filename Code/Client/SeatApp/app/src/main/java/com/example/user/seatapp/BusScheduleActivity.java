@@ -1,16 +1,22 @@
 package com.example.user.seatapp;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.LinkedList;
 
 public class BusScheduleActivity extends AppCompatActivity
 {
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -236,6 +242,144 @@ public class BusScheduleActivity extends AppCompatActivity
         arriving_time = get_next_leaving_time(leaving_time, time_difference); // This function return the time after X minutes, like we need
 
         return arriving_time;
+    }
+
+
+
+    public void SendingDetailsToServer(String BusNumber)
+    {
+        Context context = getApplicationContext();
+        int duration = Toast.LENGTH_SHORT;
+
+        String ret = "0";
+        String vehicle_type = "Bus";
+        String vehicle_company = "Egged";
+        String vehicle_number = "263";
+        String data_from_server = "";
+        String read = null;
+
+        try
+        {
+            ProgressDialog progress = new ProgressDialog(this);
+            progress.setTitle("Loading");
+            progress.setMessage("Wait while loading...");
+            progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
+            progress.show();
+            MyClientTask myClientTask = new MyClientTask('g',vehicle_type, vehicle_company, vehicle_number);
+            myClientTask.execute(); //will run like a thread
+
+            int times = 0;
+            //wait for the client to get response from the server, if it doesn't connect in a few seconds, terminate the waiting
+            while (myClientTask.response_from_server == "-")
+            {
+                if (times < 5)
+                    Thread.sleep(1000);
+                times++;
+            }
+            progress.hide();
+
+            //success
+            if (myClientTask.response_from_server.contains("g;"))
+            {
+                Intent intent = new Intent(this, TrainSeatsActivity.class);
+                intent.putExtra("message", myClientTask.response_from_server);
+
+                Toast toast_successful = Toast.makeText(context, "Your bus's seats", duration);
+                toast_successful.show();
+
+                myClientTask.response_from_server = "-";
+                startActivity(intent);
+            }
+            //failure or not connected
+            else
+            {
+                if (myClientTask.response_from_server == "0")
+                {
+                    Toast toast_unsuccessful = Toast.makeText(context, "Couldn't get the seats of this bus. Try again!", duration);
+                    toast_unsuccessful.show();
+                }
+
+                else
+                {
+                    Toast toast_unsuccessful_connection = Toast.makeText(context, "Couldn't connect to server, try again!", duration);
+                    toast_unsuccessful_connection.show();
+                }
+
+            }
+        }
+
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public void startBus1(View view)
+    {
+        String ret = "1"; //TODO: cahnge it to "0"
+        Button button_bus_number = (Button) findViewById(R.id.bn1);
+        String BusNumber = button_bus_number.getText().toString();
+
+        SendingDetailsToServer(BusNumber);
+    }
+
+    public void startBus2(View view)
+    {
+        String ret = "1"; //TODO: cahnge it to "0"
+        Button button_bus_number = (Button) findViewById(R.id.bn2);
+        String BusNumber = button_bus_number.getText().toString();
+
+        SendingDetailsToServer(BusNumber);
+    }
+
+    public void startBus3(View view)
+    {
+        Button button_bus_number = (Button) findViewById(R.id.bn3);
+        String BusNumber = button_bus_number.getText().toString();
+
+        SendingDetailsToServer(BusNumber);
+    }
+
+    public void startBus4(View view)
+    {
+        Button button_bus_number = (Button) findViewById(R.id.bn4);
+        String BusNumber = button_bus_number.getText().toString();
+
+        SendingDetailsToServer(BusNumber);
+    }
+
+    public void startBus5(View view)
+    {
+        Button button_bus_number = (Button) findViewById(R.id.bn5);
+        String BusNumber = button_bus_number.getText().toString();
+
+        SendingDetailsToServer(BusNumber);
+    }
+
+    public void startBus6(View view)
+    {
+        Button button_bus_number = (Button) findViewById(R.id.bn6);
+        String BusNumber = button_bus_number.getText().toString();
+
+        SendingDetailsToServer(BusNumber);
+    }
+
+    public void startBus7(View view)
+    {
+        Button button_bus_number = (Button) findViewById(R.id.bn7);
+        String BusNumber = button_bus_number.getText().toString();
+
+        SendingDetailsToServer(BusNumber);
+    }
+
+    public void startBus8(View view)
+    {
+        Button button_bus_number = (Button) findViewById(R.id.bn8);
+        String BusNumber = button_bus_number.getText().toString();
+
+        SendingDetailsToServer(BusNumber);
     }
 
 }

@@ -9,84 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import android.os.AsyncTask;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
-import java.net.Socket;
 
 
 public class SignUpActivity extends ActionBarActivity
 {
-    String host = "192.168.1.42";
-    char response_from_server = '-';
-
-
-    public class MyClientTask extends AsyncTask<Void, Void, Void> {
-        String NewPassword,NewUsername,NewEmail;
-        String dstAddress = host;
-        int dstPort = 8888;
-        char ret;
-
-        public MyClientTask(String NU, String NP, String NE)
-        {
-            NewPassword = NP;
-            NewUsername = NU;
-            NewEmail = NE;
-        }
-
-        //Execute()
-        @Override
-        protected Void doInBackground(Void... arg0) {
-
-            try {
-                String username_length = String.valueOf(NewUsername.length());
-                String password_length = String.valueOf(NewPassword.length());
-                String email_length = String.valueOf(NewEmail.length());
-                String data_from_server;
-
-                // The data that the client sends to the server when he signs-up
-                String string_to_send = ";r;" + username_length + ";" + NewUsername + ";" + password_length + ";" + NewPassword + ";" + email_length + ";" + NewEmail;
-
-
-                Socket socket = new Socket(dstAddress, dstPort);
-                DataOutputStream output = new DataOutputStream(socket.getOutputStream());
-                output.writeUTF(string_to_send); //The msg to the server
-                output.flush(); // Send off the data
-
-                //read input stream
-                DataInputStream input = new DataInputStream(socket.getInputStream());
-                InputStreamReader input_reader = new InputStreamReader(input);
-                BufferedReader br = new BufferedReader(input_reader); //create a BufferReader object for input
-
-                data_from_server = br.readLine();
-
-                if ((data_from_server).contains("r;0"))
-                    response_from_server = '0';
-                else if ((data_from_server).contains("r;1"))
-                    response_from_server = '1';
-
-                //server.close();
-
-                br.close();
-                input.close();
-                input_reader.close();
-                output.close();
-                socket.close();
-
-            }
-            catch ( Exception e)
-            {
-                e.printStackTrace();
-                ret = '0';
-            }
-            return null;
-        }
-
-
-    }
 
 
     @Override
@@ -176,12 +103,12 @@ public class SignUpActivity extends ActionBarActivity
                         progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
                         progress.show();
 
-                        MyClientTask myClientTask = new MyClientTask(name,password,email);
+                        MyClientTask myClientTask = new MyClientTask('r',name,password,email);
                         myClientTask.execute();
 
                         int times = 0;
                         //wait for the client to get response from the server, if it doesn't connect in a few seconds, terminate the waiting
-                        while (response_from_server== '-')
+                        while (myClientTask.response_from_server== "-")
                         {
                             if (times < 10)
                         Thread.sleep(1000);
@@ -190,7 +117,7 @@ public class SignUpActivity extends ActionBarActivity
                     progress.hide();
 
                     //Sending the necessary details to the server, and getting back the answer from it
-                    if( response_from_server == '1')
+                    if( myClientTask.response_from_server == "1")
                     {
                             Toast toast_successful = Toast.makeText(context, "Successfully signing-up!", duration);
                             toast_successful.show();
@@ -198,7 +125,7 @@ public class SignUpActivity extends ActionBarActivity
                         }
                         else
                         {
-                            if ( response_from_server == '0')
+                            if ( myClientTask.response_from_server == "0")
                             {
                                 Toast toast_unsuccessful = Toast.makeText(context, "registration failed, try again!", duration);
                                 toast_unsuccessful.show();

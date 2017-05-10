@@ -8,83 +8,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import android.os.AsyncTask;
 import android.app.ProgressDialog;
-import android.os.Handler;
-import android.content.DialogInterface;
-import java.io.*;
-import java.net.*;
 
 
 
 public class HomePageActivity extends ActionBarActivity
 {
-
-    final String host = "192.168.1.42"; //TODO:
-    char response_from_server = '-';
-
-
-    public class MyClientTask extends AsyncTask<Void, Void, Void> {
-        String NewPassword,NewUsername;
-        String dstAddress = host;
-        int dstPort = 8888;
-        char ret;
-
-        public MyClientTask(String NU, String NP)
-        {
-            NewPassword = NP;
-            NewUsername = NU;
-        }
-
-        //Execute()
-        @Override
-        protected Void doInBackground(Void... arg0) {
-
-            try {
-                String username_length = String.valueOf(NewUsername.length());
-                String password_length = String.valueOf(NewPassword.length());
-                String data_from_server;
-
-                // The data that the client sends to the server when he signs-up
-                String string_to_send = ";l;" + username_length + ";" + NewUsername + ";" + password_length + ";" + NewPassword;
-
-                Socket socket = new Socket(dstAddress, dstPort);
-
-
-                DataOutputStream output = new DataOutputStream(socket.getOutputStream());
-                output.writeUTF(string_to_send); //The msg to the server
-                output.flush(); // Send off the data
-
-                //read input stream
-                DataInputStream input = new DataInputStream(socket.getInputStream());
-                InputStreamReader input_reader = new InputStreamReader(input);
-                BufferedReader br = new BufferedReader(input_reader); //create a BufferReader object for input
-
-                data_from_server = br.readLine();
-
-                if ((data_from_server).contains("l;0"))
-                    response_from_server = '0';
-                else if ((data_from_server).contains("l;1"))
-                    response_from_server = '1';
-
-                //server.close();
-
-                br.close();
-                input.close();
-                input_reader.close();
-                output.close();
-                socket.close();
-
-            }
-            catch ( Exception e)
-            {
-                e.printStackTrace();
-                ret = '0';
-            }
-            return null;
-        }
-
-    }
 
 
     @Override
@@ -126,12 +55,12 @@ public class HomePageActivity extends ActionBarActivity
                     progress.setMessage("Wait while loading...");
                     progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
                     progress.show();
-                    MyClientTask myClientTask = new MyClientTask(name,password);
+                    MyClientTask myClientTask = new MyClientTask('l',name,password,null);
                     myClientTask.execute(); //will run like a thread
 
                     int times = 0;
                     //wait for the client to get response from the server, if it doesn't connect in a few seconds, terminate the waiting
-                    while (response_from_server== '-')
+                    while (myClientTask.response_from_server == "-")
                     {
                         if (times < 5)
                             Thread.sleep(1000);
@@ -140,7 +69,7 @@ public class HomePageActivity extends ActionBarActivity
                     progress.hide();
 
                     //success
-                    if ( response_from_server == '1' )
+                    if ( myClientTask.response_from_server == "1" )
                     {
                         Intent intent = new Intent(this, MainActivity.class);
                         intent.putExtra("Username", name);
@@ -148,14 +77,13 @@ public class HomePageActivity extends ActionBarActivity
 
                         Toast toast_successful = Toast.makeText(context, "Successfully logged in!", duration);
                         toast_successful.show();
-
-                        response_from_server = '-';
+                        myClientTask.response_from_server = "-";
                         startActivity(intent);
                     }
                     //failure or not connected
                     else
                     {
-                        if ( response_from_server == '0')
+                        if ( myClientTask.response_from_server == "0" )
                         {
                             Toast toast_unsuccessful = Toast.makeText(context, "Username and Password combination wasn't found, try again!", duration);
                             toast_unsuccessful.show();

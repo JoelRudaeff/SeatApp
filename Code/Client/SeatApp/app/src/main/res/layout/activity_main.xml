@@ -44,19 +44,4 @@
         android:layout_alignRight="@+id/Train_button"
         android:layout_alignEnd="@+id/Train_button" />
 
-    <Button
-        android:id="@+id/Taxi_button"
-        android:layout_width="100sp"
-        android:layout_height="80sp"
-        android:layout_marginTop="47dp"
-        android:onClick="startTaxis"
-        android:text="Taxis"
-        android:textSize="20sp"
-        android:textColor="@android:color/holo_blue_light"
-        android:layout_below="@+id/Bus_button"
-        android:layout_alignLeft="@+id/Bus_button"
-        android:layout_alignStart="@+id/Bus_button"
-        android:layout_alignRight="@+id/Bus_button"
-        android:layout_alignEnd="@+id/Bus_button" />
-
 </RelativeLayout>

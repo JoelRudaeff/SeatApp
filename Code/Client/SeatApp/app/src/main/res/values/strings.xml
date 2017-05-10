@@ -29,6 +29,7 @@
         <item>Ashdod</item>
         <item>Ashkelon</item>
         <item>Eilat</item>
+        <item>Karmiel</item>
     </string-array>
 
     <string-array name="train_companies_array">

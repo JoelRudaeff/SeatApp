@@ -13,40 +13,39 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+public class BusSeatsActivity extends AppCompatActivity{
 
-public class TrainSeatsActivity extends AppCompatActivity
-{
-    private int maximum_seats_per_line = 10;
-    private int starting_y = 78;
-    private int starting_x = 71;
-    private int x_difference_between_seats = 61;
-    private int y_difference_between_lnes = 44;
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_train_seats);
-
-
-        Intent intent = getIntent();
-
-        int i;
-        int msg_length;
-        String msg = "";
-
-        if( !( intent.getExtras().getString("message").isEmpty() ))
+        private int maximum_seats_per_line = 10;
+        private int starting_y = 78;
+        private int starting_x = 71;
+        private int x_difference_between_seats = 61;
+        private int y_difference_between_lnes = 44;
+        @Override
+        protected void onCreate(Bundle savedInstanceState)
         {
-            msg = intent.getExtras().getString("message");
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_bus_seats);
 
-            if(msg.startsWith("g")) // if the message it's a "Get Seats" message from the server
+
+            Intent intent = getIntent();
+
+            int i;
+            int msg_length;
+            String msg = "";
+
+            if( !( intent.getExtras().getString("message").isEmpty() ))
             {
-                msg_length = msg.length();
+                msg = intent.getExtras().getString("message");
 
-                parse_message(msg, msg_length);
+                if(msg.startsWith("g")) // if the message it's a "Get Seats" message from the server
+                {
+                    msg_length = msg.length();
+
+                    parse_message(msg, msg_length);
+                }
             }
-        }
 
-    }
+        }
 
 
 

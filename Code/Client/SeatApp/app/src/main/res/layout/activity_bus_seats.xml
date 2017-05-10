@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView
     android:id="@+id/mScrollView"
     android:layout_height="match_parent"
@@ -37,5 +36,4 @@
             android:text="0" />
 
     </AbsoluteLayout>
-
 </ScrollView>

@@ -2,7 +2,8 @@ import socket
 import sqlite3
 import sys
 import time
-import os
+from Crypto.Cipher import AES
+import base64
 from threading import Thread, Lock
 
 CLIENT_HOST = '192.168.1.42'  # TODO:
@@ -14,6 +15,7 @@ VEHICLES_FOLDER = 'Vehicles'
 
 # Server's log for user who use the app currently 
 SERVER_LOG = {}
+ENCRYPTION_LOG = {}
 
 # kind of a mutex lock, will be used for DataBase access
 lock = Lock()
@@ -68,10 +70,35 @@ def update_transport_database(vehicle_type, vehicle_company, vehicle_number, lin
 ########################################################################################################################
 #                                                   CLIENT SIDE
 
+def encrtpyt_msg(msg,user):
+    return "x;"+base64.b64encode(ENCRYPTION_LOG[user].encrypt(msg))
+
+def decrypt_msg(data):
+    # junk;X;len(user);user;encrypted_data
+    if not ';' in data:
+        return "ERROR"
+
+    data.split(';',1)[1]
+    if not data.startwith('X'):
+        return "ERROR"
+
+    data = data.split(';')
+    user = data[2]
+    decrypted = ENCRYPTION_LOG[user].decrypt(base64.b64decode(data[3]))
+    return decrypted,user
+
+def register_client_encryption(msg):
+    # x;len(username);username;len(key);key
+    user = msg[2]
+    key = msg[4]
+    cipher = AES.new(key, AES.MODE_CBC)
+    ENCRYPTION_LOG[user] = cipher
+
 def delete_user_from_logs(address,username):
     try:
         if username in SERVER_LOG and SERVER_LOG[username]==address:
             del SERVER_LOG[username]
+            del ENCRYPTION_LOG[username]
         else:
             print "ERROR! Unregistered user logged out!" #security failure
     except:
@@ -91,7 +118,7 @@ def insert_user_to_logs(address,username):
         return False
     '''
     
-def send_get_seats(client_socket, client_msg):
+def send_get_seats(username,client_socket, client_msg):
     # g;len(vehicle_type);vehicle_type;len(vehicle_company);vehicle_company;len(vehicle_number); vehicle_number
     vehicle_type = client_msg[2]
     vehicle_company = client_msg[4]
@@ -119,10 +146,11 @@ def send_get_seats(client_socket, client_msg):
             print "Error in send_get_seats: " + vehicle_type + "" + vehicle_company + "" + vehicle_number
             seats = ""  # an error has been occured
             conn.close()
-    client_socket.sendall('g;'+str(len(seats))+";" + str(seats)) # by the protocol
+    to_send = 'g;'+str(len(seats))+";" + str(seats)
+    client_socket.sendall(encrtpyt_msg(to_send,username)) # by the protocol
 
 
-def send_register_client(address,client_socket, client_msg):
+def send_register_client(address,username,client_socket, client_msg):
     # r;length(username);username;length(password);password;length(email);email
     username = client_msg[2]
     password = client_msg[4]
@@ -147,12 +175,12 @@ def send_register_client(address,client_socket, client_msg):
             conn.close()
             
     if ('1' in confirmation) and (insert_user_to_logs(address,username)): #all good, user achives the standards
-        client_socket.sendall(confirmation)
+        client_socket.sendall(encrtpyt_msg(confirmation,username))
     else:
-        client_socket.sendall("r;0") #failure
+        client_socket.sendall(encrtpyt_msg("r;0",username)) #failure
 
 
-def send_login_client(address,client_socket, client_msg):
+def send_login_client(address,username,client_socket, client_msg):
     # l;length(username);username;length(password);password
     username = client_msg[2]
     password = client_msg[4]
@@ -174,12 +202,12 @@ def send_login_client(address,client_socket, client_msg):
             conn.close()
             
     if ('1' in confirmation) and (insert_user_to_logs(address,username)): #all good, user achives the standards
-        client_socket.sendall(confirmation)
+        client_socket.sendall(encrtpyt_msg(confirmation,username))
     else:
-        client_socket.sendall("l;0") #failure
+        client_socket.sendall(encrtpyt_msg("l;0",username)) #failure
 
 
-def send_view_vehicle(client_socket, client_msg):
+def send_view_vehicle(username,client_socket, client_msg):
     # v;len(vehicle_type);vehicle_type;len(vehicle_company);vehicle_company;len(vehicle_number); vehicle_number
     vehicle_type = client_msg[2]
     vehicle_company = client_msg[4]
@@ -224,22 +252,22 @@ def send_view_vehicle(client_socket, client_msg):
         except:
             view_vehicle = ""
             print "Error in send_view_vehicle: " + vehicle_type + "" + vehicle_company + "" + vehicle_number
-    client_socket.sendall(view_vehicle)
+    client_socket.sendall(encrtpyt_msg(view_vehicle,username))
 
 
-def handle_client(address,client_socket,client_msg):
+def handle_client(address,username,client_socket,client_msg):
     option = client_msg[0]
     option = option[-1]
     if option is "g":  # If the client sent a seats request-message to the server ("g" - protocol message for request for the seats' status)
-        send_get_seats(client_socket, client_msg)
+        send_get_seats(username,client_socket, client_msg)
     elif option is "r":  # register       
-        send_register_client(address,client_socket, client_msg)
+        send_register_client(address,username,client_socket, client_msg)
     elif option is "l":  # login       
-        send_login_client(address,client_socket, client_msg)
+        send_login_client(address,username,client_socket, client_msg)
     elif option is "v":  # view vehicle
-        send_view_vehicle(client_socket, client_msg)
+        send_view_vehicle(username,client_socket, client_msg)
     elif option is "E": # Exit
-        delete_user_from_logs(address,client_msg[2]) #ip and username
+        delete_user_from_logs(address,username) #ip and username
     client_socket.close()
 
 ########################################################################################################################
@@ -271,7 +299,7 @@ class ThreadedServer:
                 data = client.recv(size)
                 print data
                 if data:
-                    if data.startswith("c"):  # c - close
+                    if data.startswith('c'):  # c - close
                         client.close()
                         break
                     elif data.startswith('u'):  #not close but update seats -RPI
@@ -280,9 +308,17 @@ class ThreadedServer:
                         update_transport_database(seat_data[1],seat_data[2],seat_data[3],seat_data[5], seat_data[7]) #send the information of the vehicle + actual status of every line
                         client.sendall('r') #ack - recieved:
                     else: #Client
-                        data = data.split(';')
-                        data.pop(0) # clears all the junk at the start, basically separates only once ; in order to get the message it
-                        handle_client(address,client,data)
+                        if ';' in data: #checking for encryption request
+                            if (data.split(';',1)[1]).startswith('x'):
+                                register_client_encryption(data.split(';',1)[1].split(';'))
+                        else:
+                            data,username = decrypt_msg(data)
+                            if data is "ERROR":
+                                raise Exception('Client Error')
+
+                            data.split(';')
+                            data.pop(0) # clears all the junk at the start, basically separates only once ; in order to get the message it
+                            handle_client(address,username,client,data)
                 else:
                     raise Exception('Client disconnected')
             except:
