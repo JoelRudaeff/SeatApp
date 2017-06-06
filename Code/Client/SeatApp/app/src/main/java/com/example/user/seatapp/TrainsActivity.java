@@ -1,92 +1,24 @@
 package com.example.user.seatapp;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.TextView;
-
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
-import java.net.Socket;
+import android.widget.Switch;
+import android.widget.Toast;
 
 public class TrainsActivity extends ActionBarActivity
 {
 
-    final String host = "192.168.1.42"; //TODO:
-    String response_from_server = "-";
+    private boolean is_north = false;
 
-
-    public class MyClientTask extends AsyncTask<Void, Void, Void> {
-        String Vehicle_type,Vehicle_company, Vehicle_number;
-        String dstAddress = host;
-        int dstPort = 8888;
-        String ret;
-
-        public MyClientTask(String VT, String VC, String VN)
-        {
-            Vehicle_type = VT;
-            Vehicle_company = VC;
-            Vehicle_number = VN;
-        }
-
-        //Execute()
-        @Override
-        protected Void doInBackground(Void... arg0) {
-
-            try
-            {
-                String vehicle_type_length = String.valueOf(Vehicle_type.length());
-                String vehicle_company_length = String.valueOf(Vehicle_company.length());
-                String vehicle_number_length = String.valueOf(Vehicle_number.length());
-                String data_from_server;
-
-                // The data that the client sends to the server when he signs-up
-                String string_to_send = ";" + "v" + ";" + vehicle_type_length + ";" + Vehicle_type + ";"  + vehicle_company_length + ";"   + Vehicle_company + ";"   + vehicle_number_length + ";"   + Vehicle_number  ;
-
-                Socket socket = new Socket(dstAddress, dstPort);
-
-
-                DataOutputStream output = new DataOutputStream(socket.getOutputStream());
-                output.writeUTF(string_to_send); //The msg to the server
-                output.flush(); // Send off the data
-
-                //read input stream
-                DataInputStream input = new DataInputStream(socket.getInputStream());
-                InputStreamReader input_reader = new InputStreamReader(input);
-                BufferedReader br = new BufferedReader(input_reader); //create a BufferReader object for input
-
-                data_from_server = br.readLine();
-
-                if ((data_from_server).contains("g;"))
-                    response_from_server = data_from_server;
-                else
-                    response_from_server = "0";
-
-                //server.close();
-
-                br.close();
-                input.close();
-                input_reader.close();
-                output.close();
-                socket.close();
-
-            }
-            catch ( Exception e)
-            {
-                e.printStackTrace();
-                ret = "0";
-            }
-            return null;
-        }
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -94,36 +26,135 @@ public class TrainsActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trains);
 
-        Spinner current_spinner = (Spinner) findViewById(R.id.CurrentSpinner);
-        Spinner destination_spinner = (Spinner) findViewById(R.id.DestinationSpinner);
-        Spinner leaving_time_spinner = (Spinner) findViewById(R.id.TimeSpinner);
+        Spinner current_spinner = (Spinner) findViewById(R.id.SourceSpinner);
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> places_adapter = ArrayAdapter.createFromResource(this, R.array.train_stations, android.R.layout.simple_spinner_item);
-        ArrayAdapter<CharSequence> leaving_time_adapter = ArrayAdapter.createFromResource(this, R.array.trains_time, android.R.layout.simple_spinner_item);
-
         // Specify the layout to use when the list of choices appears - the spinner type
         places_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        leaving_time_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // Apply the adapter to the spinner
         current_spinner.setAdapter(places_adapter);
-        destination_spinner.setAdapter(places_adapter);
-        leaving_time_spinner.setAdapter(leaving_time_adapter);
+
+
+        Switch temp = (Switch) findViewById(R.id.NorthSwitch);
+        temp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                is_north = isChecked;
+            }
+        });
     }
 
-    public void startTrainSchedule(View view)
+    //TODO:
+    public void startTrainActivity(View view)
     {
-        Spinner current_spinner = (Spinner) findViewById(R.id.CurrentSpinner);
-        Spinner destination_spinner = (Spinner) findViewById(R.id.DestinationSpinner);
-        Spinner leaving_time_spinner = (Spinner) findViewById(R.id.TimeSpinner);
+        String current = String.valueOf(((Spinner) findViewById(R.id.SourceSpinner)).getSelectedItemPosition());
+        String to = "";
+        String from = "";
 
-        Intent intent = new Intent(this, TrainScheduleActivity.class);
-        intent.putExtra("current", current_spinner.getSelectedItem().toString());
-        intent.putExtra("destination", destination_spinner.getSelectedItem().toString());
-        intent.putExtra("leaving time", leaving_time_spinner.getSelectedItem().toString());
+        if (is_north==true) {
+            to = "North";
+            from = "South";
+        }
+        else {
+            to = "South";
+            from = "North";
+        }
+        RadioGroup radioChoice = (RadioGroup) findViewById(R.id.radioChoice);
+        RadioButton radioChoiceChecked= (RadioButton) findViewById(radioChoice.getCheckedRadioButtonId());
 
-        startActivity(intent);
+        Context context = getApplicationContext();
+        int duration = Toast.LENGTH_SHORT;
+
+
+        try
+        {
+            MyClientTask myClientTask;
+            ProgressDialog progress = new ProgressDialog(this);
+            progress.setTitle("Loading");
+            progress.setMessage("Wait while loading...");
+            progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
+            progress.show();
+
+            //view vehicle
+            if (radioChoiceChecked.getText().toString().equals("View information about the vehicle") )
+                myClientTask = new MyClientTask('v', "Train", "none", from, "none", null);
+            else //get seats
+                myClientTask = new MyClientTask('g',"Train","none", from, "none", current);
+
+
+            myClientTask.execute(); //will run like a thread
+
+            int times = 0;
+            //wait for the client to get response from the server, if it doesn't connect in a few seconds, terminate the waiting
+            while (myClientTask.response_from_server.equals("-"))
+            {
+                if (times < 5)
+                    Thread.sleep(1000);
+                times++;
+            }
+            progress.hide();
+
+            //success
+            if (myClientTask.response_from_server.contains("v;"))
+            {
+                // v;len(total startTime_EndTime);0800_0830|0835_0905;len(data);Rabin_0|Big_25
+                String time = myClientTask.response_from_server.split(";")[2];
+                String data = myClientTask.response_from_server.split(";")[4];
+                myClientTask.response_from_server = "-";
+
+                Intent intent = new Intent(this, ScheduleActivity.class);
+                intent.putExtra("city", to);
+                intent.putExtra("time",time);
+                intent.putExtra("data",data);
+
+                myClientTask.response_from_server = "-";
+                startActivity(intent);
+            }
+            else if(myClientTask.response_from_server.contains("g;"))
+            {
+                if (myClientTask.response_from_server.equals("g;0"))
+                {
+                    Toast toast_unsuccessful = Toast.makeText(context, "Couldn't get the train info. Try again!", duration);
+                    toast_unsuccessful.show();
+                }
+                else
+                {
+                    Intent intent = new Intent(this, SeatsActivity.class);
+                    intent.putExtra("message", myClientTask.response_from_server);
+                    intent.putExtra("title","Train - " + from + " -> " + to);
+                    intent.putExtra("direction",to);
+                    Toast toast_successful = Toast.makeText(context, "Your train's seats", duration);
+                    toast_successful.show();
+
+                    myClientTask.response_from_server = "-";
+                    startActivity(intent);
+                }
+
+            }
+            //failure or not connected
+            else
+            {
+                if (myClientTask.response_from_server.equals("0"))
+                {
+                    Toast toast_unsuccessful = Toast.makeText(context, "Couldn't get the train info. Try again!", duration);
+                    toast_unsuccessful.show();
+                }
+
+                else
+                {
+                    Toast toast_unsuccessful_connection = Toast.makeText(context, "Couldn't connect to server, try again!", duration);
+                    toast_unsuccessful_connection.show();
+                }
+
+            }
+        }
+
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
     }
 
 }

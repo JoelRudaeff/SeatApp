@@ -18,11 +18,11 @@ public class MyClientTask extends AsyncTask<Void, Void, Void> {
     public boolean sent_to_server = false;
 
 
-    private String Vehicle_type, Vehicle_company, Vehicle_number; //  view AND get
+    private String Vehicle_type, Vehicle_company, city,Vehicle_number,Current_stop; //  view AND get
     private String NewPassword,NewEmail; // register AND login
     private static String NewUsername;
 
-    public MyClientTask(char qt,String first, String second, String third) {
+    public MyClientTask(char qt,String first, String second, String third, String fourth, String fifth) {
 
         Querry_type = qt;
         switch (Querry_type)
@@ -35,10 +35,14 @@ public class MyClientTask extends AsyncTask<Void, Void, Void> {
                 NewUsername = first;
                 break;
             case 'g':
+                Current_stop = fifth;
+            case 'S':
             case 'v':
+                Vehicle_number = fourth;
+            case 'N':
                 Vehicle_type = first;
                 Vehicle_company = second;
-                Vehicle_number = third;
+                city = third;
                 break;
 
         }
@@ -53,6 +57,9 @@ public class MyClientTask extends AsyncTask<Void, Void, Void> {
             String data_from_server;
             switch (Querry_type)
             {
+                case 'E':
+                    string_to_send = ";" + Querry_type + ";" + String.valueOf(NewUsername.length()) + ";" + NewUsername;
+                    break;
                 case 'r':
                     string_to_send = ";" + Querry_type + ";" + String.valueOf(NewUsername.length()) + ";" + NewUsername + ";" + String.valueOf(NewPassword.length()) + ";" + NewPassword + ";" + String.valueOf(NewEmail.length()) + ";" + NewEmail;
                     break;
@@ -60,8 +67,14 @@ public class MyClientTask extends AsyncTask<Void, Void, Void> {
                     string_to_send = ";" + Querry_type + ";" + String.valueOf(NewUsername.length()) + ";" + NewUsername + ";" + String.valueOf(NewPassword.length()) + ";" + NewPassword;
                     break;
                 case 'g':
+                    string_to_send = ";" + Querry_type + ";" + String.valueOf(Vehicle_type.length()) + ";" + Vehicle_type + ";" + String.valueOf(Vehicle_company.length()) + ";" + Vehicle_company + ";" + String.valueOf(city.length()) + ";" + city + ";"+String.valueOf(Vehicle_number.length()) + ";" + Vehicle_number+ ";" + String.valueOf(Current_stop.length())+ ";" + Current_stop;
+                    break;
                 case 'v':
-                    string_to_send = ";" + Querry_type + ";" + String.valueOf(Vehicle_type.length()) + ";" + Vehicle_type + ";" + String.valueOf(Vehicle_company.length()) + ";" + Vehicle_company + ";" + String.valueOf(Vehicle_number.length()) + ";" + Vehicle_number + ";";
+                case 'S':
+                    string_to_send = ";" + Querry_type + ";" + String.valueOf(Vehicle_type.length()) + ";" + Vehicle_type + ";" + String.valueOf(Vehicle_company.length()) + ";" + Vehicle_company + ";" + String.valueOf(city.length()) + ";" + city + ";"+String.valueOf(Vehicle_number.length()) + ";" + Vehicle_number;
+                    break;
+                case 'N':
+                    string_to_send = ";" + Querry_type + ";" + String.valueOf(Vehicle_type.length()) + ";" + Vehicle_type + ";" + String.valueOf(Vehicle_company.length()) + ";" + Vehicle_company + ";" + String.valueOf(city.length()) + ";" + city;
                     break;
             }
 
@@ -91,7 +104,8 @@ public class MyClientTask extends AsyncTask<Void, Void, Void> {
                         else if ((data_from_server).contains(Querry_type+";1"))
                             response_from_server = "1";
                         break;
-
+                    case 'S':
+                    case 'N':
                     case 'v':
                     case 'g':
                         if ((data_from_server).contains(Querry_type + ";"))

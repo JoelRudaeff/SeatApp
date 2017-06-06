@@ -41,7 +41,7 @@ public class MainActivity extends ActionBarActivity
     //when logging of the app, send the application exit message
     public void onBackPressed() {
 
-        MyClientTask myClientTask = new MyClientTask('E',username,null,null);
+        MyClientTask myClientTask = new MyClientTask('E',username,null,null,null, null);
         myClientTask.execute();
         int times = 0;
 

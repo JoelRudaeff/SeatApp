@@ -10,22 +10,14 @@ ACCOUNTS_FOLDER = 'Accounts'
 VEHICLES_FOLDER = 'Vehicles'
 
 
-def prepare_seats_table(c,amount_of_lines):
-    #SEATS - TABLE
+def prepare_vehicles_table(c):
+    #VEHICLES - TABLE
+
     try:
-        c.execute('''CREATE TABLE IF NOT EXISTS seats(line int,status text NOT NULL);''')
-        #c.execute('''CREATE TABLE IF NOT EXISTS seats(line int,status text NOT NULL,parts int NOT NULL,chairs_per_part int NOT NULL);''')
-
-        c.execute('''SELECT line FROM seats WHERE line = ?''',(amount_of_lines,))
-        data = c.fetchall()
-        if  len(data) is 0:
-            x = 1
-            for x in xrange(1, int(amount_of_lines) + 1):
-                c.execute('''INSERT INTO seats(line,status) VALUES(?,?);''',(x,"0000"))
-
+        c.execute('''CREATE TABLE IF NOT EXISTS vehicles(id TEXT NOT NULL,next_stop TEXT NOT NULL);''')
     except sqlite3.Error as e:
-        print "Error in function 'prepare_active_table'"
-        print e
+        print "Error in function 'prepare_vehicles_table'"
+        print e        
 
 def prepare_active_table(c,start_and_end):
     #ACTIVE - TABLE
@@ -36,7 +28,7 @@ def prepare_active_table(c,start_and_end):
         start_and_end = start_and_end.split("_")
         for temp in start_and_end:
             start,end = temp.split(":")
-            c.execute('''SELECT start_time FROM active WHERE start_time = ?''',(start,))
+            c.execute('''SELECT start_time FROM active WHERE start_time = ?;''',(start,))
             data = c.fetchall()
             if len(data) is 0:
                 c.execute('''INSERT INTO active(start_time,end_time) VALUES(?,?);''',(start,end))
@@ -52,16 +44,16 @@ def prepare_information_table(c,path_and_delay):
         path_and_delay = path_and_delay.split("_")
         for temp in path_and_delay:
             path, delay = temp.split(":")
-            c.execute('''SELECT path FROM information WHERE path = ?''', (path,))
+            c.execute('''SELECT path FROM information WHERE path = ?;''', (path,))
             data = c.fetchall()
             if len(data) is 0:
-                c.execute('''INSERT INTO information(path,delay) VALUES(?,?)''',(path, delay))
+                c.execute('''INSERT INTO information(path,delay) VALUES(?,?);''',(path, delay))
 
     except sqlite3.Error as e:
         print "Error in function 'prepare_information_table'"
         print e
 
-                
+        
                 
 # checks if the account.db and its foldier exists, otherwise creates it
 def create_account_db():
@@ -78,7 +70,7 @@ def create_account_db():
         
         print "Preparing the 'users' table!"
         print "Creating 'users' table inside the 'Accounts' DataBase!"
-        c.execute('''CREATE TABLE IF NOT EXISTS users(username text NOT NULL,email text NOT NULL,password text NOT NULL,PRIMARY KEY(username,email))''')
+        c.execute('''CREATE TABLE IF NOT EXISTS users(username text NOT NULL,email text NOT NULL,password text NOT NULL,PRIMARY KEY(username,email));''')
         conn.commit()
         conn.close()
 
@@ -96,7 +88,7 @@ def create_vehicle_db():
         print "Creating a new basic configurationg file!"
         temp = open(VEHICLE_INSTRUCTOR_FILE, 'a')
         # path:delay - RABIN:0000_BIG:0025. START:END - 930:1000_1000:1030
-        temp.write("VEHICLE_TYPE ; VEHICLE_COMPANY ; VEHICLE_NUMBER ; AMOUNT_OF_LINES ; PATH:DELAY_PATH1:DELAY1 ; START:END_START1:END1\n")
+        temp.write("VEHICLE_TYPE ; VEHICLE_COMPANY ; STARTING_CITY ; VEHICLE_NUMBER ; AMOUNT_OF_LINES ; PATH:DELAY_PATH1:DELAY1 ; START:END_START1:END1\n")
         temp.write("===================================================================================================================\n")
         temp.close()
         print "Please fill the Configuration file if you wish to proceed with the process!"
@@ -117,31 +109,47 @@ def create_vehicle_db():
             for line in lines:
                 if index >= 2:
                     # remove whitespaces,\n,lower case, upper case the first letter  and split into the required data
-                    vehicle_type, vehicle_company, vehicle_number, amount_of_lines,path_and_delay,start_and_end = line.replace(" ", "").replace('\n',"").lower().title().split(';')
-                    dest_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + vehicle_number
-                    if not os.path.isdir(VEHICLES_FOLDER + '/' + vehicle_type):
-                        os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type)
-                        os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company)
-                        os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + vehicle_number)
-                    else:
-                        if not os.path.isdir(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company):
+                    vehicle_type, vehicle_company, city,vehicle_number, amount_of_lines,path_and_delay,start_and_end = line.replace(" ", "").replace('\n',"").lower().title().split(';')
+                    dest_path =  ""
+                    
+                    if 'Bus' in vehicle_type or 'bus' in vehicle_type:
+                        dest_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city + '/' + vehicle_number
+                        if not os.path.isdir(VEHICLES_FOLDER + '/' + vehicle_type):
+                            os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type)
                             os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company)
-                            os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + vehicle_number)
+                            os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city)
+                            os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city + '/' + vehicle_number)
                         else:
-                            if not os.path.isdir(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + vehicle_number):
-                                os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + vehicle_number)
+                            if not os.path.isdir(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company):
+                                os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company)
+                                os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city)
+                                os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city + '/' + vehicle_number)
+                            else:
+                                if not os.path.isdir(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city):
+                                    os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city)
+                                    os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city + '/' + vehicle_number)
+                                else:
+                                    if not os.path.isdir(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city + '/' + vehicle_number):
+                                        os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city + '/' + vehicle_number)
+                    else: #train
+                        dest_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + city
+                        if not os.path.isdir(VEHICLES_FOLDER + '/' + vehicle_type):
+                            os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type)
+                            os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type + '/' + city)
+                        else:
+                            if not os.path.isdir(VEHICLES_FOLDER + '/' + vehicle_type + '/' + city):
+                                os.makedirs(VEHICLES_FOLDER + '/' + vehicle_type + '/' + city)
 
                     conn = sqlite3.connect(dest_path + '/Transport.db')
                     c = conn.cursor()
-                    print "Preparing the 'seats' table!"
-                    prepare_seats_table(c,amount_of_lines)
                     print "Preparing the 'active' table!"
                     prepare_active_table(c,start_and_end)
                     print "Preparing the 'information' table!"
                     prepare_information_table(c,path_and_delay)
+                    print "Preparing the 'vehicles' table!"
+                    prepare_vehicles_table(c)
 
-
-                    print "Vehicle: ",vehicle_type," Company: ",vehicle_company," Number: ",vehicle_number," Was added to DB"
+                    print "Vehicle: ",vehicle_type," Company: ",vehicle_company," City: ",city," Number: ",vehicle_number," Was added to DB"
                     conn.commit()
                     conn.close()
                 else:    

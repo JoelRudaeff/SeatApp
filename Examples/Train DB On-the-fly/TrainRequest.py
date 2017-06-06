@@ -49,12 +49,16 @@ def request_page_new(year,month,day,hour,minute,source,destination):
 	for times in soup.find_all('td', class_ = "GridSortDateItemStyle",onclick="SelectRow(this);"):
 		print times.text
 
-	trs1,trs2 = soup.find_all('tr',class_ = "blueBG"),soup.find_all('tr',class_ = "normalBG")
-	for times1,times2 in trs1,trs2:
-		tds = times.find_all('td',onclick="SelectRow(this);")
-		for td in tds:
-			if  (td.text[0] >= '0' and td.text[0] <= '9' )and td.text[1] is not ':':
-				print td.text
+
+	for times1,times2 in soup.find_all('tr',class_ = "blueBG", onclick="SelectRow(this);"),soup.find_all('tr',class_ = "normalBG",onclick="SelectRow(this);"):
+		for time in times1:
+			#if  (time.text[0] >= '0' and time.text[0] <= '9' )and time.text[1] is not ':':
+				#print time.text
+			print times.text
+		for time in times2:
+			#if (time.text[0] >= '0' and time.text[0] <= '9') and time.text[1] is not ':':
+				#print time.text
+
 
 
 
@@ -110,8 +114,8 @@ def request_page(date,time,source,destination):
 '''
 def main():
 	year = "2017"
-	month = "04"
-	day = "24"
+	month = "06"
+	day = "06"
 	hour = "16"
 	minute = "00"
 	source = "Nharyia"

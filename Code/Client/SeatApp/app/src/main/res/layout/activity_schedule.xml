@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.user.seatapp.ScheduleActivity">
+
+
+    <TextView
+        android:id="@+id/BusArrivingTimeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="26dp"
+        android:layout_y="99dp"
+        android:padding="3dip"
+        android:text="Arriving time"
+        android:textColor="@android:color/black"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/BusLeavingTimeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="237dp"
+        android:layout_y="99dp"
+        android:padding="3dip"
+        android:text="Leaving time"
+        android:textColor="@android:color/black"
+        android:textSize="20sp" />
+
+    <ListView
+        android:id="@+id/timelist"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_x="1dp"
+        android:layout_y="128dp" />
+</AbsoluteLayout>

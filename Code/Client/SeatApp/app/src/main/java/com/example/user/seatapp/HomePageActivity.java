@@ -55,7 +55,7 @@ public class HomePageActivity extends ActionBarActivity
                     progress.setMessage("Wait while loading...");
                     progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
                     progress.show();
-                    MyClientTask myClientTask = new MyClientTask('l',name,password,null);
+                    MyClientTask myClientTask = new MyClientTask('l',name,password,null,null, null);
                     myClientTask.execute(); //will run like a thread
 
                     int times = 0;
@@ -77,6 +77,7 @@ public class HomePageActivity extends ActionBarActivity
 
                         Toast toast_successful = Toast.makeText(context, "Successfully logged in!", duration);
                         toast_successful.show();
+
                         myClientTask.response_from_server = "-";
                         startActivity(intent);
                     }

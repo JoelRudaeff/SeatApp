@@ -1,0 +1,6 @@
+VEHICLE_TYPE ; VEHICLE_COMPANY ; STARTING_CITY ; VEHICLE_NUMBER ; AMOUNT_OF_LINES ; PATH:DELAY_PATH1:DELAY1 ; START:END_START1:END1
+===================================================================================================================
+Bus ; Egged ; Karmiel ; 263 ; 10 ; Rabin:0000_Big:0020 ; 0930:1000_1030:1100
+Bus ; Egged ; Akko ; 263 ; 10 ; Big:0000_Rabin:0020 ; 0930:1000_1030:1100
+Train ; none ; North ; none ; 20 ; Nhariya:0000_Tel-Aviv:0100 ; 0500:0600_0530:0630
+Train ; none ; South; none ; 20 ; Nhariya:0000_Tel-Aviv:0100 ; 0500:0600_0530:0630

@@ -35,22 +35,20 @@ def print_server_information():
 #                                                   RPI_SIDE
 
 # function that will update the seats data inside the data-base. will be used during communication with the RPI
-def update_transport_database(vehicle_type, vehicle_company, vehicle_number, line_number, data):
+def update_transport_database(vehicle_type, vehicle_company, city ,vehicle_number, line_number, data):
     old_line_status = ""
     with lock:
-        db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + vehicle_number + '/Transport.db'
+        if 'Bus' in vehicle_type or 'bus' in vehicle_type:
+            db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city +'/' +vehicle_number + '/Transport.db'
+        else:
+            db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' +  city + '/Transport.db'
         conn = sqlite3.connect(db_path)  # connection to the database
         c = conn.cursor()
 
         try:
-            # first of all, if an error has been occured in the process, get the data before changing it so if something happened we can restore the OLD_DATA
-            try:
-                seat_results = c.execute('''SELECT status FROM seats WHERE line=?''',(line_number,))
-                old_line_status = seat_results
-            except:
-                conn.close() #if there's no access to db, backup won't work
-                lock.release()
-                return
+            seat_results = c.execute('''SELECT status FROM seats WHERE line=?''',(line_number,))
+            old_line_status = seat_results
+
 
             # after we stored the backup data, we can change to the new data
             c.execute('''UPDATE seats SET status = ? WHERE line = ?;''',(data,line_number))  # Updating the data for each seat's data
@@ -59,12 +57,103 @@ def update_transport_database(vehicle_type, vehicle_company, vehicle_number, lin
             conn.commit()
 
         except:  # restoring the old data
-            data = old_line_status
-            c.execute('''UPDATE seats SET status = ? WHERE line = ?;''',(data, line_number))  # Updating the data for each seat's data
-            # save changes and close db
+            if old_line_status is not "":
+                data = old_line_status
+                c.execute('''UPDATE seats SET status = ? WHERE line = ?;''',(data, line_number))  # Updating the data for each seat's data
+                # save changes and close db
             conn.commit()
         conn.close()
 
+        
+# when a vehicle starts to run, it sends a message to the server in order to get an id - lets users get seats from his db and not from the other vehicles     
+def init_vehicle(socket,vehicle_type,vehicle_company,city,vehicle_number,amount_of_lines):
+    #i;vehicle_type;vehicle_company;city;vehicle_number
+    new_id = 0
+    
+    with lock:
+        if 'Bus' in vehicle_type or 'bus' in vehicle_type:
+            db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city +'/' +vehicle_number + '/Transport.db'
+        else:
+            db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' +  city + '/Transport.db'
+        conn = sqlite3.connect(db_path)  # connection to the database
+        c = conn.cursor()
+        
+        try:
+            # first of all, if an error has been occured in the process, get the data before changing it so if something happened we can restore the OLD_DATA
+            latest_vehicle_id = c.execute('''SELECT * FROM vehicles ORDER BY id DESC LIMIT 1;''')
+            if latest_vehicle_id["id"] is None:
+                new_id = 1
+            else:
+                new_id = latest_vehicle_id["id"]+1
+            c.execute('''INSERT INTO vehicles (id,next_stop) VALUES( id = ?, next_stop = ?);''',(id,0))  # inserting vehicle into the active vehicle list
+
+            conn.close()
+            if 'Bus' in vehicle_type or 'bus' in vehicle_type:
+                db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city +'/' +vehicle_number + '/' + str(new_id) +'.db'
+            else:
+                db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' +  city + '/' + str(new_id) +'.db'
+            
+            conn = sqlite3.connect(db_path)  # connection to the database OF THE VEHICLE ITSELF
+
+            
+            c.execute('''CREATE TABLE IF NOT EXISTS seats(line int,status text NOT NULL);''')
+            for x in xrange(1, int(amount_of_lines) + 1):
+                c.execute('''INSERT INTO seats(line,status) VALUES(?,?);''',(x,"0000"))
+
+            # save changes
+            conn.commit()
+            
+        except:        
+            new_id = 0            
+        conn.close()
+        socket.sendall("i;" + str(id))
+    
+    
+#when a vehicle stops his service - completes his destination, the vehicle notifies the server
+def destroy_vehicle(socket,vehicle_type,vehicle_company,city,vehicle_number,vehicle_id):    
+      #d;vehicle_type;vehicle_company;city;vehicle_number;vehicle_id
+    to_remove_path = ""
+    with lock:
+        if 'Bus' in vehicle_type or 'bus' in vehicle_type:
+            db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city +'/' +vehicle_number + '/Transport.db'
+            to_remove_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city +'/' +vehicle_number + '/' + str(vehicle_id) +'.db'
+        else:
+            db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' +  city + '/Transport.db'
+            to_remove_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' +  city + '/' + str(vehicle_id) +'.db'
+
+            
+        conn = sqlite3.connect(db_path)  # connection to the database
+        c = conn.cursor()        
+        try:
+            c.execute('''DELETE FROM vehicles WHERE id=?;''',(vehicle_id,))
+            os.remove(to_remove_path)
+            
+        except:        
+            new_id = 0            
+        conn.close()
+        socket.sendall("d;" + str(id))
+        
+        
+        
+#everytime a vehicle reaches its next stop, it notifies the server
+def update_stop(socket,vehicle_type,vehicle_company,city,vehicle_number,vehicle_id):
+    with lock:
+        if 'Bus' in vehicle_type or 'bus' in vehicle_type:
+            db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city +'/' +vehicle_number + '/Transport.db'
+            to_remove_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city +'/' +vehicle_number + '/' + str(vehicle_id) +'.db'
+        else:
+            db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' +  city + '/Transport.db'
+            to_remove_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' +  city + '/' + str(vehicle_id) +'.db'
+        
+        conn = sqlite3.connect(db_path)  # connection to the database
+        c = conn.cursor()  
+        
+        try:
+            c.execute("UPDATE vehicles SET next_stop=next_stop+1 WHERE id=?",(vehicle_id,))
+        except:
+            print "error in update_stop"
+            
+        conn.close()
 ########################################################################################################################
 #                                                   CLIENT SIDE
 
@@ -90,34 +179,69 @@ def insert_user_to_logs(address,username):
     if username not in SERVER_LOG and address in SERVER_LOG.values(): #same computer uses different users
         return False
     '''
-    
+
+#TODO: Add "current stop" to protocol in order to send the proper vehicle's seats to the user      
 def send_get_seats(client_socket, client_msg):
-    # g;len(vehicle_type);vehicle_type;len(vehicle_company);vehicle_company;len(vehicle_number); vehicle_number
+    # g;len(vehicle_type);vehicle_type;len(vehicle_company);vehicle_company;len(city); city;len(vehicle_number); vehicle_number ; len(curr_stop) ; curr_stop
     vehicle_type = client_msg[2]
     vehicle_company = client_msg[4]
-    vehicle_number = client_msg[6]
-
-    db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + vehicle_number + '/Transport.db'
-    conn = sqlite3.connect(db_path)  # connection to the database
-    c = conn.cursor()
-
-    seats = ""
+    city = client_msg[6]
+    vehicle_number = client_msg[8]
+    current_stop = client_msg[10] #number - starts from 1 to the number of the latest stop
+    
+    seats = ""      
+    db_path = ""
+    id_path = ""
+    id = ""
+    
+    if 'Bus' in vehicle_type or 'bus' in vehicle_type:
+        db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city +'/' +vehicle_number + '/Transport.db'
+        id_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city +'/' +vehicle_number + '/'
+       
+    else:
+        db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' +  city + '/Transport.db'
+        id_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' +  city + '/'
+          
+    
     with lock:  # tries to gain access to the data base. WITH - whenever it's done, release the lock - it's like the state "USING" in c#
         try:
-            index = 0
-            data = c.execute('''SELECT * FROM seats''')
-            for row in data:
-                if index is not 0:
-                    seats += "|" #indicates space between the previous line and the current
-                else:
-                    index +=1
-                seats += str(row[0])  # append the seat's line number, after converting from int to string
-                seats += "_" #indicates the line number before the sign, and the seats' status after the sign
-                seats += str(row[1])  # append the seat's status, after converting from int to string
+            conn = sqlite3.connect(db_path)  # connection to the database
+            c = conn.cursor()
+            
+            #FINDs THE CLOSEST VEHICLE TO USER AND THEN USES HIS ID TO GET THE SEATS' DATA
+            c.execute('''SELECT MAX(id) FROM vehicles WHERE next_stop <= ?;''',(current_stop,))
+            id = c.fetchone()[0] #gets the value itself
+            
             conn.close()
-        except:
+            if id is None:
+                print "No vehicles found under: " + vehicle_type + "" + vehicle_company + "" + vehicle_number
+                raise sqlite3.Error #no vehicles are alive 
+            id_path = id_path + id + '.db'
+            conn = sqlite3.connect(id_path)  # connection to the database
+            c = conn.cursor()
+
+            #if the seats table doesn't exist - the vehicle wasn't init at all
+            if not c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='seats'").fetchone():
+                c.execute('''CREATE TABLE seats(line INTEGER NOT NULL,status TEXT NOT NULL);''')
+                c.execute('''INSERT INTO seats(line,status) VALUES(?,?);''',(1,0))
+                seats = str(1) + "_" + str(0)
+            else:
+                index = 0
+                data = c.execute('''SELECT * FROM seats''')
+                for row in data:                   
+                    if index is not 0:
+                        seats += "|" #indicates space between the previous line and the current
+                    else:
+                        index +=1
+                    seats += str(row[0])  # append the seat's line number, after converting from int to string
+                    seats += "_" #indicates the line number before the sign, and the seats' status after the sign
+                    seats += str(row[1])  # append the seat's status, after converting from int to string
+                    
+            conn.close()
+        except sqlite3.Error as e:
+            print e
             print "Error in send_get_seats: " + vehicle_type + "" + vehicle_company + "" + vehicle_number
-            seats = ""  # an error has been occured
+            seats = "-1"  # an error has been occured
             conn.close()
     client_socket.sendall('g;'+str(len(seats))+";" + str(seats)) # by the protocol
 
@@ -129,12 +253,12 @@ def send_register_client(address,client_socket, client_msg):
     email = client_msg[6]
 
     db_path = ACCOUNTS_FOLDER + '/Accounts.db'
-    conn = sqlite3.connect(db_path)  # connection to the database
-    c = conn.cursor()
 
     confirmation = "r;0"
     with lock:  # tries to gain access to the data base. WITH - whenever it's done, release the lock - it's like the state "USING" in c#
         try:
+            conn = sqlite3.connect(db_path)  # connection to the database
+            c = conn.cursor()
             c.execute('''SELECT username FROM users WHERE username = ? AND password = ? AND email = ?''',(username, password, email))
             data = c.fetchall()
             if len(data) is 0:  # if no user was found under these conditions - a success of registrations
@@ -180,22 +304,27 @@ def send_login_client(address,client_socket, client_msg):
 
 
 def send_view_vehicle(client_socket, client_msg):
-    # v;len(vehicle_type);vehicle_type;len(vehicle_company);vehicle_company;len(vehicle_number); vehicle_number
+    # v;len(vehicle_type);vehicle_type;len(vehicle_company);vehicle_company;len(city); city;len(vehicle_number); vehicle_number
     vehicle_type = client_msg[2]
     vehicle_company = client_msg[4]
-    vehicle_number = client_msg[6]
+    city = client_msg[6]
+    vehicle_number = client_msg[8]
 
     view_vehicle = ""
     start_and_end = ""
     location_and_delay = ""
-
+    db_path = ""
+    index = 0
+    if 'Bus' in vehicle_type or 'bus' in vehicle_type:
+        db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city +'/' +vehicle_number + '/Transport.db'
+    else:
+        db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' +  city + '/Transport.db'
+                
     with lock:  # tries to gain access to the data base. WITH - whenever it's done, release the lock - it's like the state "USING" in c#
         try:
-            db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + vehicle_number + '/Transport.db'
             conn = sqlite3.connect(db_path)  # connection to the database
             c = conn.cursor()
 
-            index = 0
             # start_time -> end_time
             data = c.execute('''SELECT * FROM active''')
             for row in data:
@@ -225,8 +354,66 @@ def send_view_vehicle(client_socket, client_msg):
             view_vehicle = ""
             print "Error in send_view_vehicle: " + vehicle_type + "" + vehicle_company + "" + vehicle_number
     client_socket.sendall(view_vehicle)
+    
+    
+def send_supported_lines(client_socket, client_msg):
+    # N;len(vehicle_type);vehicle_type;len(vehicle_company);vehicle_company; len(city);city
+    vehicle_type = client_msg[2]
+    vehicle_company = client_msg[4]
+    city = client_msg[6]
+  
+    msg_to_send = ""
+    first_flag = True # will help organize the msg by the protocols
+    vehicle_list_in_string = "" # will be by the protocol
+    directory = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city
+    try:
+        for line in os.listdir(directory): #return a tupel where the x[0] is the name of the sub-directory itself
+            if first_flag is not True:
+                vehicle_list_in_string+='|'
+            vehicle_list_in_string+=line
+            first_flag = False
+            continue
+        msg_to_send = "N;"+str(len(vehicle_list_in_string))+";"+vehicle_list_in_string
+    except:
+        msg_to_send = "N;1;-1"
+    client_socket.sendall(msg_to_send)  
 
 
+def send_stops(client_socket,client_msg):
+    #S;len(vehicle_type);vehicle_type;len(vehicle_company);vehicle_company; len(city);city;len(vehicle_number);vehicle_number
+    vehicle_type = client_msg[2]
+    vehicle_company = client_msg[4]
+    city = client_msg[6]
+    vehicle_number = client_msg[8]
+    
+    stops = ""
+    if 'Bus' in vehicle_type or 'bus' in vehicle_type:
+        db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city +'/' +vehicle_number + '/Transport.db'
+    else:
+        db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' +  city + '/Transport.db'
+        
+        
+    with lock:  # tries to gain access to the data base. WITH - whenever it's done, release the lock - it's like the state "USING" in c#
+        try:
+            conn = sqlite3.connect(db_path)  # connection to the database
+            c = conn.cursor()
+            index = 0
+            data = c.execute('''SELECT path FROM information''')
+            for row in data:
+                if index is not 0:
+                    stops += '|'
+                else:
+                    index +=1
+                stops += str(row[0])  # append the start time number
+
+
+            stops = 'S;' + str(len(stops)) + ';' + str(stops)
+            conn.close()
+        except:
+            stops = ""
+            print "Error in send_stops: " + vehicle_type + "" + vehicle_company + "" + vehicle_number
+    client_socket.sendall(stops)    
+    
 def handle_client(address,client_socket,client_msg):
     option = client_msg[0]
     option = option[-1]
@@ -238,6 +425,10 @@ def handle_client(address,client_socket,client_msg):
         send_login_client(address,client_socket, client_msg)
     elif option is "v":  # view vehicle
         send_view_vehicle(client_socket, client_msg)
+    elif option is "N":  # supported lines in city - ONLY BUS
+        send_supported_lines(client_socket, client_msg)
+    elif option is "S":  # get stops of a specific vehicle - ONLY BUS CURRENTLY
+        send_stops(client_socket,client_msg)
     elif option is "E": # Exit
         delete_user_from_logs(address,client_msg[2]) #ip and username
     client_socket.close()
@@ -276,9 +467,17 @@ class ThreadedServer:
                         break
                     elif data.startswith('u'):  #not close but update seats -RPI
                         seat_data = data.split(';')
-                        #u/c;t;C;n;L1;A
-                        update_transport_database(seat_data[1],seat_data[2],seat_data[3],seat_data[5], seat_data[7]) #send the information of the vehicle + actual status of every line
+                        #u/c;t;C;city;n;L1;A
+                        update_transport_database(seat_data[1],seat_data[2],seat_data[3],seat_data[6], seat_data[8]) #send the information of the vehicle + actual status of every line
                         client.sendall('r') #ack - recieved:
+                    elif data.startswith('i'): #init vehicle
+                        data = data.split(';')
+                        #i;vehicle_type;vehicle_company;city;vehicle_number;amount_of_lines
+                        init_vehicle(client,data[1],data[2],data[3],data[4],data[5])
+                    elif data.startswith('d'):
+                        data = data.split(';')
+                        #d;vehicle_type;vehicle_company;city;vehicle_number;vehicle_id
+                        destroy_vehicle(client,data[1],data[2],data[3],data[4],data[5])
                     else: #Client
                         data = data.split(';')
                         data.pop(0) # clears all the junk at the start, basically separates only once ; in order to get the message it

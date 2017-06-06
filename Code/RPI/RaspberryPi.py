@@ -1,6 +1,7 @@
 import serial
 import time
 import socket
+import atexit
 
 PORT = 8888  # TODO: port to send data to server - DEFINE A DEFAULT PORT FOR THE SERVER
 HOST = '10.10.0.14'  # TODO: ip of server - DEFINE IP FOR THE SERVER
@@ -13,7 +14,45 @@ SEATS = {}
 #vehicle information - hard coded
 VEHICLE_TYPE = "Bus"
 VEHICLE_COMPANY = "Egged"
+CITY = "Karmiel"
 VEHICLE_NUMBER = "263"
+VEHICLE_ID = ""
+
+
+def init_number():
+    pass
+
+def init_city():
+    pass
+
+def init_vehicle(socket):
+    #i;vehicle_type;vehicle_company;city;vehicle_number
+    socket.sendall("i;" + VEHICLE_TYPE + ";" + VEHICLE_COMPANY + ";" + CITY + ";" + VEHICLE_NUMBER + ";" + AMOUNT_OF_LINES)
+    flag = False
+    while (flag == False):
+        data = socket.recv(1024)
+        if data.startswith("i"):
+            #i;id
+            VEHICLE_ID = data.split(";")[1]
+            if VEHICLE_ID != 0:
+                flag = True
+    
+    
+def destroy_vehicle(socket):
+    #d;vehicle_type;vehicle_company;city;vehicle_number;vehicle_id
+    socket.sendall("d;" + VEHICLE_TYPE + ";" + VEHICLE_COMPANY + ";" + CITY + ";" + VEHICLE_NUMBER + ";" + VEHICLE_ID)
+    flag = False
+    while (flag == False):
+        data = socket.recv(1024)
+        if data.startswith("d"):
+            #d;id
+            if VEHICLE_ID == data.split(";")[1]
+                flag = True
+
+
+
+
+
 
 # will try to connect to the server
 def try_connecting_to_server():
@@ -52,7 +91,7 @@ def send_sensors_data_to_server(line_number,sensors_data, socket_to_server):
 
     if (stored_sensors_data is "-1-1-1-1") or (stored_sensors_data is not sensors_data):  # if stored data is different than the new data or it's first time, else don't do anything
         server_reply = ""
-        socket_to_server.sendall(PROTOCOL_UPDATE_KEY + ";" + VEHICLE_TYPE + ";" + VEHICLE_COMPANY + ";" + VEHICLE_NUMBER + ";" + str(len(line_number)) + ";" + line_number + ";" + str(len(sensors_data)) + ";" + sensors_data)
+        socket_to_server.sendall(PROTOCOL_UPDATE_KEY + ";" + VEHICLE_TYPE + ";" + VEHICLE_COMPANY + ";" + VEHICLE_NUMBER + ";" + VEHICLE_ID + ";" +str(len(line_number)) + ";" + line_number + ";" + str(len(sensors_data)) + ";" + sensors_data)
         server_reply = socket_to_server.recv(1024) #1024 - the size of the buffer which recieves the message (int bytes)
         
         if server_reply == "r": #server got the data
@@ -89,10 +128,12 @@ def handle_missions():
 
 def main():
     try:
+        init_vehicle()
         handle_missions()
     except:
         print "encountered an error"
 
+    atexit.register(destroy_vehicle,try_connecting_to_server())
 
 if __name__ == "__main__":
     main()

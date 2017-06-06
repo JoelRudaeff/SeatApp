@@ -13,39 +13,58 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class BusSeatsActivity extends AppCompatActivity{
 
-        private int maximum_seats_per_line = 10;
-        private int starting_y = 78;
-        private int starting_x = 71;
-        private int x_difference_between_seats = 61;
-        private int y_difference_between_lnes = 44;
-        @Override
-        protected void onCreate(Bundle savedInstanceState)
+public class SeatsActivity extends AppCompatActivity
+{
+    private int maximum_seats_per_line = 10;
+    private int starting_y = 78;
+    private int starting_x = 71;
+    private int x_difference_between_seats = 61;
+    private int y_difference_between_lnes = 44;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_seats);
+
+
+        Intent intent = getIntent();
+
+        int i;
+        int msg_length;
+        String msg = "";
+
+        try
         {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_bus_seats);
-
-
-            Intent intent = getIntent();
-
-            int i;
-            int msg_length;
-            String msg = "";
-
             if( !( intent.getExtras().getString("message").isEmpty() ))
             {
                 msg = intent.getExtras().getString("message");
 
-                if(msg.startsWith("g")) // if the message it's a "Get Seats" message from the server
+                if(msg.startsWith("g")) // if the message is a "Get Seats" message from the server
                 {
                     msg_length = msg.length();
-
                     parse_message(msg, msg_length);
                 }
             }
-
+            if( !( intent.getExtras().getString("title").isEmpty() )) {
+                String title = intent.getExtras().getString("title");
+                if (title.startsWith("Train") && !( intent.getExtras().getString("direction").isEmpty()))  {
+                    if (intent.getExtras().getString("direction").equals("North")) //north is up
+                        title+= " - North is up";
+                    else
+                        title+= " - North is down";
+                }
+                setTitle(title);
+            }
         }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }
 
 
 
@@ -73,7 +92,7 @@ public class BusSeatsActivity extends AppCompatActivity{
 
 
         TextView title = (TextView) findViewById(R.id.SeatsTitle);
-        TextView number_of_free_seats = (TextView) findViewById(R.id.NumOfFreeSeats);
+
 
         AbsoluteLayout absoluteLayout1 = (AbsoluteLayout) findViewById(R.id.absoluteLayout1);
 
@@ -148,7 +167,7 @@ public class BusSeatsActivity extends AppCompatActivity{
             //params.height = (int) ( (diff_height) * (seats_list.size() ) * (inPixels/5));
             params.height = screen_height ;
         }
-        number_of_free_seats.setText(String.valueOf(free_seats));
+        title.setText("Free Seats:" +String.valueOf(free_seats));
     }
 
 }

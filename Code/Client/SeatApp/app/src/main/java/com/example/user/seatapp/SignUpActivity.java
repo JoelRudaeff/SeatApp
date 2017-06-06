@@ -103,7 +103,7 @@ public class SignUpActivity extends ActionBarActivity
                         progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
                         progress.show();
 
-                        MyClientTask myClientTask = new MyClientTask('r',name,password,email);
+                        MyClientTask myClientTask = new MyClientTask('r',name,password,email,null, null);
                         myClientTask.execute();
 
                         int times = 0;
@@ -113,14 +113,16 @@ public class SignUpActivity extends ActionBarActivity
                             if (times < 10)
                         Thread.sleep(1000);
                         times++;
-                    }
-                    progress.hide();
+                        }
+                        progress.hide();
 
-                    //Sending the necessary details to the server, and getting back the answer from it
-                    if( myClientTask.response_from_server == "1")
-                    {
+                        //Sending the necessary details to the server, and getting back the answer from it
+                        if( myClientTask.response_from_server == "1")
+                        {
                             Toast toast_successful = Toast.makeText(context, "Successfully signing-up!", duration);
                             toast_successful.show();
+
+                            myClientTask.response_from_server = "-";
                             startActivity(intent);
                         }
                         else
