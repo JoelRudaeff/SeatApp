@@ -4,7 +4,7 @@ import socket
 import atexit
 
 PORT = 8888  # TODO: port to send data to server - DEFINE A DEFAULT PORT FOR THE SERVER
-HOST = '10.10.0.16'  # TODO: ip of server - DEFINE IP FOR THE SERVER
+HOST = '10.10.0.14'  # TODO: ip of server - DEFINE IP FOR THE SERVER
 PROTOCOL_UPDATE_KEY = "u"  # TODO: number of message that the server will understand that the RPI sends updated data - DEFINE A KEY FOR UPDATE THE DATA
 PROTOCOL_CLOSE_KEY = "c"  # TODO: message that will be sent to the server if the RPI is closing the code - DEFINE A KEY FOR CLOSING THE COMMUNICATION
 SERIAL_PORT = 9600  # port for communication between the RPI and the Arduino
@@ -46,7 +46,7 @@ def destroy_vehicle(socket):
         data = socket.recv(1024)
         if data.startswith("d"):
             #d;id
-            if VEHICLE_ID == data.split(";")[1]:
+            if VEHICLE_ID == data.split(";")[1]
                 flag = True
 
 
@@ -91,7 +91,7 @@ def send_sensors_data_to_server(line_number,sensors_data, socket_to_server):
 
     if (stored_sensors_data is "-1-1-1-1") or (stored_sensors_data is not sensors_data):  # if stored data is different than the new data or it's first time, else don't do anything
         server_reply = ""
-        socket_to_server.sendall(PROTOCOL_UPDATE_KEY + ";" + VEHICLE_TYPE + ";" + VEHICLE_COMPANY + ";" + CITY + ";"  + VEHICLE_NUMBER + ";" + str(len(line_number)) + ";" + line_number + ";" + str(len(sensors_data)) + ";" + sensors_data)
+        socket_to_server.sendall(PROTOCOL_UPDATE_KEY + ";" + VEHICLE_TYPE + ";" + VEHICLE_COMPANY + ";" + VEHICLE_NUMBER + ";" + VEHICLE_ID + ";" +str(len(line_number)) + ";" + line_number + ";" + str(len(sensors_data)) + ";" + sensors_data)
         server_reply = socket_to_server.recv(1024) #1024 - the size of the buffer which recieves the message (int bytes)
         
         if server_reply == "r": #server got the data
@@ -128,7 +128,7 @@ def handle_missions():
 
 def main():
     try:
-        #init_vehicle(try_connecting_to_server())
+        init_vehicle()
         handle_missions()
     except:
         print "encountered an error"
