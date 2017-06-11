@@ -17,8 +17,9 @@ public class ScheduleActivity extends AppCompatActivity {
     {
         String[] start_end_arr = start_end.split("\\|"); // start_end|start1_end
         for (int i =0 ; i< start_end_arr.length ; i++)
-            listItems.add(start_end_arr[i].replace("_"," "));
-
+        {
+            listItems.add(start_end_arr[i].replace("_", "                                                        "));
+        }
     }
 
     @Override

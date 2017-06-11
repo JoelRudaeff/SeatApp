@@ -5,7 +5,7 @@ import time
 import os
 from threading import Thread, Lock
 
-CLIENT_HOST = '192.168.1.42'  # TODO:
+CLIENT_HOST = '10.10.0.16'  # TODO:
 CLIENT_PORT = 8888
 
 # Path files
@@ -39,9 +39,9 @@ def update_transport_database(vehicle_type, vehicle_company, city ,vehicle_numbe
     old_line_status = ""
     with lock:
         if 'Bus' in vehicle_type or 'bus' in vehicle_type:
-            db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city +'/' +vehicle_number + '/Transport.db'
+            db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city +'/' +vehicle_number + '/0.db'
         else:
-            db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' +  city + '/Transport.db'
+            db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' +  city + '/0.db'
         conn = sqlite3.connect(db_path)  # connection to the database
         c = conn.cursor()
 
@@ -69,7 +69,7 @@ def update_transport_database(vehicle_type, vehicle_company, city ,vehicle_numbe
 def init_vehicle(socket,vehicle_type,vehicle_company,city,vehicle_number,amount_of_lines):
     #i;vehicle_type;vehicle_company;city;vehicle_number
     new_id = 0
-    
+
     with lock:
         if 'Bus' in vehicle_type or 'bus' in vehicle_type:
             db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city +'/' +vehicle_number + '/Transport.db'
@@ -77,7 +77,7 @@ def init_vehicle(socket,vehicle_type,vehicle_company,city,vehicle_number,amount_
             db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' +  city + '/Transport.db'
         conn = sqlite3.connect(db_path)  # connection to the database
         c = conn.cursor()
-        
+
         try:
             # first of all, if an error has been occured in the process, get the data before changing it so if something happened we can restore the OLD_DATA
             latest_vehicle_id = c.execute('''SELECT * FROM vehicles ORDER BY id DESC LIMIT 1;''')
@@ -195,11 +195,11 @@ def send_get_seats(client_socket, client_msg):
     id = ""
     
     if 'Bus' in vehicle_type or 'bus' in vehicle_type:
-        db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city +'/' +vehicle_number + '/Transport.db'
+        db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city +'/' +vehicle_number + '/0.db' #TODO: change it to the transport.db, if you want to do your method with the closest vehicle
         id_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' + vehicle_company + '/' + city +'/' +vehicle_number + '/'
        
     else:
-        db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' +  city + '/Transport.db'
+        db_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' +  city + '/0.db'
         id_path = VEHICLES_FOLDER + '/' + vehicle_type + '/' +  city + '/'
           
     
@@ -207,15 +207,16 @@ def send_get_seats(client_socket, client_msg):
         try:
             conn = sqlite3.connect(db_path)  # connection to the database
             c = conn.cursor()
-            
+
+            """
             #FINDs THE CLOSEST VEHICLE TO USER AND THEN USES HIS ID TO GET THE SEATS' DATA
             c.execute('''SELECT MAX(id) FROM vehicles WHERE next_stop <= ?;''',(current_stop,))
             id = c.fetchone()[0] #gets the value itself
-            
+
             conn.close()
             if id is None:
                 print "No vehicles found under: " + vehicle_type + "" + vehicle_company + "" + vehicle_number
-                raise sqlite3.Error #no vehicles are alive 
+                raise sqlite3.Error #no vehicles are alive
             id_path = id_path + id + '.db'
             conn = sqlite3.connect(id_path)  # connection to the database
             c = conn.cursor()
@@ -225,18 +226,19 @@ def send_get_seats(client_socket, client_msg):
                 c.execute('''CREATE TABLE seats(line INTEGER NOT NULL,status TEXT NOT NULL);''')
                 c.execute('''INSERT INTO seats(line,status) VALUES(?,?);''',(1,0))
                 seats = str(1) + "_" + str(0)
-            else:
-                index = 0
-                data = c.execute('''SELECT * FROM seats''')
-                for row in data:                   
-                    if index is not 0:
-                        seats += "|" #indicates space between the previous line and the current
-                    else:
-                        index +=1
-                    seats += str(row[0])  # append the seat's line number, after converting from int to string
-                    seats += "_" #indicates the line number before the sign, and the seats' status after the sign
-                    seats += str(row[1])  # append the seat's status, after converting from int to string
-                    
+            else: """
+
+            index = 0
+            data = c.execute('''SELECT * FROM seats''')
+            for row in data:
+                if index is not 0:
+                    seats += "|" #indicates space between the previous line and the current
+                else:
+                    index +=1
+                seats += str(row[0])  # append the seat's line number, after converting from int to string
+                seats += "_" #indicates the line number before the sign, and the seats' status after the sign
+                seats += str(row[1])  # append the seat's status, after converting from int to string
+
             conn.close()
         except sqlite3.Error as e:
             print e
@@ -468,7 +470,7 @@ class ThreadedServer:
                     elif data.startswith('u'):  #not close but update seats -RPI
                         seat_data = data.split(';')
                         #u/c;t;C;city;n;L1;A
-                        update_transport_database(seat_data[1],seat_data[2],seat_data[3],seat_data[6], seat_data[8]) #send the information of the vehicle + actual status of every line
+                        update_transport_database(seat_data[1],seat_data[2],seat_data[3],seat_data[4], seat_data[6], seat_data[8]) #send the information of the vehicle + actual status of every line
                         client.sendall('r') #ack - recieved:
                     elif data.startswith('i'): #init vehicle
                         data = data.split(';')
