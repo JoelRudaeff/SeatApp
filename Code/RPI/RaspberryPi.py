@@ -3,7 +3,7 @@ import time
 import socket
 
 PORT = 8888  # TODO: port to send data to server - DEFINE A DEFAULT PORT FOR THE SERVER
-HOST = '10.10.0.16'  # TODO: ip of server - DEFINE IP FOR THE SERVER
+HOST = '192.168.43.236'  # TODO: ip of server - DEFINE IP FOR THE SERVER
 PROTOCOL_UPDATE_KEY = "u"  # TODO: number of message that the server will understand that the RPI sends updated data - DEFINE A KEY FOR UPDATE THE DATA
 PROTOCOL_CLOSE_KEY = "c"  # TODO: message that will be sent to the server if the RPI is closing the code - DEFINE A KEY FOR CLOSING THE COMMUNICATION
 SERIAL_PORT = 9600  # port for communication between the RPI and the Arduino
@@ -37,7 +37,8 @@ def init_vehicle():
             VEHICLE_ID = data.split("i;")[1]
             got_data_flag = True
         else:
-            time.sleep(0.1)
+            time.sleep(0.5)
+
 
     
     
@@ -118,7 +119,7 @@ def handle_missions():
     is_arduino_connected = False
     while not is_arduino_connected:
         try:
-            ser = serial.Serial("COM5", SERIAL_PORT) # serial - our "physical socket" to the sensors and the arduino - gets the data of the sensors from the output of the arduino code we made
+            ser = serial.Serial("COM3", SERIAL_PORT) # serial - our "physical socket" to the sensors and the arduino - gets the data of the sensors from the output of the arduino code we made
             is_arduino_connected = True
         except:
             print "No arduino connected on the serial, trying again in 1 seconds"

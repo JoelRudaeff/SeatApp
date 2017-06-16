@@ -11,7 +11,7 @@ import java.net.Socket;
 public class MyClientTask extends AsyncTask<Void, Void, Void> {
 
     private char Querry_type;
-    private final String dstAddress = "10.10.0.16";
+    private final String dstAddress = "192.168.43.236";
     private int dstPort = 8888;
 
     String response_from_server = "-";

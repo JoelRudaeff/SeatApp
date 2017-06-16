@@ -36,4 +36,12 @@
         android:layout_height="match_parent"
         android:layout_x="1dp"
         android:layout_y="128dp" />
+
+    <ListView
+        android:id="@+id/stationlist"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_x="1dp"
+        android:layout_y="256dp" />
+
 </AbsoluteLayout>

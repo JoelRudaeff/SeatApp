@@ -5,7 +5,7 @@ import time
 import os
 from threading import Thread, Lock
 
-CLIENT_HOST = '10.10.0.16'  # TODO:
+CLIENT_HOST = '192.168.43.236'  # TODO:
 CLIENT_PORT = 8888
 
 # Path files
